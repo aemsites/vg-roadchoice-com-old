@@ -11,34 +11,65 @@
  */
 
  :root {
-  /* colors */
-  --link-color: #035fe6;
-  --link-hover-color: #136ff6;
-  --background-color: #fff;
-  --overlay-background-color: #eee;
-  --highlight-background-color: #ccc;
-  --text-color: #000;
+  /* BASE COLORS */
 
-  /* fonts */
-  --body-font-family: 'helvetica neue', helvetica, ubuntu, roboto, noto, sans-serif;
-  --heading-font-family: var(--body-font-family);
-  --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
+  /* Primary colors */
+  --primary-black: #000;
+  --primary-white: #fff;
+  --primary-red: #B92530;
+  --primary-dark-gray: #363636;
+  --primary-medium-gray: #737478;
+  --primary-light-gray: #EAEAEA;
+
+  /* Secondary colors */
+  --secondary-dark-gray: #181818;
+  --secondary-gray-1: #757378;
+  --secondary-gray-2: #717372;
+  --secondary-gray-3: #707372;
+  --secondary-gray-3: #747474;
+  --secondary-light-gray: #B1B7B8;
+
+
+  /* colors */
+  --link-color: var(--primary-red);
+  --link-hover-color: var(--link-color);
+  --background-color: var(--primary-white);
+  --overlay-background-color: var(--primary-light-gray);
+  --highlight-background-color: var(--secondary-light-gray);
+  --text-color: var(--primary-black);
+
+  /* NEW fonts */
+
+  /* Body */
+  --body-ff: "Nexa Regular", var(--fallback-ff);
+  --fixed-ff: menlo, consolas, monospace;
+  --heading-ff-regular: var(--body-ff);
+
+  /* Headings */
+  --headings-ff-bold: "Nexa Bold", var(--fallback-ff);
+  --headings-ff-x-bold: "Nexa XBold", var(--fallback-ff);
+  --headings-ff-heavy: "Nexa Heavy", var(--fallback-ff);
+  --headings-ff-black: "Nexa Black", var(--fallback-ff);
+
+  /* Fallback */
+  --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
 
   /* body sizes */
   --body-font-size-m: 22px;
+  --body-font-size-m: 20px;
   --body-font-size-s: 18px;
-  --body-font-size-xs: 16px;
+  --body-font-size-xs: 14px;
 
   /* heading sizes */
-  --heading-font-size-xxl: 48px;
-  --heading-font-size-xl: 40px;
-  --heading-font-size-l: 32px;
-  --heading-font-size-m: 24px;
-  --heading-font-size-s: 20px;
+  --heading-font-size-xxl: 70px;
+  --heading-font-size-xl: 52px;
+  --heading-font-size-l: 40px;
+  --heading-font-size-m: 35px;
+  --heading-font-size-s: 22px;
   --heading-font-size-xs: 18px;
 
   /* nav height */
-  --nav-height: 64px;
+  --nav-height: 50px;
 
 }
 
@@ -53,10 +84,20 @@
   }
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
 body {
   font-size: var(--body-font-size-m);
   margin: 0;
-  font-family: var(--body-font-family);
+  font-family: var(--body-ff);
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--background-color);
@@ -73,7 +114,7 @@ header {
 
 h1, h2, h3,
 h4, h5, h6 {
-  font-family: var(--heading-font-family);
+  font-family: var(--heading-ff-regular);
   font-weight: 600;
   line-height: 1.25;
   margin-top: 1em;
@@ -101,7 +142,7 @@ hr {
 }
 
 code, pre, samp {
-  font-family: var(--fixed-font-family);
+  font-family: var(--fixed-ff);
   font-size: var(--body-font-size-s);
 }
 
@@ -133,7 +174,7 @@ a:hover {
 
 /* buttons */
 a.button:any-link, button {
-  font-family: var(--body-font-family);
+  font-family: var(--body-ff);
   display: inline-block;
   box-sizing: border-box;
   text-decoration: none;
