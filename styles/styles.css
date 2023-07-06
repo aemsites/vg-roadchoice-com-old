@@ -176,9 +176,10 @@ main .section {
   }
 }
 
-a.btn {
+a.button {
   background-color: var(--primary-red);
   color: var(--primary-white);
   padding: 13px 30px;
   font-size: var(--body-font-size-m);
+  text-decoration: none;
 }

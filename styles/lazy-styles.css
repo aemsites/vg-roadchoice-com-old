@@ -4,31 +4,31 @@
 /* NEXA FONTS */
 @font-face {
   font-family: 'Nexa Regular';
-  src: url('../fonts/NexaRegular.otf') format('otf');
+  src: url('../fonts/NexaRegular.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Bold';
-  src: url('../fonts/NexaBold.otf') format('otf');
+  src: url('../fonts/NexaBold.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa XBold';
-  src: url('../fonts/NexaXBold.otf') format('otf');
+  src: url('../fonts/NexaXBold.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Heavy';
-  src: url('../fonts/NexaHeavy.otf') format('otf');
+  src: url('../fonts/NexaHeavy.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Black';
-  src: url('../fonts/NexaBlack.otf') format('otf');
+  src: url('../fonts/NexaBlack.otf') format('opentype');
   font-display: swap;
 }
 
