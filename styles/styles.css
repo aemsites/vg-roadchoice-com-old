@@ -10,57 +10,114 @@
  * governing permissions and limitations under the License.
  */
 
- :root {
-  /* colors */
-  --link-color: #035fe6;
-  --link-hover-color: #136ff6;
-  --background-color: #fff;
-  --overlay-background-color: #eee;
-  --highlight-background-color: #ccc;
-  --text-color: #000;
+ @import url('./reset.css');
 
-  /* fonts */
-  --body-font-family: 'helvetica neue', helvetica, ubuntu, roboto, noto, sans-serif;
-  --heading-font-family: var(--body-font-family);
-  --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
+ :root {
+  /* BREAKPOINTS */
+  --breakpoint-xxs: 495px;
+  --breakpoint-xs: 768px;
+  --breakpoint-small: 992px;
+  --breakpoint-medium: 1024px;
+  --breakpoint-large: 1200px;
+  --breakpoint-extra-large: 1360px;
+
+  /* Primary colors */
+  --primary-black: #000;
+  --primary-white: #fff;
+  --primary-red: #B92530;
+  --primary-dark-gray: #363636;
+  --primary-medium-gray: #737478;
+  --primary-light-gray: #EAEAEA;
+
+  /* Secondary colors */
+  --secondary-dark-gray: #181818;
+  --secondary-gray-1: #757378;
+  --secondary-gray-2: #717372;
+  --secondary-gray-3: #707372;
+  --secondary-gray-4: #747474;
+  --secondary-light-gray: #B1B7B8;
+
+  /* Applied colors */
+  --link-color: var(--primary-red);
+  --link-hover-color: var(--link-color);
+  --background-color: var(--primary-white);
+  --overlay-background-color: var(--primary-light-gray);
+  --highlight-background-color: var(--secondary-light-gray);
+  --text-color: var(--primary-black);
+
+  /* FONTS */
+  
+  /* Body */
+  --body-ff: "Nexa Regular", var(--fallback-ff);
+  --fixed-ff: menlo, consolas, monospace;
+  
+  /* Headings */
+  --heading-ff-regular: var(--body-ff);
+  --headings-ff-bold: "Nexa Bold", var(--fallback-ff);
+  --headings-ff-x-bold: "Nexa XBold", var(--fallback-ff);
+  --headings-ff-heavy: "Nexa Heavy", var(--fallback-ff);
+  --headings-ff-black: "Nexa Black", var(--fallback-ff);
+
+  /* Fallback */
+  --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
 
   /* body sizes */
-  --body-font-size-m: 22px;
+  --body-font-size-xl: 30px;
+  --body-font-size-l: 22px;
+  --body-font-size-m: 20px;
   --body-font-size-s: 18px;
-  --body-font-size-xs: 16px;
+  --body-font-size-xs: 14px;
 
   /* heading sizes */
-  --heading-font-size-xxl: 48px;
-  --heading-font-size-xl: 40px;
-  --heading-font-size-l: 32px;
-  --heading-font-size-m: 24px;
-  --heading-font-size-s: 20px;
+  --h1-font-size: 24px;
+  --heading-font-size-xxl: 70px;
+  --heading-font-size-xl: 52px;
+  --heading-font-size-l: 40px;
+  --heading-font-size-m: 35px;
+  --heading-font-size-s: 22px;
   --heading-font-size-xs: 18px;
+  --heading-font-size-xxs: 14px;
 
   /* nav height */
-  --nav-height: 64px;
-
+  --nav-height: 50px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 495px) {
   :root {
-    --heading-font-size-xxl: 60px;
-    --heading-font-size-xl: 48px;
-    --heading-font-size-l: 36px;
-    --heading-font-size-m: 30px;
-    --heading-font-size-s: 24px;
-    --heading-font-size-xs: 22px;
+    --h1-font-size: 32px;
   }
 }
 
+@media (min-width: 768px) {
+  :root {
+    --h1-font-size: 46px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --h1-font-size: 70px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
 body {
-  font-size: var(--body-font-size-m);
-  margin: 0;
-  font-family: var(--body-font-family);
-  line-height: 1.6;
-  color: var(--text-color);
-  background-color: var(--background-color);
   display: none;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: var(--body-font-size-m);
+  font-family: var(--body-ff);
+  line-height: 1.6;
+  margin: 0;
 }
 
 body.appear {
@@ -71,136 +128,28 @@ header {
   height: var(--nav-height);
 }
 
-h1, h2, h3,
+h1 {
+  font-family: var(--headings-ff-black);
+  font-size: var(--h1-font-size) 
+}
+
+h2, h3,
 h4, h5, h6 {
-  font-family: var(--heading-font-family);
-  font-weight: 600;
-  line-height: 1.25;
-  margin-top: 1em;
-  margin-bottom: .5em;
-  scroll-margin: calc(var(--nav-height) + 1em);
+  font-family: var(--headings-ff-bold);
 }
 
-h1 { font-size: var(--heading-font-size-xxl) }
-h2 { font-size: var(--heading-font-size-xl) }
-h3 { font-size: var(--heading-font-size-l) }
-h4 { font-size: var(--heading-font-size-m) }
-h5 { font-size: var(--heading-font-size-s) }
-h6 { font-size: var(--heading-font-size-xs) }
-
-p, dl, ol, ul, pre, blockquote {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-hr {
-  margin-top: 1.5em;
-  margin-bottom: 1.5em;
-  border: 0;
-  border-bottom: 1px solid var(--overlay-background-color);
-}
+h2 { font-size: var(--heading-font-size-l) }
+h3 { font-size: var(--heading-font-size-m) }
+h4 { font-size: var(--heading-font-size-s) }
+h5 { font-size: var(--heading-font-size-xs) }
+h6 { font-size: var(--heading-font-size-xxs) }
 
 code, pre, samp {
-  font-family: var(--fixed-font-family);
-  font-size: var(--body-font-size-s);
-}
-
-code, samp {
-  padding: .125em;
+  font-family: var(--fixed-ff);
 }
 
 pre {
   overflow: scroll;
-}
-
-main pre {
-  background-color: var(--overlay-background-color);
-  padding: 1em;
-  border-radius: .25em;
-  overflow-x: auto;
-  white-space: pre;
-}
-
-a:any-link {
-  color: var(--link-color);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: var(--link-hover-color);
-}
-
-/* buttons */
-a.button:any-link, button {
-  font-family: var(--body-font-family);
-  display: inline-block;
-  box-sizing: border-box;
-  text-decoration: none;
-  border: 2px solid transparent;
-  padding: 5px 30px;
-  text-align: center;
-  font-style: normal;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--background-color);
-  background-color: var(--link-color);
-  margin: 16px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-radius: 30px;
-}
-
-a.button:hover, a.button:focus, button:hover, button:focus  {
-  background-color: var(--link-hover-color);
-  cursor: pointer;
-}
-
-button:disabled, button:disabled:hover {
-  background-color: var(--overlay-background-color);
-  cursor: unset;
-}
-
-a.button.secondary, button.secondary {
-  background-color: unset;
-  border: 2px solid currentcolor;
-  color: var(--text-color)
-}
-
-main input {
-  font-size: 1.25rem;
-  width: 100%;
-  max-width: 50rem;
-  display: block;
-  margin-bottom: 1rem;
-  padding: 0.75rem 0.6rem;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  border: 1px solid var(--text-color);
-  color: var(--text-color);
-  background-color: var(--background-color);
-}
-
-main input:hover {
-  border: 1px solid var(--text-color);
-}
-
-main blockquote {
-  font-style: italic;
-  margin: 3rem;
-  text-indent: -1rem;
-  hanging-punctuation: first;
-}
-
-main blockquote p::before {
-  content: "“";
-  line-height: 0;
-}
-
-main blockquote p::after {
-  content: "”";
-  line-height: 0;
 }
 
 main img {
@@ -209,35 +158,28 @@ main img {
   height: auto;
 }
 
-.icon {
-  display: inline-block;
-  height: 24px;
-  width: 24px;
-}
-
-.icon svg {
-  height: 100%;
-  width: 100%;
-}
-
+/* SECTION styling */
 main .section {
   padding: 64px 16px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   main .section {
     padding: 64px 32px;
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 992px) {
   .section > div {
     max-width: 1200px;
     margin: auto;
   }
 }
 
-/* section metadata */
-main .section.highlight {
-  background-color: var(--highlight-background-color);
+a.button {
+  background-color: var(--primary-red);
+  color: var(--primary-white);
+  padding: 13px 30px;
+  font-size: var(--body-font-size-m);
+  text-decoration: none;
 }
