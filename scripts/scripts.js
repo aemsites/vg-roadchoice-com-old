@@ -118,8 +118,8 @@ loadPage();
  * @param {string} tagName the tag
  * @param {Object} options the element options
  * @param {string[]|string} [options.classes=[]] the class or classes to add
- * @param {object} [options.props={}] any other attributes to add to the element
- * @returns the element
+ * @param {Object} [options.props={}] any other attributes to add to the element
+ * @returns {HTMLElement} the element
  */
 export function createElement(tagName, options = {}) {
   const { classes = [], props = {} } = options;

@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import { getMetadata, decorateIcons } from '../../scripts/lib-franklin.js';
 import { createElement } from '../../scripts/scripts.js';
 
@@ -10,11 +11,9 @@ function closeOnEscape(e) {
     const navSections = nav.querySelector('.nav-sections');
     const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
     if (navSectionExpanded && isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
       toggleAllNavSections(navSections);
       navSectionExpanded.focus();
     } else if (!isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
       toggleMenu(nav, navSections);
       nav.querySelector('button').focus();
     }
@@ -26,7 +25,6 @@ function openOnKeydown(e) {
   const isNavDrop = focused.className === 'nav-drop';
   if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
     const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
-    // eslint-disable-next-line no-use-before-define
     toggleAllNavSections(focused.closest('.nav-sections'));
     focused.setAttribute('aria-expanded', dropExpanded ? 'false' : 'true');
   }
@@ -105,7 +103,6 @@ export default async function decorate(block) {
     const nav = createElement('nav', { props: { id: 'nav' } });
     const navFragment = docRange.createContextualFragment(html);
     nav.appendChild(navFragment);
-    // nav.innerHTML = html;
 
     const classes = ['brand', 'sections', 'tools'];
     classes.forEach((c, i) => {
@@ -116,7 +113,11 @@ export default async function decorate(block) {
     const navSections = nav.querySelector('.nav-sections');
     if (navSections) {
       navSections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
-        if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
+        const nextLevelList = navSection.querySelector('ul');
+        if (nextLevelList) {
+          nextLevelList.className = 'level-2';
+          navSection.classList.add('nav-drop');
+        }
         navSection.addEventListener('click', () => {
           if (isDesktop.matches) {
             const expanded = navSection.getAttribute('aria-expanded') === 'true';
@@ -125,12 +126,34 @@ export default async function decorate(block) {
           }
         });
       });
+
+      navSections.querySelectorAll(':scope > ul > li > ul > li').forEach((navSection) => {
+        const nextLevelList = navSection.querySelector('ul');
+        if (nextLevelList) {
+          nextLevelList.className = 'level-3';
+          navSection.classList.add('nav-drop');
+        }
+      });
+
+      // add css classes for styling purposes
       const sectionClasses = ['main', 'mobile'];
       const sectionNavs = navSections.querySelectorAll(':scope > ul');
       if (sectionNavs.length === sectionClasses.length) {
+        sectionNavs[0].className = 'level-1';
         sectionClasses.forEach((c, i) => sectionNavs[i].classList.add(`nav-sections-${c}`));
       }
+      const sectionNavsLvl2 = sectionNavs[0].querySelectorAll('ul.level-2');
+      if (sectionNavsLvl2) {
+        [...sectionNavsLvl2].forEach((ul) => {
+          const lvl2Wrapper = ul.closest('li');
+          const arrowRight = createElement('span', { classes: ['fa', 'fa-arrow-right'] });
+          lvl2Wrapper.appendChild(arrowRight);
+          lvl2Wrapper.classList.add('has-lvl2');
+          console.log({ lvl2Wrapper });
+        });
+      }
     }
+    // TODO: add listener to the arrow to navigate in mobile viewport
 
     // hamburger for mobile
     const hamburger = createElement('div', { classes: 'nav-hamburger' });
@@ -147,9 +170,13 @@ export default async function decorate(block) {
     isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
     decorateIcons(nav);
-    const navWrapper = document.createElement('div');
-    navWrapper.className = 'nav-wrapper';
+    const navWrapper = createElement('div', { classes: 'nav-wrapper' });
     navWrapper.append(nav);
+
+    // move tools as direct children of nav-wrapper
+    const navTools = nav.querySelector('.nav-tools');
+    navWrapper.appendChild(navTools);
+
     block.append(navWrapper);
   }
 }
