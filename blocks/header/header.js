@@ -1,7 +1,8 @@
 import { getMetadata, decorateIcons } from '../../scripts/lib-franklin.js';
+import { createElement } from '../../scripts/scripts.js';
 
 // media query match that indicates mobile/tablet width
-const isDesktop = window.matchMedia('(min-width: 900px)');
+const isDesktop = window.matchMedia('(min-width: 992px)');
 
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
@@ -90,18 +91,21 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
+  const docRange = document.createRange();
   // fetch nav content
   const navMeta = getMetadata('nav');
   const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
   const resp = await fetch(`${navPath}.plain.html`);
 
   if (resp.ok) {
+    block.textContent = '';
     const html = await resp.text();
 
     // decorate nav DOM
-    const nav = document.createElement('nav');
-    nav.id = 'nav';
-    nav.innerHTML = html;
+    const nav = createElement('nav', { props: { id: 'nav' } });
+    const navFragment = docRange.createContextualFragment(html);
+    nav.appendChild(navFragment);
+    // nav.innerHTML = html;
 
     const classes = ['brand', 'sections', 'tools'];
     classes.forEach((c, i) => {
@@ -121,14 +125,20 @@ export default async function decorate(block) {
           }
         });
       });
+      const sectionClasses = ['main', 'mobile'];
+      const sectionNavs = navSections.querySelectorAll(':scope > ul');
+      if (sectionNavs.length === sectionClasses.length) {
+        sectionClasses.forEach((c, i) => sectionNavs[i].classList.add(`nav-sections-${c}`));
+      }
     }
 
     // hamburger for mobile
-    const hamburger = document.createElement('div');
-    hamburger.classList.add('nav-hamburger');
-    hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
-        <span class="nav-hamburger-icon"></span>
-      </button>`;
+    const hamburger = createElement('div', { classes: 'nav-hamburger' });
+    const hamburgerInnerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
+    <span class="nav-hamburger-icon"></span>
+    </button>`;
+    const fragment = docRange.createContextualFragment(hamburgerInnerHTML);
+    hamburger.appendChild(fragment);
     hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
     nav.prepend(hamburger);
     nav.setAttribute('aria-expanded', 'false');
