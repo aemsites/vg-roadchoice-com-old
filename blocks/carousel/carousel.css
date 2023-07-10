@@ -1,0 +1,18 @@
+.carousel .carousel-slide {
+  display: none;
+}
+
+.carousel .carousel-slide.carousel-slide-active {
+  display: flex;
+}
+
+.carousel .carousel-controls-pagination-step {
+  width: 20px;
+  height: 20px;
+  background: red;
+  border: solid 1px black;
+}
+
+.carousel .carousel-controls-pagination-step-active {
+  background-color: yellow;
+}
