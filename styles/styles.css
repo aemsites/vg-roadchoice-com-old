@@ -49,6 +49,7 @@
   
   /* Body */
   --body-ff: "Nexa Regular", var(--fallback-ff);
+  --body-ff-bold: "Nexa Bold", var(--fallback-ff);
   --fixed-ff: menlo, consolas, monospace;
   
   /* Headings */
@@ -146,6 +147,10 @@ h6 { font-size: var(--heading-font-size-xxs) }
 
 code, pre, samp {
   font-family: var(--fixed-ff);
+}
+
+p strong {
+  font-family: var(--body-ff-bold);
 }
 
 pre {
