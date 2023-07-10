@@ -1,17 +1,22 @@
 const activeSlideClass = 'carousel-slide-active';
 const activeControlStepClass = 'carousel-controls-pagination-step-active';
 
-const buildSlide = (slide) => {
-  slide.classList.add('carousel-slide');
-  const backgroundImg = slide.querySelector('picture');
+const buildSlide = (slideTemplate) => {
+  const slideEl = document.createElement('li');
+  slideEl.classList.add('carousel-slide');
+  slideEl.innerHTML = slideTemplate.innerHTML;
+
+  const backgroundImg = slideEl.querySelector('picture');
 
   // unwrap the picture tag to be direct child of the slide
   if (backgroundImg && backgroundImg.parentElement.tagName === 'P') {
     backgroundImg.parentElement.replaceWith(backgroundImg);
   }
 
-  const heading = slide.querySelector('h1, h2, h3');
+  const heading = slideEl.querySelector('h1, h2, h3');
   heading.classList.add('carousel-heading');
+
+  slideTemplate.replaceWith(slideEl);
 };
 
 const renderSlidesControls = (carouselEl, onSelect) => {
@@ -81,8 +86,14 @@ const autoSlideChange = (carouseEl, onChange, carouselState) => {
 };
 
 export default function decorate(block) {
-  const slides = block.querySelectorAll(':scope > div');
+  const carouselEl = document.createElement('ul');
+  carouselEl.innerHTML = block.innerHTML;
+  block.innerHTML = '';
+  block.append(carouselEl);
+
+  const slides = block.querySelectorAll(':scope > ul > div');
   [...slides].forEach(buildSlide);
+
   const carouselState = {
     activeSlideIndex: 0,
     slideNumber: [...slides].length,
