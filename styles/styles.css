@@ -85,9 +85,6 @@
   /* Fallback */
   --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
 
-  /* Fontawesome */
-  --ff-fontawesome: "fontawesome", "fontawesome Fallback";
-
   /* body sizes */
   --body-font-size-xl: 30px;
   --body-font-size-l: 22px;
