@@ -44,7 +44,7 @@ export function sampleRUM(checkpoint, data = {}) {
       const urlSanitizers = {
         full: () => window.location.href,
         origin: () => window.location.origin,
-        path: () => window.location.href.replace(/\?.*$/, ''),
+        path: () => window.location.pathname,
       };
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = { weight, id, random, isSelected, sampleRUM, sanitizeURL: urlSanitizers[window.hlx.RUM_MASK_URL || 'path'] };
@@ -80,46 +80,39 @@ export function sampleRUM(checkpoint, data = {}) {
 
 /**
  * Loads a CSS file.
- * @param {string} href URL to the CSS file
+ * @param {string} href The path to the CSS file
  */
-export async function loadCSS(href) {
-  return new Promise((resolve, reject) => {
-    if (!document.querySelector(`head > link[href="${href}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.onload = resolve;
-      link.onerror = reject;
-      document.head.append(link);
-    } else {
-      resolve();
+export function loadCSS(href, callback) {
+  if (!document.querySelector(`head > link[href="${href}"]`)) {
+    const link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('href', href);
+    if (typeof callback === 'function') {
+      link.onload = (e) => callback(e.type);
+      link.onerror = (e) => callback(e.type);
     }
-  });
+    document.head.appendChild(link);
+  } else if (typeof callback === 'function') {
+    callback('noop');
+  }
 }
 
-/**
- * Loads a non module JS file.
- * @param {string} src URL to the JS file
- * @param {Object} attrs additional optional attributes
- */
-
-export async function loadScript(src, attrs) {
+export async function loadScript(url, attrs) {
   return new Promise((resolve, reject) => {
-    if (!document.querySelector(`head > script[src="${src}"]`)) {
-      const script = document.createElement('script');
-      script.src = src;
-      if (attrs) {
-      // eslint-disable-next-line no-restricted-syntax, guard-for-in
-        for (const attr in attrs) {
-          script.setAttribute(attr, attrs[attr]);
-        }
+    const script = document.createElement('script');
+    script.src = url;
+    if (attrs) {
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+      for (const attr in attrs) {
+        script.setAttribute(attr, attrs[attr]);
       }
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.append(script);
-    } else {
-      resolve();
     }
+
+    script.onload = () => resolve(script);
+    script.onerror = reject;
+
+    const head = document.querySelector('head');
+    head.append(script);
   });
 }
 
@@ -202,12 +195,7 @@ export async function decorateIcons(element) {
     }
   }));
 
-  const symbols = Object
-    .keys(ICONS_CACHE).filter((k) => !svgSprite.querySelector(`#icons-sprite-${k}`))
-    .map((k) => ICONS_CACHE[k])
-    .filter((v) => !v.styled)
-    .map((v) => v.html)
-    .join('\n');
+  const symbols = Object.values(ICONS_CACHE).filter((v) => !v.styled).map((v) => v.html).join('\n');
   svgSprite.innerHTML += symbols;
 
   icons.forEach((span) => {
@@ -319,45 +307,6 @@ export function readBlockConfig(block) {
 }
 
 /**
- * Decorates all sections in a container element.
- * @param {Element} main The container element
- */
-export function decorateSections(main) {
-  main.querySelectorAll(':scope > div').forEach((section) => {
-    const wrappers = [];
-    let defaultContent = false;
-    [...section.children].forEach((e) => {
-      if (e.tagName === 'DIV' || !defaultContent) {
-        const wrapper = document.createElement('div');
-        wrappers.push(wrapper);
-        defaultContent = e.tagName !== 'DIV';
-        if (defaultContent) wrapper.classList.add('default-content-wrapper');
-      }
-      wrappers[wrappers.length - 1].append(e);
-    });
-    wrappers.forEach((wrapper) => section.append(wrapper));
-    section.classList.add('section');
-    section.dataset.sectionStatus = 'initialized';
-    section.style.display = 'none';
-
-    /* process section metadata */
-    const sectionMeta = section.querySelector('div.section-metadata');
-    if (sectionMeta) {
-      const meta = readBlockConfig(sectionMeta);
-      Object.keys(meta).forEach((key) => {
-        if (key === 'style') {
-          const styles = meta.style.split(',').map((style) => toClassName(style.trim()));
-          styles.forEach((style) => section.classList.add(style));
-        } else {
-          section.dataset[toCamelCase(key)] = meta[key];
-        }
-      });
-      sectionMeta.parentNode.remove();
-    }
-  });
-}
-
-/**
  * Updates all section status in a container element.
  * @param {Element} main The container element
  */
@@ -430,7 +379,9 @@ export async function loadBlock(block) {
     block.dataset.blockStatus = 'loading';
     const { blockName } = block.dataset;
     try {
-      const cssLoaded = loadCSS(`${window.hlx.codeBasePath}/blocks/${blockName}/${blockName}.css`);
+      const cssLoaded = new Promise((resolve) => {
+        loadCSS(`${window.hlx.codeBasePath}/blocks/${blockName}/${blockName}.css`, resolve);
+      });
       const decorationComplete = new Promise((resolve) => {
         (async () => {
           try {
@@ -469,6 +420,28 @@ export async function loadBlocks(main) {
 }
 
 /**
+ * Returns the true origin of the current page in the browser.
+ * If the page is running in a iframe with srcdoc, the ancestor origin is returned.
+ * @returns {String} The true origin
+ */
+export function getOrigin() {
+  return window.location.href === 'about:srcdoc' ? window.parent.location.origin : window.location.origin;
+}
+
+/**
+ * Returns the true of the current page in the browser.mac
+ * If the page is running in a iframe with srcdoc,
+ * the ancestor origin + the path query param is returned.
+ * @returns {String} The href of the current page or the href of the block running in the library
+ */
+export function getHref() {
+  if (window.location.href !== 'about:srcdoc') return window.location.href;
+
+  const urlParams = new URLSearchParams(window.parent.location.search);
+  return `${window.parent.location.origin}${urlParams.get('path')}`;
+}
+
+/**
  * Returns a picture element with webp and fallbacks
  * @param {string} src The image URL
  * @param {string} [alt] The image alternative text
@@ -477,7 +450,7 @@ export async function loadBlocks(main) {
  * @returns {Element} The picture element
  */
 export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }]) {
-  const url = new URL(src, window.location.href);
+  const url = new URL(src, getHref());
   const picture = document.createElement('picture');
   const { pathname } = url;
   const ext = pathname.substring(pathname.lastIndexOf('.') + 1);
@@ -554,36 +527,6 @@ export function decorateTemplateAndTheme() {
 }
 
 /**
- * Decorates paragraphs containing a single link as buttons.
- * @param {Element} element container element
- */
-export function decorateButtons(element) {
-  element.querySelectorAll('a').forEach((a) => {
-    a.title = a.title || a.textContent;
-    if (a.href !== a.textContent) {
-      const up = a.parentElement;
-      const twoup = a.parentElement.parentElement;
-      if (!a.querySelector('img')) {
-        if (up.childNodes.length === 1 && (up.tagName === 'P' || up.tagName === 'DIV')) {
-          a.className = 'button primary'; // default
-          up.classList.add('button-container');
-        }
-        if (up.childNodes.length === 1 && up.tagName === 'STRONG'
-          && twoup.childNodes.length === 1 && twoup.tagName === 'P') {
-          a.className = 'button primary';
-          twoup.classList.add('button-container');
-        }
-        if (up.childNodes.length === 1 && up.tagName === 'EM'
-          && twoup.childNodes.length === 1 && twoup.tagName === 'P') {
-          a.className = 'button secondary';
-          twoup.classList.add('button-container');
-        }
-      }
-    }
-  });
-}
-
-/**
  * Load LCP block and/or wait for LCP in default content.
  */
 export async function waitForLCP(lcpBlocks) {
@@ -652,6 +595,7 @@ export function setup() {
  * Auto initializiation.
  */
 function init() {
+  document.body.style.display = 'none';
   setup();
   sampleRUM('top');
 
