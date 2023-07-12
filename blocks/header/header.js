@@ -146,9 +146,14 @@ export default async function decorate(block) {
       if (sectionNavsLvl2) {
         [...sectionNavsLvl2].forEach((ul) => {
           const lvl2Wrapper = ul.closest('li');
-          const arrowRight = createElement('span', { classes: ['fa', 'fa-arrow-right'] });
+          const arrowRight = createElement('span', { classes: ['icon', 'fa', 'fa-arrow-right'] });
+          const arrowLeft = createElement('span', { classes: ['icon', 'fa', 'fa-arrow-left', 'hide'] });
           lvl2Wrapper.appendChild(arrowRight);
+          lvl2Wrapper.prepend(arrowLeft);
           lvl2Wrapper.classList.add('has-lvl2');
+          arrowRight.onclick = (e) => {
+            console.log({target: e.target});
+          };
           console.log({ lvl2Wrapper });
         });
       }

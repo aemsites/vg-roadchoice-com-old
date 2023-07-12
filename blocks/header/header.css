@@ -198,6 +198,15 @@ header nav .nav-sections ul > li > ul {
   display: none;
 }
 
+header span.icon {
+  cursor: pointer;
+  width: 3rem;
+}
+
+header span.icon.hide {
+  display: none;
+}
+
 @media (min-width: 992px) {
   header nav .nav-sections {
     display: block;

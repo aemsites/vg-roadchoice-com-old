@@ -198,6 +198,10 @@
   content: "\f061";
 }
 
+.fa-arrow-left::before {
+  content: "\f060";
+}
+
 .fa-truck::before {
   content: "\f0d1"
 }
