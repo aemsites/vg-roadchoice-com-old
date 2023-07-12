@@ -1,9 +1,9 @@
-# Your Project's Title...
-Your project's description...
+# Road Choice
+Franklin site for roadchoice.com
 
 ## Environments
-- Preview: https://main--{repo}--{owner}.hlx.page/
-- Live: https://main--{repo}--{owner}.hlx.live/
+- Preview: https://main--vg-roadchoice-com--hlxsites.hlx.page/
+- Live: https://main--vg-roadchoice-com--hlxsites.hlx.live/
 
 ## Installation
 
