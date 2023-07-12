@@ -416,18 +416,24 @@ export function createLowResolutionBanner() {
   return banner;
 }
 
-// export function showVideoModal(linkUrl) {
-//   // eslint-disable-next-line import/no-cycle
-//   import('../common/modal/modal-component.js').then((modal) => {
-//     let beforeBanner = null;
+export function showVideoModal(linkUrl) {
+  // eslint-disable-next-line import/no-cycle
 
-//     if (isLowResolutionVideoUrl(linkUrl)) {
-//       beforeBanner = createLowResolutionBanner();
-//     }
+  // Added a false gate until modal is created
+  // const route = '../common/modal/modal-component.js'
+  const route = false;
+  if (route) {
+    import(route).then((modal) => {
+      let beforeBanner = null;
 
-//     modal.showModal(linkUrl, { beforeBanner });
-//   });
-// }
+      if (isLowResolutionVideoUrl(linkUrl)) {
+        beforeBanner = createLowResolutionBanner();
+      }
+
+      modal.showModal(linkUrl, { beforeBanner });
+    });
+  }
+}
 
 export function addVideoShowHandler(link) {
   link.classList.add('text-link-with-video');
