@@ -5,12 +5,19 @@ const buildSlide = (slideTemplate) => {
   const slideEl = document.createElement('li');
   slideEl.classList.add('carousel-slide');
   slideEl.innerHTML = slideTemplate.innerHTML;
+  slideEl.children[0].classList.add('carousel-slide-content-wrapper');
 
   const backgroundImg = slideEl.querySelector('picture');
 
   // unwrap the picture tag to be direct child of the slide
   if (backgroundImg && backgroundImg.parentElement.tagName === 'P') {
     backgroundImg.parentElement.replaceWith(backgroundImg);
+    backgroundImg.classList.add('carousel-slide-background');
+  }
+
+  // moving background image as the first child of the slide
+  if (backgroundImg) {
+    backgroundImg.closest('.carousel-slide').prepend(backgroundImg);
   }
 
   const heading = slideEl.querySelector('h1, h2, h3');
@@ -39,8 +46,8 @@ const renderSlidesControls = (carouselEl, onSelect) => {
 
 const renderArrows = (carouseEl, onSelect, carouselState) => {
   const arrowsControl = `
-    <div class="carousel-arrows-left">\<</div>
-    <div class="carousel-arrows-right">\></div>
+    <button class="carousel-arrows-left" aria-label="slide left"></button>
+    <button class="carousel-arrows-right" aria-label="slide right"></button>
   `;
 
   const arrowsControlEl = document.createElement('div');
@@ -87,6 +94,7 @@ const autoSlideChange = (carouseEl, onChange, carouselState) => {
 
 export default function decorate(block) {
   const carouselEl = document.createElement('ul');
+  carouselEl.classList.add('carousel-slide-list');
   carouselEl.innerHTML = block.innerHTML;
   block.innerHTML = '';
   block.append(carouselEl);
@@ -113,8 +121,8 @@ export default function decorate(block) {
     carouselState.activeSlideIndex = newIndex;
   }
 
-  renderArrows(block, setActiveSlideIndex, carouselState);
-  renderSlidesControls(block, setActiveSlideIndex);
+  carouselState.slideNumber > 1 && renderArrows(block, setActiveSlideIndex, carouselState);
+  carouselState.slideNumber > 1 && renderSlidesControls(block, setActiveSlideIndex);
   setActiveSlideIndex(0);
-  autoSlideChange(block, setActiveSlideIndex, carouselState);
+  carouselState.slideNumber > 1 && autoSlideChange(block, setActiveSlideIndex, carouselState);
 }

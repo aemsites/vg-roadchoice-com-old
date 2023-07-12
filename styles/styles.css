@@ -46,11 +46,11 @@
   --text-color: var(--primary-black);
 
   /* FONTS */
-  
+
   /* Body */
   --body-ff: "Nexa Regular", var(--fallback-ff);
   --fixed-ff: menlo, consolas, monospace;
-  
+
   /* Headings */
   --heading-ff-regular: var(--body-ff);
   --headings-ff-bold: "Nexa Bold", var(--fallback-ff);
@@ -130,7 +130,7 @@ header {
 
 h1 {
   font-family: var(--headings-ff-black);
-  font-size: var(--h1-font-size) 
+  font-size: var(--h1-font-size)
 }
 
 h2, h3,
