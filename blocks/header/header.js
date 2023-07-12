@@ -120,11 +120,11 @@ export default async function decorate(block) {
           navSection.setAttribute('aria-expanded', 'false');
         }
         navSection.onclick = () => {
+          // * is Desktop Mode
           if (isDesktop.matches) {
             const expanded = navSection.getAttribute('aria-expanded') === 'true';
             // toggleAllNavSections(navSections);
             navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-            console.log('hi');
           }
         };
       });
