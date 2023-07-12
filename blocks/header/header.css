@@ -24,6 +24,31 @@ header nav[aria-expanded="true"] {
   min-height: 100vh;
 }
 
+header nav li.nav-drop.show {
+  justify-content: start;
+  display: grid;
+  grid-template:
+    'left section'
+    'sub-section sub-section';
+  row-gap: 1rem;
+}
+
+header nav .nav-drop.show > a {
+  color: red;
+  grid-area: section;
+}
+
+.show .level-2 {
+  display: flex;
+  flex-direction: column;
+  grid-area: sub-section;
+  row-gap: 1rem;
+}
+
+header span.fa-arrow-left {
+  grid-area: left;
+}
+
 @media (min-width: 992px) {
   header nav {
     display: flex;
@@ -41,6 +66,7 @@ header nav p {
   line-height: 1;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 header nav a:any-link {
   color: currentcolor;
   text-decoration: none;

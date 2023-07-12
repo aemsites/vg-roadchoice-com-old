@@ -11,7 +11,7 @@ function closeOnEscape(e) {
     const navSections = nav.querySelector('.nav-sections');
     const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
     if (navSectionExpanded && isDesktop.matches) {
-      toggleAllNavSections(navSections);
+      // toggleAllNavSections(navSections);
       navSectionExpanded.focus();
     } else if (!isDesktop.matches) {
       toggleMenu(nav, navSections);
@@ -25,7 +25,7 @@ function openOnKeydown(e) {
   const isNavDrop = focused.className === 'nav-drop';
   if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
     const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
-    toggleAllNavSections(focused.closest('.nav-sections'));
+    // toggleAllNavSections(focused.closest('.nav-sections'));
     focused.setAttribute('aria-expanded', dropExpanded ? 'false' : 'true');
   }
 }
@@ -39,11 +39,11 @@ function focusNavSection() {
  * @param {Element} sections The container element
  * @param {Boolean} expanded Whether the element should be expanded or collapsed
  */
-function toggleAllNavSections(sections, expanded = false) {
-  sections.querySelectorAll('.nav-sections > ul > li').forEach((section) => {
-    section.setAttribute('aria-expanded', expanded);
-  });
-}
+// function toggleAllNavSections(sections, expanded = false) {
+//   sections.querySelectorAll('.nav-sections > ul > li').forEach((section) => {
+//     section.setAttribute('aria-expanded', expanded);
+//   });
+// }
 
 /**
  * Toggles the entire nav
@@ -56,7 +56,7 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   const button = nav.querySelector('.nav-hamburger button');
   document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
   nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-  toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
+  // toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
   button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
   // enable nav dropdown keyboard accessibility
   const navDrops = navSections.querySelectorAll('.nav-drop');
@@ -117,14 +117,16 @@ export default async function decorate(block) {
         if (nextLevelList) {
           nextLevelList.className = 'level-2';
           navSection.classList.add('nav-drop');
+          navSection.setAttribute('aria-expanded', 'false');
         }
-        navSection.addEventListener('click', () => {
+        navSection.onclick = () => {
           if (isDesktop.matches) {
             const expanded = navSection.getAttribute('aria-expanded') === 'true';
-            toggleAllNavSections(navSections);
+            // toggleAllNavSections(navSections);
             navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+            console.log('hi');
           }
-        });
+        };
       });
 
       navSections.querySelectorAll(':scope > ul > li > ul > li').forEach((navSection) => {
@@ -132,6 +134,7 @@ export default async function decorate(block) {
         if (nextLevelList) {
           nextLevelList.className = 'level-3';
           navSection.classList.add('nav-drop');
+          navSection.setAttribute('aria-expanded', 'false');
         }
       });
 
@@ -151,10 +154,17 @@ export default async function decorate(block) {
           lvl2Wrapper.appendChild(arrowRight);
           lvl2Wrapper.prepend(arrowLeft);
           lvl2Wrapper.classList.add('has-lvl2');
-          arrowRight.onclick = (e) => {
-            console.log({target: e.target});
+          arrowRight.onclick = () => {
+            lvl2Wrapper.classList.add('show');
+            arrowRight.classList.add('hide');
+            arrowLeft.classList.remove('hide');
           };
-          console.log({ lvl2Wrapper });
+          arrowLeft.onclick = () => {
+            lvl2Wrapper.classList.remove('show');
+            arrowRight.classList.remove('hide');
+            arrowLeft.classList.add('hide');
+          };
+          // console.log({ lvl2Wrapper });
         });
       }
     }
@@ -167,12 +177,12 @@ export default async function decorate(block) {
     </button>`;
     const fragment = docRange.createContextualFragment(hamburgerInnerHTML);
     hamburger.appendChild(fragment);
-    hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
+    hamburger.onclick = () => toggleMenu(nav, navSections);
     nav.prepend(hamburger);
     nav.setAttribute('aria-expanded', 'false');
     // prevent mobile nav behavior on window resize
     toggleMenu(nav, navSections, isDesktop.matches);
-    isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
+    isDesktop.onclick = () => toggleMenu(nav, navSections, isDesktop.matches);
 
     decorateIcons(nav);
     const navWrapper = createElement('div', { classes: 'nav-wrapper' });
