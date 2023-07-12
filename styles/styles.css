@@ -43,6 +43,7 @@
   --primary-light-gray: #eaeaea;
 
   /* Secondary colors */
+  --secondary-red: #8f1720;
   --secondary-dark-gray: #181818;
   --secondary-gray-1: #757378;
   --secondary-gray-2: #717372;
@@ -62,6 +63,8 @@
   --overlay-background-color: var(--primary-light-gray);
   --highlight-background-color: var(--secondary-light-gray);
   --text-color: var(--primary-black);
+  --button-active: var(--primary-red);
+  --button-hover: var(--secondary-red);
 
   /* FONTS */
 
@@ -81,6 +84,9 @@
 
   /* Fallback */
   --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
+
+  /* Fontawesome */
+  --ff-fontawesome: "fontawesome", "fontawesome Fallback";
 
   /* body sizes */
   --body-font-size-xl: 30px;
@@ -201,7 +207,7 @@ main .section {
 }
 
 a.button {
-  background-color: var(--primary-red);
+  background-color: var(--button-active);
   color: var(--primary-white);
   padding: 13px 30px;
   font-size: var(--body-font-size-m);

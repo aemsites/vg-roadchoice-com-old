@@ -20,6 +20,27 @@ export default async function decorate(block) {
     footer.innerHTML = html;
 
     decorateIcons(footer);
+
+    const children = footer.querySelectorAll('div');
+    const [social, internal, privacy] = children;
+
+    social.classList.add('footer-social-section');
+    internal.classList.add('footer-internal-section');
+    privacy.classList.add('footer-privacy-section');
+
+    social.querySelectorAll('a').forEach((link) => {
+      link.target = '_blank';
+      const linkText = link.innerText.toLowerCase();
+      const icon = document.createElement('i');
+      icon.classList.add('social-icon', 'fa', `fa-${linkText}`);
+      link.innerHTML = '';
+      link.appendChild(icon);
+    });
+
+    const privacyChildren = privacy.querySelectorAll('a');
+    const lastChild = privacyChildren[privacyChildren.length - 1];
+    lastChild.target = '_blank';
+
     block.append(footer);
   }
 }
