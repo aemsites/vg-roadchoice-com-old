@@ -608,6 +608,9 @@ export function getAllElWithChildren(elements, childrenCheck) {
 
 /* Adds attributes to all anchors and buttons that start with properties between [ brackets ] */
 const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
+/**
+ * @param {NodeList} link list of anchor and button elements
+*/
 allLinks.forEach((link) => {
   const linkText = link.innerText;
   if (linkText[0] !== '[') return;
@@ -628,7 +631,10 @@ allLinks.forEach((link) => {
   link.innerText = selectedText;
 });
 
-/* Turns the date number that comes from an excel sheet into a JS date string*/
+/* Turns the date number that comes from an excel sheet into a JS date string */
+/**
+ * @param {number} excelTimestamp Date recieved as a number from excel sheet 
+*/
 export function convertDateExcel(excelTimestamp) {
   // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google leap year bug)
   // 2. Convert to milliseconds.
