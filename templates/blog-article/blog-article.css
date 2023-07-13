@@ -4,13 +4,13 @@
 
 .blog-article .default-content-wrapper {
   margin: 0 auto 50px;
-  padding: 100px 50px;
+  padding: 50px 50px 100px;
 }
 
 .blog-article h1.article-title {
-  font-size: var(--heading-font-size-xl);
+  font-size: var(--heading-font-size-m);
   color: var(--primary-red);
-  line-height: 55px;
+  line-height: 35px;
   text-transform: uppercase;
   margin: 10px 0;
 }
@@ -31,3 +31,9 @@
   margin: 5px 0 30px;
 }
 
+@media (min-width: 992px) {
+  .blog-article h1.article-title {
+    font-size: var(--heading-font-size-xl);
+    line-height: 55px;
+  }
+}

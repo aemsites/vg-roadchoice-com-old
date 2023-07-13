@@ -89,7 +89,7 @@ main .section > div + .recommendations-container {
   text-decoration: none;
 }
 
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
   .recommendations .recommendations-list {
     display: flex;
     flex-flow: row;
