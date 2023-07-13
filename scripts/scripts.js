@@ -627,3 +627,16 @@ allLinks.forEach((link) => {
   link.title = selectedText;
   link.innerText = selectedText;
 });
+
+export function convertDateExcel(excelTimestamp) {
+  // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google leap year bug)
+  // 2. Convert to milliseconds.
+  const secondsInDay = 24 * 60 * 60;
+  const excelEpoch = new Date(1899, 11, 31);
+  const excelEpochAsUnixTimestamp = excelEpoch.getTime();
+  const missingLeapYearDay = secondsInDay * 1000;
+  const delta = excelEpochAsUnixTimestamp - missingLeapYearDay;
+  const excelTimestampAsUnixTimestamp = excelTimestamp * secondsInDay * 1000;
+  const parsed = excelTimestampAsUnixTimestamp + delta;
+  return Number.isNaN(parsed) ? null : new Date(parsed);
+}

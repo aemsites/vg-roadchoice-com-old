@@ -1,0 +1,33 @@
+.blog-article main .section {
+  padding: 0;
+}
+
+.blog-article .default-content-wrapper {
+  margin: 0 auto 50px;
+  padding: 100px 50px;
+}
+
+.blog-article h1.article-title {
+  font-size: var(--heading-font-size-xl);
+  color: var(--primary-red);
+  line-height: 55px;
+  text-transform: uppercase;
+  margin: 10px 0;
+}
+
+.blog-article .article-date {
+  font-size: var(--body-font-size-xs);
+  color: var(--secondary-dark-gray);
+  margin: 10px 0;
+}
+
+.blog-article h3 {
+  font-size: var(--body-font-size-m);
+}
+
+.blog-article p {
+  font-size: var(--body-font-size-s);
+  color: var(--secondary-dark-gray);
+  margin: 5px 0 30px;
+}
+
