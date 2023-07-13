@@ -633,7 +633,7 @@ allLinks.forEach((link) => {
 
 /* Turns the date number that comes from an excel sheet into a JS date string */
 /**
- * @param {number} excelTimestamp Date recieved as a number from excel sheet 
+ * @param {number} excelTimestamp Date recieved as a number from excel sheet
 */
 export function convertDateExcel(excelTimestamp) {
   // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google leap year bug)
