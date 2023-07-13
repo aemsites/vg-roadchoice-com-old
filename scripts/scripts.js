@@ -607,43 +607,30 @@ export function getAllElWithChildren(elements, childrenCheck) {
 }
 
 /* Adds attributes to all anchors and buttons that start with properties between [ brackets ] */
-const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
 /**
- * @param {NodeList} link list of anchor and button elements
-*/
-allLinks.forEach((link) => {
-  const linkText = link.innerText;
-  if (linkText[0] !== '[') return;
-  const brackets = linkText.match(/^\[(.*?)\]/);
-  const rawProperties = brackets && brackets[1];
-  const propertyArray = rawProperties?.split(',');
-  propertyArray?.forEach((prop) => {
-    prop.trimStart();
-    /* Check if this link should open in new tab */
-    if (prop === 'new-tab') {
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
-    }
+ * @param {NodeList} links list of links to check if have properties to add as attributes
+ */
+export function checkLinkProps(links) {
+  links.forEach((link) => {
+    const linkText = link.innerText;
+    if (linkText[0] !== '[') return;
+    const brackets = linkText.match(/^\[(.*?)\]/);
+    const rawProperties = brackets && brackets[1];
+    const propertyArray = rawProperties?.split(',');
+    propertyArray?.forEach((prop) => {
+      prop.trimStart();
+      /* Check if this link should open in new tab */
+      if (prop === 'new-tab') {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+    const firstDashIndex = linkText.indexOf(']');
+    const selectedText = linkText.slice(firstDashIndex + 1);
+    link.title = selectedText;
+    link.innerText = selectedText;
   });
-  const firstDashIndex = linkText.indexOf(']');
-  const selectedText = linkText.slice(firstDashIndex + 1);
-  link.title = selectedText;
-  link.innerText = selectedText;
-});
-
-/* Turns the date number that comes from an excel sheet into a JS date string */
-/**
- * @param {number} excelTimestamp Date recieved as a number from excel sheet
-*/
-export function convertDateExcel(excelTimestamp) {
-  // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google leap year bug)
-  // 2. Convert to milliseconds.
-  const secondsInDay = 24 * 60 * 60;
-  const excelEpoch = new Date(1899, 11, 31);
-  const excelEpochAsUnixTimestamp = excelEpoch.getTime();
-  const missingLeapYearDay = secondsInDay * 1000;
-  const delta = excelEpochAsUnixTimestamp - missingLeapYearDay;
-  const excelTimestampAsUnixTimestamp = excelTimestamp * secondsInDay * 1000;
-  const parsed = excelTimestampAsUnixTimestamp + delta;
-  return Number.isNaN(parsed) ? null : new Date(parsed);
 }
+
+const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
+checkLinkProps(allLinks);
