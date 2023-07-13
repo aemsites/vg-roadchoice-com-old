@@ -29,7 +29,7 @@ header nav li.nav-drop.show {
   display: grid;
   grid-template:
     'left section'
-    'sub-section sub-section';
+    'sub-section sub-section' / 3rem 1fr;
   row-gap: 1rem;
 }
 
@@ -38,7 +38,9 @@ header nav .nav-drop.show > a {
   grid-area: section;
 }
 
-.show .level-2 {
+.show .level-2,
+.show .show .level-3,
+.show .show .show .level-4 {
   display: flex;
   flex-direction: column;
   grid-area: sub-section;
@@ -70,6 +72,10 @@ header nav p {
 header nav a:any-link {
   color: currentcolor;
   text-decoration: none;
+}
+
+header .level-1 .hide {
+  display: none !important;
 }
 
 /* hamburger */
@@ -215,22 +221,20 @@ header nav .nav-sections .nav-sections-mobile {
   color: var(--c-light-gray);
 }
 
-header nav .level-1 .has-lvl2 {
+header nav .level-1 .has-sublevel {
   display: flex;
   justify-content: space-between;
 }
 
-header nav .nav-sections ul > li > ul {
+header nav .nav-sections ul > li > ul,
+header span.icon.hide,
+header .show.next-level > :is(span, a) {
   display: none;
 }
 
 header span.icon {
   cursor: pointer;
   width: 3rem;
-}
-
-header span.icon.hide {
-  display: none;
 }
 
 @media (min-width: 992px) {

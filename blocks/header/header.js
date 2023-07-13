@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { getMetadata, decorateIcons } from '../../scripts/lib-franklin.js';
+import { getMetadata } from '../../scripts/lib-franklin.js';
 import { createElement } from '../../scripts/scripts.js';
 
 // media query match that indicates mobile/tablet width
@@ -34,16 +34,47 @@ function focusNavSection() {
   document.activeElement.addEventListener('keydown', openOnKeydown);
 }
 
-/**
- * Toggles all nav sections
- * @param {Element} sections The container element
- * @param {Boolean} expanded Whether the element should be expanded or collapsed
- */
-// function toggleAllNavSections(sections, expanded = false) {
-//   sections.querySelectorAll('.nav-sections > ul > li').forEach((section) => {
-//     section.setAttribute('aria-expanded', expanded);
-//   });
-// }
+function HideOtherNavItems(parent, element) {
+  const { children } = parent;
+  if (['level-2', 'level-3'].some((item) => parent.classList.contains(item))) {
+    parent.closest('.has-sublevel').classList.add('next-level');
+  }
+  const otherItems = [...children].filter((item) => item !== element);
+  otherItems.forEach((item) => item.classList.add('hide'));
+}
+
+function ShowOtherNavItems(parent) {
+  const { children } = parent;
+  if (['level-2', 'level-3'].some((item) => parent.classList.contains(item))) {
+    parent.closest('.has-sublevel').classList.remove('next-level');
+  }
+  [...children].forEach((item) => item.classList.remove('hide'));
+}
+
+function buildSubSection(sectionNavs) {
+  [...sectionNavs].forEach((ul) => {
+    const lvlWrapper = ul.closest('li');
+    const arrowRight = createElement('span', { classes: ['icon', 'fa', 'fa-arrow-right'] });
+    const arrowLeft = createElement('span', { classes: ['icon', 'fa', 'fa-arrow-left', 'hide'] });
+    lvlWrapper.appendChild(arrowRight);
+    lvlWrapper.prepend(arrowLeft);
+    lvlWrapper.classList.add('has-sublevel');
+    arrowRight.onclick = () => {
+      lvlWrapper.classList.add('show');
+      lvlWrapper.setAttribute('aria-expanded', 'true');
+      HideOtherNavItems(lvlWrapper.parentElement, lvlWrapper);
+      arrowRight.classList.add('hide');
+      arrowLeft.classList.remove('hide');
+    };
+    arrowLeft.onclick = () => {
+      lvlWrapper.classList.remove('show');
+      lvlWrapper.setAttribute('aria-expanded', 'false');
+      ShowOtherNavItems(lvlWrapper.parentElement);
+      arrowRight.classList.remove('hide');
+      arrowLeft.classList.add('hide');
+    };
+  });
+}
 
 /**
  * Toggles the entire nav
@@ -84,6 +115,17 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   }
 }
 
+function setupNextLevelList(navSections, selector, level) {
+  navSections.querySelectorAll(selector).forEach((navSection) => {
+    const nextLevelList = navSection.querySelector('ul');
+    if (nextLevelList) {
+      nextLevelList.className = `level-${level}`;
+      navSection.classList.add('nav-drop');
+      navSection.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
 /**
  * decorates the header, mainly the nav
  * @param {Element} block The header block element
@@ -112,31 +154,31 @@ export default async function decorate(block) {
 
     const navSections = nav.querySelector('.nav-sections');
     if (navSections) {
-      navSections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
-        const nextLevelList = navSection.querySelector('ul');
-        if (nextLevelList) {
-          nextLevelList.className = 'level-2';
-          navSection.classList.add('nav-drop');
-          navSection.setAttribute('aria-expanded', 'false');
-        }
-        navSection.onclick = () => {
-          // * is Desktop Mode
-          if (isDesktop.matches) {
-            const expanded = navSection.getAttribute('aria-expanded') === 'true';
-            // toggleAllNavSections(navSections);
-            navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-          }
-        };
-      });
+      const navLevels = 4;
+      let selector = ':scope';
+      for (let i = 2; i <= navLevels; i += 1) {
+        selector += ' > ul > li';
+        setupNextLevelList(navSections, selector, i);
+      }
 
-      navSections.querySelectorAll(':scope > ul > li > ul > li').forEach((navSection) => {
-        const nextLevelList = navSection.querySelector('ul');
-        if (nextLevelList) {
-          nextLevelList.className = 'level-3';
-          navSection.classList.add('nav-drop');
-          navSection.setAttribute('aria-expanded', 'false');
-        }
-      });
+      // TODO prepare styling and scripts for desktop version
+
+      // navSections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
+      //   const nextLevelList = navSection.querySelector('ul');
+      //   if (nextLevelList) {
+      //     nextLevelList.className = 'level-2';
+      //     navSection.classList.add('nav-drop');
+      //     navSection.setAttribute('aria-expanded', 'false');
+      //   }
+      //   navSection.onclick = () => {
+      //     // * is Desktop Mode ?
+      //     if (isDesktop.matches) {
+      //       const expanded = navSection.getAttribute('aria-expanded') === 'true';
+      //       // toggleAllNavSections(navSections);
+      //       navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      //     }
+      //   };
+      // });
 
       // add css classes for styling purposes
       const sectionClasses = ['main', 'mobile'];
@@ -145,30 +187,11 @@ export default async function decorate(block) {
         sectionNavs[0].className = 'level-1';
         sectionClasses.forEach((c, i) => sectionNavs[i].classList.add(`nav-sections-${c}`));
       }
-      const sectionNavsLvl2 = sectionNavs[0].querySelectorAll('ul.level-2');
-      if (sectionNavsLvl2) {
-        [...sectionNavsLvl2].forEach((ul) => {
-          const lvl2Wrapper = ul.closest('li');
-          const arrowRight = createElement('span', { classes: ['icon', 'fa', 'fa-arrow-right'] });
-          const arrowLeft = createElement('span', { classes: ['icon', 'fa', 'fa-arrow-left', 'hide'] });
-          lvl2Wrapper.appendChild(arrowRight);
-          lvl2Wrapper.prepend(arrowLeft);
-          lvl2Wrapper.classList.add('has-lvl2');
-          arrowRight.onclick = () => {
-            lvl2Wrapper.classList.add('show');
-            arrowRight.classList.add('hide');
-            arrowLeft.classList.remove('hide');
-          };
-          arrowLeft.onclick = () => {
-            lvl2Wrapper.classList.remove('show');
-            arrowRight.classList.remove('hide');
-            arrowLeft.classList.add('hide');
-          };
-          // console.log({ lvl2Wrapper });
-        });
+      for (let i = 2; i <= navLevels; i += 1) {
+        const subSectionNav = sectionNavs[0].querySelectorAll(`ul.level-${i}`);
+        if (subSectionNav) buildSubSection(subSectionNav);
       }
     }
-    // TODO: add listener to the arrow to navigate in mobile viewport
 
     // hamburger for mobile
     const hamburger = createElement('div', { classes: 'nav-hamburger' });
@@ -184,7 +207,7 @@ export default async function decorate(block) {
     toggleMenu(nav, navSections, isDesktop.matches);
     isDesktop.onclick = () => toggleMenu(nav, navSections, isDesktop.matches);
 
-    decorateIcons(nav);
+    // decorateIcons(nav); // ?
     const navWrapper = createElement('div', { classes: 'nav-wrapper' });
     navWrapper.append(nav);
 
