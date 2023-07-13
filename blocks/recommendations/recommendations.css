@@ -24,18 +24,24 @@ main .section > div + .recommendations-container {
   font-size: var(--heading-font-size-m);
   text-transform: uppercase;
   font-family: var(--headings-ff-black);
-  padding: 33px 50px 44px;
+  padding: 30px 40px 45px;
 }
 
 .recommendations .recommendations-list {
   display: flex;
-  flex-flow: row;
+  flex-direction: column;
+  align-items: center;
   padding: 0 40px 50px;
 }
 
-.recommendations .article {
-  width: calc(100% / 3);
-  padding: 0 40px;
+.recommendations .recommendations-content .title-section {
+  width: 100%;
+  text-align: center;
+}
+
+.recommendations .recommendations-content .article {
+  width: 90%;
+  padding: 0 0 20px;
 }
 
 .recommendations .article .article-title {
@@ -61,6 +67,10 @@ main .section > div + .recommendations-container {
   margin: 0 0 20px;
 }
 
+.recommendations .article .article-title-link:hover {
+  text-decoration: underline;
+}
+
 .recommendations .article .article-date {
   color: var(--secondary-gray-4);
   font-size: var(--body-font-size-xs);
@@ -77,4 +87,23 @@ main .section > div + .recommendations-container {
   color: var(--primary-red);
   font-size: var(--body-font-size-m);
   text-decoration: none;
+}
+
+@media (min-width: 992px) { 
+  .recommendations .recommendations-list {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+    padding: 0 40px 50px;
+    column-gap: 80px;
+  }
+
+  .recommendations .article {
+    width: calc(100% / 3);
+    padding: 0 40px;
+  }
+
+  .recommendations .recommendations-content .title-section {
+    text-align: left;
+  }
 }
