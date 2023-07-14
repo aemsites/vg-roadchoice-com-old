@@ -104,6 +104,14 @@
   transform: translateY(-50%);
 }
 
+.carousel .carousel-arrows-left {
+  margin-left: 50px;
+}
+
+.carousel .carousel-arrows-right {
+  margin-right: 50px;
+}
+
 .carousel .carousel-arrows-left::after {
   content: url(/icons/arrow-left.png);
   cursor: pointer;
