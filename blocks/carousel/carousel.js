@@ -38,7 +38,7 @@ const renderSlidesControls = (carouselEl, onSelect) => {
     paginationStep.classList.add('carousel-controls-pagination-step');
     paginationStep.addEventListener('click', () => {
       onSelect(index);
-    })
+    });
     slidesCountrolsEl.append(paginationStep);
   });
 
@@ -80,10 +80,12 @@ const autoSlideChange = (carouseEl, onChange, carouselState) => {
 
       onChange(activeSlideIndex < slideNumber - 1 ? activeSlideIndex + 1 : 0);
     }, SLIDE_CHANGE_TIME);
-  }
+  };
 
   carouseEl.addEventListener('mouseover', () => {
-    intervalId && clearInterval(intervalId);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
   });
 
   carouseEl.addEventListener('mouseout', () => {
@@ -106,20 +108,22 @@ const onScroll = (carousel, onChange, carouselState) => {
       el.style.overflow = prevStyle;
       pauseTimeout = null;
     }, time);
-  }
+  };
 
   list.addEventListener('scroll', () => {
+    const { activeSlideIndex, slideNumber } = carouselState;
+
     if (pauseTimeout) {
       return;
     }
 
     const listWidth = list.getBoundingClientRect().width;
-    const actualItemStartPosition = listWidth * carouselState.activeSlideIndex;
+    const actualItemStartPosition = listWidth * activeSlideIndex;
 
     if (actualItemStartPosition < list.scrollLeft) {
-      const newIndex = carouselState.activeSlideIndex < carouselState.slideNumber - 1 ? carouselState.activeSlideIndex + 1 : 0;
+      const newIndex = activeSlideIndex < slideNumber - 1 ? activeSlideIndex + 1 : 0;
 
-      if (carouselState.activeSlideIndex !== newIndex) {
+      if (activeSlideIndex !== newIndex) {
         onChange(newIndex);
       }
 
@@ -129,16 +133,16 @@ const onScroll = (carousel, onChange, carouselState) => {
     }
 
     if (actualItemStartPosition > list.scrollLeft) {
-        const newIndex = carouselState.activeSlideIndex ? carouselState.activeSlideIndex - 1 : carouselState.slideNumber - 1;
+      const newIndex = activeSlideIndex ? activeSlideIndex - 1 : slideNumber - 1;
 
-        if (carouselState.activeSlideIndex !== newIndex) {
-          onChange(newIndex);
-        }
-
-        disableScrollingForTime(list);
+      if (activeSlideIndex !== newIndex) {
+        onChange(newIndex);
       }
+
+      disableScrollingForTime(list);
+    }
   });
-}
+};
 
 export default function decorate(block) {
   const carouselEl = document.createElement('ul');
@@ -154,16 +158,19 @@ export default function decorate(block) {
     activeSlideIndex: 0,
     slideNumber: [...slides].length,
     locked: false,
-  }
+  };
 
   const setActiveSlideIndex = (newIndex) => {
-    const slides = block.querySelectorAll('.carousel-slide');
+    const slidesList = block.querySelectorAll('.carousel-slide');
     const paginationSteps = [...block.querySelectorAll('.carousel-controls-pagination-step')];
 
-    [...slides].forEach((slide, index) => {
+    [...slidesList].forEach((slide, index) => {
       const action = index === newIndex ? 'add' : 'remove';
       slide.classList[action](ACTIVE_SLIDE_CLASS);
-      paginationSteps.length && paginationSteps[index].classList[action](ACTIVE_CONTROL_STEP_CLASS);
+
+      if (paginationSteps.length) {
+        paginationSteps[index].classList[action](ACTIVE_CONTROL_STEP_CLASS);
+      }
     });
 
     const ul = block.querySelector('ul.carousel-slide-list');
@@ -172,18 +179,24 @@ export default function decorate(block) {
     ul.scrollTo({ top: 0, left, behavior: 'instant' });
 
     carouselState.activeSlideIndex = newIndex;
-  }
+  };
 
   window.addEventListener('resize', () => {
     const ul = block.querySelector('ul.carousel-slide-list');
     const left = ul.getBoundingClientRect().width * carouselState.activeSlideIndex;
 
     ul.scrollTo({ top: 0, left, behavior: 'instant' });
-  })
+  });
 
-  carouselState.slideNumber > 1 && renderArrows(block, setActiveSlideIndex, carouselState);
-  carouselState.slideNumber > 1 && renderSlidesControls(block, setActiveSlideIndex);
+  if (carouselState.slideNumber > 1) {
+    renderArrows(block, setActiveSlideIndex, carouselState);
+  }
+  if (carouselState.slideNumber > 1) {
+    renderSlidesControls(block, setActiveSlideIndex);
+  }
   setActiveSlideIndex(0);
-  carouselState.slideNumber > 1 && autoSlideChange(block, setActiveSlideIndex, carouselState);
+  if (carouselState.slideNumber > 1) {
+    autoSlideChange(block, setActiveSlideIndex, carouselState);
+  }
   onScroll(block, setActiveSlideIndex, carouselState);
 }
