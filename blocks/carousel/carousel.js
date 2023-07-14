@@ -115,11 +115,23 @@ export default function decorate(block) {
     [...slides].forEach((slide, index) => {
       const action = index === newIndex ? 'add' : 'remove';
       slide.classList[action](activeSlideClass);
-      paginationSteps[index].classList[action](activeControlStepClass);
+      paginationSteps.length && paginationSteps[index].classList[action](activeControlStepClass);
     });
+
+    const ul = block.querySelector('ul.carousel-slide-list');
+    const left = ul.getBoundingClientRect().width * newIndex;
+
+    ul.scrollTo({ top: 0, left, behavior: 'instant' });
 
     carouselState.activeSlideIndex = newIndex;
   }
+
+  window.addEventListener('resize', () => {
+    const ul = block.querySelector('ul.carousel-slide-list');
+    const left = ul.getBoundingClientRect().width * carouselState.activeSlideIndex;
+
+    ul.scrollTo({ top: 0, left, behavior: 'instant' });
+  })
 
   carouselState.slideNumber > 1 && renderArrows(block, setActiveSlideIndex, carouselState);
   carouselState.slideNumber > 1 && renderSlidesControls(block, setActiveSlideIndex);

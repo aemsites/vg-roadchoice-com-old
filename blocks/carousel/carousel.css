@@ -10,20 +10,33 @@
   overflow: hidden;
   width: 100vw;
   position: relative;
+  touch-action: pan-y;
+  user-select: none;
 }
 
 .carousel .carousel-slide-list {
   height: 100%;
+  overflow: scroll hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  width: 100vw;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.carousel .carousel-slide-list::-webkit-scrollbar {
+  display: none;
 }
 
 .carousel .carousel-slide {
-  display: none;
+  display: flex;
   height: 100%;
   position: relative;
   color: var(--primary-white);
   text-align: center;
   font-size: 19px;
   line-height: 19px;
+  min-width: 100%;
 }
 
 .carousel .carousel-slide h1 {
@@ -34,10 +47,6 @@
 .carousel .carousel-slide a.button {
   background-color: inherit;
   padding: 0;
-}
-
-.carousel .carousel-slide.carousel-slide-active {
-  display: flex;
 }
 
 .carousel .carousel-slide-background {
@@ -79,6 +88,7 @@
   height: 15px;
   background: transparent;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .carousel .carousel-controls-pagination-step-active {
