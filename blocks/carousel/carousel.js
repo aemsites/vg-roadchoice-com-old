@@ -1,5 +1,6 @@
-const activeSlideClass = 'carousel-slide-active';
-const activeControlStepClass = 'carousel-controls-pagination-step-active';
+const ACTIVE_SLIDE_CLASS = 'carousel-slide-active';
+const ACTIVE_CONTROL_STEP_CLASS = 'carousel-controls-pagination-step-active';
+const SLIDE_CHANGE_TIME = 6000;
 
 const buildSlide = (slideTemplate) => {
   const slideEl = document.createElement('li');
@@ -78,7 +79,7 @@ const autoSlideChange = (carouseEl, onChange, carouselState) => {
       const { activeSlideIndex, slideNumber } = carouselState;
 
       onChange(activeSlideIndex < slideNumber - 1 ? activeSlideIndex + 1 : 0);
-    }, 6000);
+    }, SLIDE_CHANGE_TIME);
   }
 
   carouseEl.addEventListener('mouseover', () => {
@@ -161,8 +162,8 @@ export default function decorate(block) {
 
     [...slides].forEach((slide, index) => {
       const action = index === newIndex ? 'add' : 'remove';
-      slide.classList[action](activeSlideClass);
-      paginationSteps.length && paginationSteps[index].classList[action](activeControlStepClass);
+      slide.classList[action](ACTIVE_SLIDE_CLASS);
+      paginationSteps.length && paginationSteps[index].classList[action](ACTIVE_CONTROL_STEP_CLASS);
     });
 
     const ul = block.querySelector('ul.carousel-slide-list');
