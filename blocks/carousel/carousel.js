@@ -93,8 +93,19 @@ const autoSlideChange = (carouseEl, onChange, carouselState) => {
 };
 
 const onScroll = (carousel, onChange, carouselState) => {
-  let pauseTimeout = null;
   const list = carousel.querySelector('ul.carousel-slide-list');
+  let pauseTimeout = null;
+
+  const disableScrollingForTime = (el, time = 50) => {
+    const prevStyle = el.style.overflow;
+
+    el.style.overflow = 'hidden';
+
+    pauseTimeout = setTimeout(() => {
+      el.style.overflow = prevStyle;
+      pauseTimeout = null;
+    }, time);
+  }
 
   list.addEventListener('scroll', () => {
     if (pauseTimeout) {
@@ -106,36 +117,24 @@ const onScroll = (carousel, onChange, carouselState) => {
 
     if (actualItemStartPosition < list.scrollLeft) {
       const newIndex = carouselState.activeSlideIndex < carouselState.slideNumber - 1 ? carouselState.activeSlideIndex + 1 : 0;
-      const prevStyle = list.style.overflow;
 
       if (carouselState.activeSlideIndex !== newIndex) {
         onChange(newIndex);
       }
 
-      list.style.overflow = 'hidden';
-
-      pauseTimeout = setTimeout(() => {
-        list.style.overflow = prevStyle;
-        pauseTimeout = null;
-      }, 50);
+      disableScrollingForTime(list);
 
       return;
     }
 
     if (actualItemStartPosition > list.scrollLeft) {
         const newIndex = carouselState.activeSlideIndex ? carouselState.activeSlideIndex - 1 : carouselState.slideNumber - 1;
-        const prevStyle = list.style.overflow;
 
         if (carouselState.activeSlideIndex !== newIndex) {
           onChange(newIndex);
         }
 
-        list.style.overflow = 'hidden';
-
-        pauseTimeout = setTimeout(() => {
-          list.style.overflow = prevStyle;
-          pauseTimeout = null;
-        }, 50);
+        disableScrollingForTime(list);
       }
   });
 }
@@ -184,6 +183,6 @@ export default function decorate(block) {
   carouselState.slideNumber > 1 && renderArrows(block, setActiveSlideIndex, carouselState);
   carouselState.slideNumber > 1 && renderSlidesControls(block, setActiveSlideIndex);
   setActiveSlideIndex(0);
-  // carouselState.slideNumber > 1 && autoSlideChange(block, setActiveSlideIndex, carouselState);
+  carouselState.slideNumber > 1 && autoSlideChange(block, setActiveSlideIndex, carouselState);
   onScroll(block, setActiveSlideIndex, carouselState);
 }
