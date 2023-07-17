@@ -102,11 +102,15 @@
   --heading-font-size-xs: 18px;
   --heading-font-size-xxs: 14px;
 
-  /* nav height */
+  /* nav properties */
   --nav-height-mobile: 80px;
-  --nav-height-desktop: 50px;
+  --nav-height-desktop-brand: 120px;
+  --nav-height-desktop-links: 50px;
   --nav-height: var(--nav-height-mobile);
   --nav-max-width: 1264px;
+  --nav-font-size: 17px;
+  --nav-text-color: #808184;
+  --nav-background: var(--primary-light-gray);
 }
 
 @media (min-width: 495px) {
@@ -118,6 +122,12 @@
 @media (min-width: 768px) {
   :root {
     --h1-font-size: 46px;
+  }
+}
+
+@media (min-width: 992px) {
+  :root {
+    --nav-height: calc(var(--nav-height-desktop-brand) + var(--nav-height-desktop-links));
   }
 }
 

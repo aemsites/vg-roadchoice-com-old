@@ -3,17 +3,18 @@ import { getMetadata } from '../../scripts/lib-franklin.js';
 import { createElement } from '../../scripts/scripts.js';
 
 // media query match that indicates mobile/tablet width
-const isDesktop = window.matchMedia('(min-width: 992px)');
+const MQ = window.matchMedia('(min-width: 992px)');
+const isDesktop = MQ.matches;
+let categoriesClone;
 
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
     const nav = document.getElementById('nav');
     const navSections = nav.querySelector('.nav-sections');
     const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
-    if (navSectionExpanded && isDesktop.matches) {
-      // toggleAllNavSections(navSections);
+    if (navSectionExpanded && isDesktop) {
       navSectionExpanded.focus();
-    } else if (!isDesktop.matches) {
+    } else if (!isDesktop) {
       toggleMenu(nav, navSections);
       nav.querySelector('button').focus();
     }
@@ -25,7 +26,6 @@ function openOnKeydown(e) {
   const isNavDrop = focused.className === 'nav-drop';
   if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
     const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
-    // toggleAllNavSections(focused.closest('.nav-sections'));
     focused.setAttribute('aria-expanded', dropExpanded ? 'false' : 'true');
   }
 }
@@ -76,6 +76,31 @@ function buildSubSection(sectionNavs) {
   });
 }
 
+function setupNextLevelList(navSections, selector, level) {
+  navSections.querySelectorAll(selector).forEach((navSection) => {
+    const nextLevelList = navSection.querySelector('ul');
+    if (nextLevelList) {
+      nextLevelList.className = `level-${level}`;
+      navSection.classList.add('nav-drop');
+      navSection.setAttribute('aria-expanded', 'false');
+    }
+  });
+  if (level === 2) {
+    const categories = navSections.querySelector('.nav-drop');
+    categories.classList.add('categories');
+    categoriesClone = categories.cloneNode(true);
+    if (isDesktop) {
+      categories.onclick = (e) => {
+        e.preventDefault();
+        const li = e.target.localName === 'a' ? e.target.closest('li') : e.target;
+        const expanded = li.getAttribute('aria-expanded') === 'true';
+        li.ariaExpanded = !expanded;
+        categoriesClone.ariaExpanded = !expanded;
+      };
+    }
+  }
+}
+
 /**
  * Toggles the entire nav
  * @param {Element} nav The container element
@@ -85,13 +110,12 @@ function buildSubSection(sectionNavs) {
 function toggleMenu(nav, navSections, forceExpanded = null) {
   const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
   const button = nav.querySelector('.nav-hamburger button');
-  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
+  document.body.style.overflowY = (expanded || isDesktop) ? '' : 'hidden';
   nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-  // toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
   button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
   // enable nav dropdown keyboard accessibility
   const navDrops = navSections.querySelectorAll('.nav-drop');
-  if (isDesktop.matches) {
+  if (isDesktop) {
     navDrops.forEach((drop) => {
       if (!drop.hasAttribute('tabindex')) {
         drop.setAttribute('role', 'button');
@@ -107,23 +131,12 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
     });
   }
   // enable menu collapse on escape keypress
-  if (!expanded || isDesktop.matches) {
+  if (!expanded || isDesktop) {
     // collapse menu on escape press
     window.addEventListener('keydown', closeOnEscape);
   } else {
     window.removeEventListener('keydown', closeOnEscape);
   }
-}
-
-function setupNextLevelList(navSections, selector, level) {
-  navSections.querySelectorAll(selector).forEach((navSection) => {
-    const nextLevelList = navSection.querySelector('ul');
-    if (nextLevelList) {
-      nextLevelList.className = `level-${level}`;
-      navSection.classList.add('nav-drop');
-      navSection.setAttribute('aria-expanded', 'false');
-    }
-  });
 }
 
 /**
@@ -161,25 +174,6 @@ export default async function decorate(block) {
         setupNextLevelList(navSections, selector, i);
       }
 
-      // TODO prepare styling and scripts for desktop version
-
-      // navSections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
-      //   const nextLevelList = navSection.querySelector('ul');
-      //   if (nextLevelList) {
-      //     nextLevelList.className = 'level-2';
-      //     navSection.classList.add('nav-drop');
-      //     navSection.setAttribute('aria-expanded', 'false');
-      //   }
-      //   navSection.onclick = () => {
-      //     // * is Desktop Mode ?
-      //     if (isDesktop.matches) {
-      //       const expanded = navSection.getAttribute('aria-expanded') === 'true';
-      //       // toggleAllNavSections(navSections);
-      //       navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-      //     }
-      //   };
-      // });
-
       // add css classes for styling purposes
       const sectionClasses = ['main', 'mobile'];
       const sectionNavs = navSections.querySelectorAll(':scope > ul');
@@ -204,8 +198,8 @@ export default async function decorate(block) {
     nav.prepend(hamburger);
     nav.setAttribute('aria-expanded', 'false');
     // prevent mobile nav behavior on window resize
-    toggleMenu(nav, navSections, isDesktop.matches);
-    isDesktop.onclick = () => toggleMenu(nav, navSections, isDesktop.matches);
+    toggleMenu(nav, navSections, isDesktop);
+    MQ.onclick = () => toggleMenu(nav, navSections, isDesktop);
 
     // decorateIcons(nav); // ?
     const navWrapper = createElement('div', { classes: 'nav-wrapper' });
@@ -214,6 +208,11 @@ export default async function decorate(block) {
     // move tools as direct children of nav-wrapper
     const navTools = nav.querySelector('.nav-tools');
     navWrapper.appendChild(navTools);
+    if (categoriesClone) {
+      const level4 = categoriesClone.querySelectorAll('.level-2 > li > ul > li > ul');
+      [...level4].forEach((ul) => { ul.className = 'level-4'; });
+      navTools.prepend(categoriesClone);
+    }
 
     block.append(navWrapper);
   }
