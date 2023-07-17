@@ -618,23 +618,30 @@ export function getAllElWithChildren(elements, childrenCheck) {
 }
 
 /* Adds attributes to all anchors and buttons that start with properties between [ brackets ] */
-const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
-allLinks.forEach((link) => {
-  const linkText = link.innerText;
-  if (linkText[0] !== '[') return;
-  const brackets = linkText.match(/^\[(.*?)\]/);
-  const rawProperties = brackets && brackets[1];
-  const propertyArray = rawProperties?.split(',');
-  propertyArray?.forEach((prop) => {
-    prop.trimStart();
-    /* Check if this link should open in new tab */
-    if (prop === 'new-tab') {
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
-    }
+/**
+ * @param {NodeList} links list of links to check if have properties to add as attributes
+ */
+export function checkLinkProps(links) {
+  links.forEach((link) => {
+    const linkText = link.innerText;
+    if (linkText[0] !== '[') return;
+    const brackets = linkText.match(/^\[(.*?)\]/);
+    const rawProperties = brackets && brackets[1];
+    const propertyArray = rawProperties?.split(',');
+    propertyArray?.forEach((prop) => {
+      prop.trimStart();
+      /* Check if this link should open in new tab */
+      if (prop === 'new-tab') {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+    const firstDashIndex = linkText.indexOf(']');
+    const selectedText = linkText.slice(firstDashIndex + 1);
+    link.title = selectedText;
+    link.innerText = selectedText;
   });
-  const firstDashIndex = linkText.indexOf(']');
-  const selectedText = linkText.slice(firstDashIndex + 1);
-  link.title = selectedText;
-  link.innerText = selectedText;
-});
+}
+
+const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
+checkLinkProps(allLinks);
