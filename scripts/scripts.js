@@ -29,6 +29,32 @@ function addBackgroundImage(section, picture) {
 }
 
 /**
+ * Create an element with the given id and classes.
+ * @param {string} tagName the tag
+ * @param {Object} options the element options
+ * @param {string[]|string} [options.classes=[]] the class or classes to add
+ * @param {Object} [options.props={}] any other attributes to add to the element
+ * @returns {HTMLElement} the element
+ */
+export function createElement(tagName, options = {}) {
+  const { classes = [], props = {} } = options;
+  const elem = document.createElement(tagName);
+  const isString = typeof classes === 'string';
+  if (classes || (isString && classes !== '') || (!isString && classes.length > 0)) {
+    const classesArr = isString ? [classes] : classes;
+    elem.classList.add(...classesArr);
+  }
+  if (props) {
+    Object.keys(props).forEach((propName) => {
+      const value = propName === props[propName] ? '' : props[propName];
+      elem.setAttribute(propName, value);
+    });
+  }
+
+  return elem;
+}
+
+/**
  * Decorates all sections in a container element.
  * @param {Element} main The container element
  */
@@ -38,7 +64,7 @@ export function decorateSections(main) {
     let defaultContent = false;
     [...section.children].forEach((e) => {
       if (e.tagName === 'DIV' || !defaultContent) {
-        const wrapper = document.createElement('div');
+        const wrapper = createElement('div');
         wrappers.push(wrapper);
         defaultContent = e.tagName !== 'DIV';
         if (defaultContent) wrapper.classList.add('default-content-wrapper');
@@ -94,19 +120,17 @@ export function decorateButtons(element) {
           twoup.className = 'button-container';
         }
         if (up.tagName === 'STRONG' && twoup.childNodes.length === 1 && twoup.tagName === 'LI') {
-          const arrow = document.createElement('span');
+          const arrow = createElement('span', { classes: 'fa fa-arrow-right' });
           link.className = 'button arrowed';
-          twoup.parentElement.className = 'button-container';
-          arrow.className = 'fa fa-arrow-right';
           link.appendChild(arrow);
+          twoup.parentElement.className = 'button-container';
         }
         if (up.tagName === 'LI' && twoup.children.length === 1
           && link.children.length > 0 && link.firstElementChild.tagName === 'STRONG') {
-          const arrow = document.createElement('span');
+          const arrow = createElement('span', { classes: 'fa fa-arrow-right' });
           link.className = 'button arrowed';
-          twoup.className = 'button-container';
-          arrow.className = 'fa fa-arrow-right';
           link.appendChild(arrow);
+          twoup.className = 'button-container';
         }
       }
     }
@@ -152,29 +176,6 @@ export function findAndCreateImageLink(node) {
 }
 
 /**
- * Create an element with the given id and classes.
- * @param {string} tagName the tag
- * @param {string[]|string} classes the class or classes to add
- * @param {object} props any other attributes to add to the element
- * @returns the element
- */
-export function createElement(tagName, classes = [], props = {}) {
-  const elem = document.createElement(tagName);
-  if (classes) {
-    const classesArr = (typeof classes === 'string') ? [classes] : classes;
-    elem.classList.add(...classesArr);
-  }
-  if (props) {
-    Object.keys(props).forEach((propName) => {
-      const value = propName === props[propName] ? '' : props[propName];
-      elem.setAttribute(propName, value);
-    });
-  }
-
-  return elem;
-}
-
-/**
  * Builds hero block and prepends to main in a new section.
  * @param {Element} main The container element
  */
@@ -192,7 +193,7 @@ function buildHeroBlock(main) {
   if (header && picture
     // eslint-disable-next-line no-bitwise
     && (header.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
-    const section = document.createElement('div');
+    const section = createElement('div');
     section.append(buildBlock('hero', { elems: [picture, header] }));
     section.querySelector('.hero').classList.add('auto-block');
     main.prepend(section);
@@ -322,10 +323,13 @@ async function loadEager(doc) {
  * @param {string} href The favicon URL
  */
 export function addFavIcon(href) {
-  const link = document.createElement('link');
-  link.rel = 'icon';
-  link.type = 'image/svg+xml';
-  link.href = href;
+  const link = createElement('link', {
+    props: {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href,
+    },
+  });
   const existingLink = document.querySelector('head link[rel="icon"]');
   if (existingLink) {
     existingLink.parentElement.replaceChild(link, existingLink);
@@ -384,6 +388,7 @@ async function loadPage() {
 
 loadPage();
 
+/** Helper functions */
 // video helpers
 export function isLowResolutionVideoUrl(url) {
   return url.split('?')[0].endsWith('.mp4');
@@ -412,7 +417,7 @@ export function createLowResolutionBanner() {
   const lowResolutionMessage = getTextLabel('Low resolution video message');
   const changeCookieSettings = getTextLabel('Change cookie settings');
 
-  const banner = createElement('div', ['low-resolution-banner']);
+  const banner = createElement('div', { classes: ['low-resolution-banner'] });
   banner.innerHTML = `${lowResolutionMessage} <button class="low-resolution-banner-cookie-settings">${changeCookieSettings}</button>`;
   banner.querySelector('button').addEventListener('click', () => {
     window.OneTrust.ToggleInfoDisplay();
@@ -451,8 +456,8 @@ export function addVideoShowHandler(link) {
 }
 
 export function addPlayIcon(parent) {
-  const iconWrapper = createElement('div', ['video-icon-wrapper']);
-  const icon = createElement('i', ['fa', 'fa-play', 'video-icon']);
+  const iconWrapper = createElement('div', { classes: ['video-icon-wrapper'] });
+  const icon = createElement('i', { classes: ['fa', 'fa-play', 'video-icon'] });
   iconWrapper.appendChild(icon);
   parent.appendChild(iconWrapper);
 }
@@ -468,10 +473,13 @@ export function wrapImageWithVideoLink(videoLink, image) {
 
 export function createIframe(url, { parentEl, classes = [] }) {
   // iframe must be recreated every time otherwise the new history record would be created
-  const iframe = createElement('iframe', classes, {
-    frameborder: '0',
-    allowfullscreen: 'allowfullscreen',
-    src: url,
+  const iframe = createElement('iframe', {
+    classes,
+    props: {
+      frameborder: '0',
+      allowfullscreen: 'allowfullscreen',
+      src: url,
+    },
   });
 
   if (parentEl) {
@@ -503,7 +511,10 @@ export function loadScriptIfNotLoadedYet(url, attrs) {
  */
 export function loadAsBlock(blockName, blockContent, options = {}) {
   const { variantsClasses = [] } = options;
-  const blockEl = createElement('div', ['block', blockName, ...variantsClasses], { 'data-block-name': blockName });
+  const blockEl = createElement('div', {
+    classes: ['block', blockName, ...variantsClasses],
+    props: { 'data-block-name': blockName },
+  });
 
   blockEl.innerHTML = blockContent;
   loadBlock(blockEl);
