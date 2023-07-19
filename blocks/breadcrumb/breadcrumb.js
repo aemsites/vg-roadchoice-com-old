@@ -9,8 +9,8 @@ const homeUrl = getTextLabel('home url');
 const pageName = getMetadata('og:title');
 
 export default async function decorate(block) {
-  const breadcrumbContent = createElement('div', 'breadcrumb-content');
-  const breadcrumbList = createElement('ul', 'breadcrumb-list');
+  const breadcrumbContent = createElement('div', { classes: ['breadcrumb-content'] });
+  const breadcrumbList = createElement('ul', { classes: ['breadcrumb-list'] });
   const currentUrl = window.location.pathname;
 
   const routes = currentUrl.split('/');

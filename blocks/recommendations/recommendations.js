@@ -52,40 +52,40 @@ export default async function decorate(block) {
   const filteredArticles = clearRepeatedArticles(sortedArticles);
   const selectedArticles = filteredArticles.slice(0, limit);
 
-  const recommmendationsContent = createElement('div', 'recommendations-content');
-  const titleSection = createElement('div', 'title-section');
+  const recommmendationsContent = createElement('div', { classes: ['recommendations-content'] });
+  const titleSection = createElement('div', { classes: ['title-section'] });
 
-  const titleElement = createElement('h3', 'title');
+  const titleElement = createElement('h3', { classes: ['title'] });
   titleElement.innerText = isBlogArticle ? recommendationsTitle : homeTitle;
 
   if (!isBlogArticle) {
-    const link = createElement('a', 'link');
+    const link = createElement('a', { classes: ['link'] });
     link.append(titleElement);
     titleSection.appendChild(link);
   } else {
     titleSection.appendChild(titleElement);
   }
 
-  const recommendationsList = createElement('ul', 'recommendations-list');
+  const recommendationsList = createElement('ul', { classes: ['recommendations-list'] });
 
   selectedArticles.forEach((art) => {
-    const article = createElement('li', 'article');
+    const article = createElement('li', { classes: ['article'] });
 
-    const articleTitle = createElement('h2', 'article-title');
-    const articleTitleLink = createElement('a', 'article-title-link');
+    const articleTitle = createElement('h2', { classes: ['article-title'] });
+    const articleTitleLink = createElement('a', { classes: ['article-title-link'] });
     articleTitleLink.innerText = art.title;
     articleTitleLink.href = art.path;
 
     articleTitle.appendChild(articleTitleLink);
 
-    const articleDate = createElement('p', 'article-date');
+    const articleDate = createElement('p', { classes: ['article-date'] });
     articleDate.innerText = formatDate(art.date);
 
-    const articleText = createElement('p', 'article-text');
+    const articleText = createElement('p', { classes: ['article-text'] });
     articleText.innerText = art.extract;
 
     const strongLink = createElement('strong');
-    const articleLink = createElement('a', 'article-link');
+    const articleLink = createElement('a', { classes: ['article-link'] });
     articleLink.innerText = linkText;
     articleLink.href = art.path;
     strongLink.appendChild(articleLink);

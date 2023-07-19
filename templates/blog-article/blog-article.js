@@ -8,8 +8,9 @@ const date = getMetadata('date');
 
 async function buildSection(container, sectionName = '') {
   const selectedContent = container.querySelector(`.${sectionName}-container .${sectionName}-wrapper`);
-  const classes = sectionName === 'breadcrumbs' ? ['section', 'template', 'article-template', `${sectionName}-container`] : `${sectionName}-container`;
-  const sectionContainer = createElement('div', classes);
+  const sectionClassList = sectionName === 'breadcrumbs' ? ['section', 'template', 'article-template', `${sectionName}-container`] : `${sectionName}-container`;
+  const sectionContainer = createElement('div', { classes: sectionClassList });
+
   sectionContainer.append(selectedContent);
 
   return sectionContainer;
@@ -17,10 +18,10 @@ async function buildSection(container, sectionName = '') {
 
 export default async function decorate(doc) {
   const container = doc.querySelector('main');
-  const article = createElement('div', 'article-content');
+  const article = createElement('div', { classes: ['article-content'] });
 
-  const articleTexts = createElement('div', ['section', 'template', 'article-template', 'article-texts-container']);
-  const currentArticle = createElement('div', 'current-article-container');
+  const articleTexts = createElement('div', { classes: ['section', 'template', 'article-template', 'article-texts-container'] });
+  const currentArticle = createElement('div', { classes: ['current-article-container'] });
 
   const [
     breadSection,
@@ -32,10 +33,10 @@ export default async function decorate(doc) {
 
   const defaultContent = container.querySelector('.default-content-wrapper');
 
-  const articleTitle = createElement('h1', 'article-title');
+  const articleTitle = createElement('h1', { classes: ['article-title'] });
   articleTitle.textContent = title;
 
-  const articleDate = createElement('p', 'article-date');
+  const articleDate = createElement('p', { classes: ['article-date'] });
   articleDate.textContent = date;
 
   defaultContent.insertAdjacentElement('afterbegin', articleDate);
