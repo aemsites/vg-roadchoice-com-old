@@ -1,4 +1,4 @@
-import { checkLinkProps } from '../../scripts/scripts.js';
+import { checkLinkProps, createElement } from '../../scripts/scripts.js';
 import { readBlockConfig, decorateIcons } from '../../scripts/lib-franklin.js';
 
 /**
@@ -32,8 +32,7 @@ export default async function decorate(block) {
     social.querySelectorAll('a').forEach((link) => {
       link.target = '_blank';
       const linkText = link.innerText.toLowerCase();
-      const icon = document.createElement('i');
-      icon.classList.add('social-icon', 'fa', `fa-${linkText}`);
+      const icon = createElement('i', { classes: ['social-icon', 'fa', `fa-${linkText}`] });
       link.innerHTML = '';
       link.appendChild(icon);
     });
