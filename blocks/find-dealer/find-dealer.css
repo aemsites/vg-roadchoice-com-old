@@ -1,0 +1,113 @@
+.find-dealer-container {
+  background-size: cover;
+  background-color: var(--primary-black);
+}
+
+.section.find-dealer-container {
+  padding: 0;
+}
+
+@media (min-width: 992px) {
+  .section.find-dealer-container {
+    padding: 64px 32px;
+  }
+}
+
+.find-dealer-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--primary-white);
+  text-align: center;
+  padding: 5rem;
+  gap: 3rem;
+  font-family: var(--body-ff);
+  width: 90%;
+  margin-inline: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.find-dealer-form-container .find-dealer-col-1 {
+  font-size: 17px;
+  line-height: 20px;
+}
+
+.find-dealer-form-container .find-dealer-col-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.find-dealer-form-container .find-dealer-col-2 h3 {
+  font-size: 40px;
+  font-family: var(--headings-ff-black);
+}
+
+.find-dealer-button.fa-search::before {
+  position: absolute;
+  color: var(--c-medium-gray-2);
+  cursor: pointer;
+  font-size: 120%;
+  left: -30px;
+  top: -15px;
+}
+
+.find-dealer-input {
+  padding: 2rem 1rem;
+  font-size: 70%;
+  color: var(--secondary-gray-4);
+  font-family: inherit;
+  width: 71vw;
+}
+
+@media (min-width: 310px) {
+  .find-dealer-input {
+    font-size: 85%;
+  }
+
+  .find-dealer-button.fa-search::before {
+    left: -45px;
+    top: -20px;
+    font-size: 150%;
+  }
+}
+
+@media (min-width: 768px) {
+  .find-dealer-form-container {
+    flex-direction: initial;
+    padding: 7rem 0;
+  }
+
+  .find-dealer-form-container .find-dealer-col-1 {
+    font-size: inherit;
+    width: 55%;
+    text-align: initial;
+  }
+
+  .find-dealer-form-container .find-dealer-col-2 {
+    gap: 1rem
+  }
+
+  .find-dealer-form-container .find-dealer-col-2 h3 {
+    line-height: 1;
+  }
+
+  .find-dealer-input {
+    width: 35vw;
+  }
+}
+
+@media (min-width: 992px) {
+  .find-dealer-input {
+    width: 25vw;
+  }
+
+  .find-dealer-form-container {
+    justify-content: space-between;
+  }
+
+  .find-dealer-form-container .find-dealer-col-1 {
+    width: 50%;
+  }
+}
