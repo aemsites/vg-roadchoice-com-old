@@ -23,10 +23,8 @@ export default async function decorate(block) {
 
   routes.forEach((path, idx) => {
     if (path.length === 0) return;
-    const item = document.createElement('li');
-    item.classList.add('breadcrumb-item', `breadcrumb-item-${idx}`);
-    const link = document.createElement('a');
-    link.classList.add('breadcrumb-link');
+    const item = createElement('li', { classes: ['breadcrumb-item', `breadcrumb-item-${idx}`] });
+    const link = createElement('a', { classes: ['breadcrumb-link'] });
 
     partialUrl = idx === 0 ? homeUrl : `${partialUrl}${path}/`;
     link.href = partialUrl;
