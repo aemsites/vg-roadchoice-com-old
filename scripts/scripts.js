@@ -182,7 +182,7 @@ export function findAndCreateImageLink(node) {
 function buildHeroBlock(main) {
   const header = main.querySelector('h1');
   const picture = main.querySelector('picture');
-  const isCarousel = header.closest('.carousel');
+  const isCarousel = header?.closest('.carousel');
   const heroBlock = main.querySelector('.hero');
 
   if (isCarousel || heroBlock) {

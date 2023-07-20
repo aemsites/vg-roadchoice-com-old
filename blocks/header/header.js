@@ -198,8 +198,7 @@ export default async function decorate(block) {
     nav.prepend(hamburger);
     nav.setAttribute('aria-expanded', 'false');
     // prevent mobile nav behavior on window resize
-    toggleMenu(nav, navSections, isDesktop);
-    MQ.onclick = () => toggleMenu(nav, navSections, isDesktop);
+    if (isDesktop) toggleMenu(nav, navSections, !isDesktop);
 
     // decorateIcons(nav); // ?
     const navWrapper = createElement('div', { classes: 'nav-wrapper' });
