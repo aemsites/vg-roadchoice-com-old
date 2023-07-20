@@ -4,12 +4,12 @@
 }
 
 .section.find-dealer-container {
-  padding: 0;
+  padding: 10px 16px;
 }
 
 @media (min-width: 992px) {
   .section.find-dealer-container {
-    padding: 64px 32px;
+    padding: 12px 32px;
   }
 }
 
