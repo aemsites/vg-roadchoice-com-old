@@ -42,13 +42,12 @@
   color: var(--breadcrumb-hover);
 }
 
-.breadcrumb-list li:first-of-type a,
 .breadcrumb-list li:last-of-type a {
   display: block;
 }
 
 .breadcrumb-list li:last-of-type a {
-  width: 50vw;
+  width: 30vw;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
