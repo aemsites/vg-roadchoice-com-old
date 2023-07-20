@@ -47,6 +47,13 @@
   display: block;
 }
 
+.breadcrumb-list li:last-of-type a {
+  width: 50vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .breadcrumb a::after {
   content: '/';
   margin: 0 5px;
@@ -65,5 +72,9 @@
 
   .breadcrumb-list li a {
     display: block;
+  }
+
+  .breadcrumb-list li:last-of-type a {
+    width: unset;
   }
 }
