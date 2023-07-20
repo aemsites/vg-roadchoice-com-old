@@ -48,7 +48,7 @@
 }
 
 .breadcrumb-list li:last-of-type a {
-  width: 30vw;
+  width: 40vw;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
