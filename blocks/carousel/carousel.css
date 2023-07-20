@@ -1,3 +1,7 @@
+main .section.carousel-container {
+  padding: 0;
+}
+
 .section > .carousel-wrapper {
   margin: auto -16px;
   max-width: unset;

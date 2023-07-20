@@ -70,6 +70,7 @@
 
   /* Body */
   --body-ff: "Nexa Regular", var(--fallback-ff);
+  --body-ff-bold: "Nexa Bold", var(--fallback-ff);
   --fixed-ff: menlo, consolas, monospace;
 
   /* Headings */
@@ -185,6 +186,10 @@ code, pre, samp {
   font-family: var(--fixed-ff);
 }
 
+p strong {
+  font-family: var(--body-ff-bold);
+}
+
 pre {
   overflow: scroll;
 }
@@ -208,7 +213,7 @@ main .section {
 
 @media (min-width: 992px) {
   .section > div {
-    max-width: 1200px;
+    max-width: 1270px;
     margin: auto;
   }
 }

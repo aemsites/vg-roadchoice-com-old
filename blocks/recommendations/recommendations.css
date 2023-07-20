@@ -1,0 +1,109 @@
+main .section.recommendations-container {
+  width: 100%;
+  padding: 0;
+}
+
+main .section > div + .recommendations-wrapper,
+main .section > div + .recommendations-container {
+  max-width: unset;
+  padding: 0;
+  background-color: var(--primary-light-gray);
+}
+
+.recommendations {
+  position: relative;
+}
+
+.recommendations-content {
+  max-width: 1270px;
+  margin: auto;
+}
+
+.recommendations h3.title{
+  color: var(--secondary-gray-1);
+  font-size: var(--heading-font-size-m);
+  text-transform: uppercase;
+  font-family: var(--headings-ff-black);
+  padding: 30px 40px 45px;
+}
+
+.recommendations .recommendations-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 40px 50px;
+}
+
+.recommendations .recommendations-content .title-section {
+  width: 100%;
+  text-align: center;
+}
+
+.recommendations .recommendations-content .article {
+  width: 90%;
+  padding: 0 0 20px;
+}
+
+.recommendations .article .article-title {
+  font-family: var(--headings-ff-heavy);
+  text-transform: uppercase;
+  line-height: 22px;
+}
+
+.recommendations .article .article-title::after {
+  display: block;
+  content: "";
+  left: 0;
+  width: 52%;
+  height: 3px;
+  background: var(--secondary-gray-2);
+  margin-top: 20px;
+}
+
+.recommendations .article .article-title-link {
+  color: var(--primary-red);
+  font-size: var(--heading-font-size-s);
+  text-decoration: none;
+  margin: 0 0 20px;
+}
+
+.recommendations .article .article-title-link:hover {
+  text-decoration: underline;
+}
+
+.recommendations .article .article-date {
+  color: var(--secondary-gray-4);
+  font-size: var(--body-font-size-xs);
+  margin: 10px 0 0;
+}
+
+.recommendations .article .article-text {
+  color: var(--secondary-gray-4);
+  font-size: var(--body-font-size-m);
+  margin: 20px 0 0;
+}
+
+.recommendations .article .article-link {
+  color: var(--primary-red);
+  font-size: var(--body-font-size-m);
+  text-decoration: none;
+}
+
+@media (min-width: 992px) {
+  .recommendations .recommendations-list {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+    padding: 0 40px 50px;
+    column-gap: 80px;
+  }
+
+  .recommendations .article {
+    width: calc(100% / 3);
+    padding: 0 40px;
+  }
+
+  .recommendations .recommendations-content .title-section {
+    text-align: left;
+  }
+}

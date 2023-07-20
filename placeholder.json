@@ -1,0 +1,24 @@
+{
+  "total": 4,
+  "offset": 0,
+  "limit": 4,
+  "data": [
+    {
+      "Key": "brand name",
+      "Text": "Road Choice"
+    },
+    {
+      "Key": "home url",
+      "Text": "https://main--vg-roadchoice-com--hlxsites.hlx.page/"
+    },
+    {
+      "Key": "recommendations title",
+      "Text": "Blog[/]You may also like..."
+    },
+    {
+      "Key": "read more",
+      "Text": "READ MORE"
+    }
+  ],
+  ":type": "sheet"
+}
