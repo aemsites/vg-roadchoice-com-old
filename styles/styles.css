@@ -12,6 +12,19 @@
 
  @import url('./reset.css');
 
+ @font-face {
+    font-family: "fontawesome Fallback";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Arial");
+    ascent-override: 93.75%;
+    descent-override: 6.25%;
+    /* stylelint-disable-next-line number-no-trailing-zeros */
+    line-gap-override: 0.00%;
+    /* stylelint-disable-next-line number-no-trailing-zeros */
+    size-adjust: 100.00%;
+  }
+
  :root {
   /* BREAKPOINTS */
   --breakpoint-xxs: 495px;
@@ -24,10 +37,10 @@
   /* Primary colors */
   --primary-black: #000;
   --primary-white: #fff;
-  --primary-red: #B92530;
+  --primary-red: #b92530;
   --primary-dark-gray: #363636;
   --primary-medium-gray: #737478;
-  --primary-light-gray: #EAEAEA;
+  --primary-light-gray: #eaeaea;
 
   /* Secondary colors */
   --secondary-red: #8f1720;
@@ -36,7 +49,12 @@
   --secondary-gray-2: #717372;
   --secondary-gray-3: #707372;
   --secondary-gray-4: #747474;
-  --secondary-light-gray: #B1B7B8;
+  --secondary-light-gray: #b1b7b8;
+
+  /* Other colors */
+  --c-light-gray: #f5f5f5;
+  --c-medium-gray-1: #727376;
+  --c-medium-gray-2: #808080;
 
   /* Applied colors */
   --link-color: var(--primary-red);
@@ -49,11 +67,11 @@
   --button-hover: var(--secondary-red);
 
   /* FONTS */
-  
+
   /* Body */
   --body-ff: "Nexa Regular", var(--fallback-ff);
   --fixed-ff: menlo, consolas, monospace;
-  
+
   /* Headings */
   --heading-ff-regular: var(--body-ff);
   --headings-ff-bold: "Nexa Bold", var(--fallback-ff);
@@ -61,11 +79,11 @@
   --headings-ff-heavy: "Nexa Heavy", var(--fallback-ff);
   --headings-ff-black: "Nexa Black", var(--fallback-ff);
 
-  /* Fallback */
-  --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
-
   /* Fontawesome */
   --ff-fontawesome: "fontawesome", "fontawesome Fallback";
+
+  /* Fallback */
+  --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
 
   /* body sizes */
   --body-font-size-xl: 30px;
@@ -84,8 +102,15 @@
   --heading-font-size-xs: 18px;
   --heading-font-size-xxs: 14px;
 
-  /* nav height */
-  --nav-height: 50px;
+  /* nav properties */
+  --nav-height-mobile: 80px;
+  --nav-height-desktop-brand: 120px;
+  --nav-height-desktop-links: 50px;
+  --nav-height: var(--nav-height-mobile);
+  --nav-max-width: 1264px;
+  --nav-font-size: 17px;
+  --nav-text-color: #808184;
+  --nav-background: var(--primary-light-gray);
 }
 
 @media (min-width: 495px) {
@@ -97,6 +122,12 @@
 @media (min-width: 768px) {
   :root {
     --h1-font-size: 46px;
+  }
+}
+
+@media (min-width: 992px) {
+  :root {
+    --nav-height: calc(var(--nav-height-desktop-brand) + var(--nav-height-desktop-links));
   }
 }
 
@@ -136,7 +167,7 @@ header {
 
 h1 {
   font-family: var(--headings-ff-black);
-  font-size: var(--h1-font-size) 
+  font-size: var(--h1-font-size);
 }
 
 h2, h3,
