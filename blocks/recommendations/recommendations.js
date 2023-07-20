@@ -72,9 +72,8 @@ export default async function decorate(block) {
     const article = createElement('li', { classes: ['article'] });
 
     const articleTitle = createElement('h2', { classes: ['article-title'] });
-    const articleTitleLink = createElement('a', { classes: ['article-title-link'] });
+    const articleTitleLink = createElement('a', { classes: ['article-title-link'], props: { href: art.path } });
     articleTitleLink.innerText = art.title;
-    articleTitleLink.href = art.path;
 
     articleTitle.appendChild(articleTitleLink);
 
@@ -85,9 +84,8 @@ export default async function decorate(block) {
     articleText.innerText = art.extract;
 
     const strongLink = createElement('strong');
-    const articleLink = createElement('a', { classes: ['article-link'] });
+    const articleLink = createElement('a', { classes: ['article-link'], props: { href: art.path } });
     articleLink.innerText = linkText;
-    articleLink.href = art.path;
     strongLink.appendChild(articleLink);
 
     article.append(articleTitle, (isBlogArticle ? articleDate : ''), articleText, strongLink);
