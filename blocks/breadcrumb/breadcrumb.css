@@ -44,9 +44,6 @@
 
 .breadcrumb-list li:last-of-type a {
   display: block;
-}
-
-.breadcrumb-list li:last-of-type a {
   width: 30vw;
   overflow: hidden;
   white-space: nowrap;
