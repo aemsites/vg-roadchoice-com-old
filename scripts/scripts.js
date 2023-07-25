@@ -44,6 +44,8 @@ export function createElement(tagName, options = {}) {
     const classesArr = isString ? [classes] : classes;
     elem.classList.add(...classesArr);
   }
+  if (!isString && classes.length === 0) elem.removeAttribute('class');
+
   if (props) {
     Object.keys(props).forEach((propName) => {
       const value = propName === props[propName] ? '' : props[propName];
