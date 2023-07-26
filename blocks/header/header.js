@@ -165,6 +165,15 @@ export default async function decorate(block) {
       if (section) section.classList.add(`nav-${c}`);
     });
 
+    // add a link to the image logo brand
+    const navBrand = nav.querySelector('.nav-brand');
+    if (navBrand) {
+      const link = createElement('a', { props: { title: 'Road choice', href: '/' } });
+      const picture = navBrand.querySelector('picture');
+      link.appendChild(picture);
+      navBrand.appendChild(link);
+    }
+
     const navSections = nav.querySelector('.nav-sections');
     if (navSections) {
       const navLevels = 4;
@@ -200,7 +209,6 @@ export default async function decorate(block) {
     // prevent mobile nav behavior on window resize
     if (isDesktop) toggleMenu(nav, navSections, !isDesktop);
 
-    // decorateIcons(nav); // ?
     const navWrapper = createElement('div', { classes: 'nav-wrapper' });
     navWrapper.append(nav);
 
