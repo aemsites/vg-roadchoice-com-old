@@ -287,6 +287,12 @@ const buildPagination = (articles, totalPages, curentPage) => {
 };
 
 const buildResults = (articles, page) => {
+  articles.sort((a, b) => {
+    a.date = +(a.date);
+    b.date = +(b.date);
+    return b.date - a.date;
+  });
+  
   const results = createElement('div', { classes: 'blog-results-articles' });
 
   const topPaginationSection = createElement('div', { classes: 'pagination-top-section' });
