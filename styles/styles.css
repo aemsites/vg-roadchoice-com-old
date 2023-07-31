@@ -55,6 +55,7 @@
   --c-light-gray: #f5f5f5;
   --c-medium-gray-1: #727376;
   --c-medium-gray-2: #808080;
+  --c-light-red: #DEAEB1;
 
   /* Applied colors */
   --link-color: var(--primary-red);
@@ -81,7 +82,7 @@
   --headings-ff-black: "Nexa Black", var(--fallback-ff);
 
   /* Fontawesome */
-  --ff-fontawesome: "fontawesome", "fontawesome Fallback";
+  --ff-fontawesome: fontawesome, "fontawesome Fallback";
 
   /* Fallback */
   --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
