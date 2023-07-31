@@ -162,3 +162,14 @@ main .section.carousel-container {
     margin-bottom: 80px;
   }
 }
+
+@media (min-width: 1200px) {
+  .carousel .carousel-slide h1 {
+    font-size: 70px;
+    line-height: 70px;
+  }
+
+  .carousel .carousel-slide p {
+    font-size: 52px;
+  }
+}
