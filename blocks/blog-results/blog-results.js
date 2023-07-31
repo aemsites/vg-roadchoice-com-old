@@ -16,7 +16,6 @@ allArticles.sort((a, b) => {
 });
 
 let selectedCategories = [];
-
 // TODO decide amount per page
 const articlesPerPage = 4;
 let firstBuild = true;
@@ -51,6 +50,7 @@ const filterCats = () => {
       const groupedArticles = selectedArticles.flat();
     return groupedArticles;
     }
+
     const newArts = getArticlesWithCat(selectedCategories, allArticles);
     newResults = buildResults(newArts, 0);
   }
@@ -125,14 +125,19 @@ const handleBtnStyling = (page, total, value, section) => {
   const prevBtn = section.querySelector('#btn-prev');
 
   const clickedBtn = section.querySelector(`#btn-${value}`);
+  let activeNumber;
   
   if (!isNaN(value)) clickedBtn.dataset.active = false;
 
   if (+value === total || value === 'last') {
+    activeNumber = section.querySelector(`#btn-${total}`);
+    activeNumber.dataset.active = false;
     lastBtn.dataset.active = false;
     nextBtn.dataset.active = false;
   }
   if (+value === 1 || value === 'first') {
+    activeNumber = section.querySelector(`#btn-1`);
+    activeNumber.dataset.active = false;
     firstBtn.dataset.active = false;
     prevBtn.dataset.active = false;
   }
@@ -145,11 +150,11 @@ const handleBtnStyling = (page, total, value, section) => {
     prevBtn.dataset.active = false;
   }
   if (value === 'next') {
-    const activeNumber = section.querySelector(`#btn-${previousPage + 1}`);
+    activeNumber = section.querySelector(`#btn-${previousPage + 1}`);
     activeNumber.dataset.active = false;
   }
   if (value === 'prev') {
-    const activeNumber = section.querySelector(`#btn-${previousPage - 1}`);
+    activeNumber = section.querySelector(`#btn-${previousPage - 1}`);
     activeNumber.dataset.active = false;
   }
 }
