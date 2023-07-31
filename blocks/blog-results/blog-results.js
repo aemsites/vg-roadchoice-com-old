@@ -6,7 +6,7 @@ import {
   convertDateExcel,
 } from '../../scripts/scripts.js';
 
-// TODO change this route
+// TODO change this route when articles are imported and available in excel file
 const route = '/drafts/shomps/blog-articles.json';
 const allArticles = await getAllArticles(route);
 allArticles.sort((a, b) => {
@@ -16,10 +16,12 @@ allArticles.sort((a, b) => {
 });
 
 let selectedCategories = [];
-// TODO decide amount per page
+// TODO change this amount to 20 as in the live site
 const articlesPerPage = 4;
 let firstBuild = true;
 let totalArticleCount;
+
+let buildResults;
 
 const divideArray = (mainArray, perChunk) => {
   const dividedArrays = mainArray.reduce((resultArray, item, index) => {
@@ -40,23 +42,20 @@ const filterCats = () => {
     newResults = buildResults(allArticles, 0);
   } else {
     const getArticlesWithCat = (categories, articles) => {
-    const selectedArticles = [];
-    categories.forEach((category) => {
-      let selectedArticle = articles.filter((article) => {
-        return article.categories === category;
+      const selectedArticles = [];
+      categories.forEach((category) => {
+        const selectedArticle = articles.filter((article) => article.categories === category);
+        selectedArticles.push(selectedArticle);
       });
-      selectedArticles.push(selectedArticle);
-    });
       const groupedArticles = selectedArticles.flat();
-    return groupedArticles;
-    }
-
+      return groupedArticles;
+    };
     const newArts = getArticlesWithCat(selectedCategories, allArticles);
     newResults = buildResults(newArts, 0);
   }
-    const oldResults = document.querySelector('.blog-results-articles');
-    oldResults.insertAdjacentElement('beforebegin', newResults);
-    oldResults.remove();
+  const oldResults = document.querySelector('.blog-results-articles');
+  oldResults.insertAdjacentElement('beforebegin', newResults);
+  oldResults.remove();
 };
 
 const deleteCats = (sidebar) => {
@@ -85,7 +84,7 @@ const selectCats = (e) => {
 };
 
 const reduceCategories = (arts) => {
-  const categoryList = arts.map(x => x.categories);
+  const categoryList = arts.map((x) => x.categories);
 
   const reducedCategories = categoryList.reduce((accumulator, value) => {
     return { ...accumulator, [value]: (accumulator[value] || 0) + 1 };
@@ -98,7 +97,6 @@ const reduceCategories = (arts) => {
     },
     {},
   );
-
   const reducedArray = Object.entries(orderedCategories);
 
   return reducedArray;
@@ -114,10 +112,12 @@ const formatDate = (date) => {
   return `${day}/${month}/${year}`;
 };
 
-const handleBtnStyling = (page, total, value, section) => {
+const handlePaginationStyling = (page, total, value, section) => {
   const previousPage = page + 1;
   const allBtns = section.querySelectorAll('.pagination-button');
-  allBtns.forEach((btn) => btn.dataset.active = true);
+  allBtns.forEach((btn) => {
+    btn.dataset.active = true;
+  });
 
   const lastBtn = section.querySelector('#btn-last');
   const firstBtn = section.querySelector('#btn-first');
@@ -126,8 +126,8 @@ const handleBtnStyling = (page, total, value, section) => {
 
   const clickedBtn = section.querySelector(`#btn-${value}`);
   let activeNumber;
-  
-  if (!isNaN(value)) clickedBtn.dataset.active = false;
+
+  if (!Number.isNaN(value)) clickedBtn.dataset.active = false;
 
   if (+value === total || value === 'last') {
     activeNumber = section.querySelector(`#btn-${total}`);
@@ -136,7 +136,7 @@ const handleBtnStyling = (page, total, value, section) => {
     nextBtn.dataset.active = false;
   }
   if (+value === 1 || value === 'first') {
-    activeNumber = section.querySelector(`#btn-1`);
+    activeNumber = section.querySelector('#btn-1');
     activeNumber.dataset.active = false;
     firstBtn.dataset.active = false;
     prevBtn.dataset.active = false;
@@ -157,7 +157,7 @@ const handleBtnStyling = (page, total, value, section) => {
     activeNumber = section.querySelector(`#btn-${previousPage - 1}`);
     activeNumber.dataset.active = false;
   }
-}
+};
 
 const handlePagination = (e, articles, page, total) => {
   firstBuild = false;
@@ -194,53 +194,7 @@ const handlePagination = (e, articles, page, total) => {
   currPage.insertAdjacentElement('beforebegin', nextPage);
   currPage.remove();
 
-  handleBtnStyling(page, total, btnValue, nextPage);
-};
-
-const buildSidebar = (articles, titleContent) => {
-  const sidebar = createElement('div', { classes: 'blog-results-sidebar' });
-
-  const titleSection = createElement('div', { classes: 'title-section' });
-  const title = createElement('h4', { classes: 'title' });
-  title.textContent = titleContent.value;
-  const closeButton = createElement('button', {
-    classes: ['close-button', 'fa', 'fa-close'],
-    props: {
-      type: 'button',
-      id: 'close-button',
-    },
-  });
-  closeButton.onclick = () => deleteCats(sidebar);
-  titleSection.append(title, closeButton);
-
-  const filterSection = createElement('div', { classes: 'filter-section' });
-  const filterButton = createElement('button', {
-    classes: 'filter-button',
-    props: {
-      type: 'button',
-    },
-  });
-
-  filterButton.textContent = 'Filter';
-  filterButton.onclick = () => filterCats();
-  filterSection.append(filterButton);
-
-  const categoriesSection = createElement('div', { classes: 'categories-section' });
-
-  const amountsAndCategories = reduceCategories(articles);
-
-  amountsAndCategories.forEach((art) => {
-    const [cat, amount] = art;
-    const category = createElement('a', { classes: 'category', props: { id: `${cat}` } });
-
-    category.onclick = (e) => selectCats(e);
-
-    category.textContent = `${cat} (${amount})`;
-    categoriesSection.appendChild(category);
-  });
-  sidebar.append(titleSection, filterSection, categoriesSection);
-
-  return sidebar;
+  handlePaginationStyling(page, total, btnValue, nextPage);
 };
 
 const buildPagination = (articles, totalPages, curentPage) => {
@@ -258,15 +212,17 @@ const buildPagination = (articles, totalPages, curentPage) => {
   if (firstBuild) prevPageBtn.dataset.active = false;
   const nextPageBtn = createElement('a', { classes: ['next-page', 'pagination-button'], props: { id: 'btn-next' } });
   nextPageBtn.textContent = next;
+  if (totalPages === 1) nextPageBtn.dataset.active = false;
   const lastPageBtn = createElement('a', { classes: ['last-page', 'pagination-button'], props: { id: 'btn-last' } });
   lastPageBtn.textContent = last;
+  if (totalPages === 1) lastPageBtn.dataset.active = false;
 
   const paginationList = createElement('ul', { classes: 'pagination-list' });
 
   for (let i = 0; i < totalPages; i += 1) {
     const pageNumber = i + 1;
-    const pageItem = createElement('li', { classes: ['page-item',  `page-number-${pageNumber}`] });
-    const pageLink = createElement('a', { classes: ['page-number', 'pagination-button'], props: { id: `btn-${pageNumber}` }});
+    const pageItem = createElement('li', { classes: ['page-item', `page-number-${pageNumber}`] });
+    const pageLink = createElement('a', { classes: ['page-number', 'pagination-button'], props: { id: `btn-${pageNumber}` } });
     pageLink.textContent = pageNumber;
     if (i === 0 && firstBuild) pageLink.dataset.active = false;
     pageItem.appendChild(pageLink);
@@ -278,7 +234,7 @@ const buildPagination = (articles, totalPages, curentPage) => {
     paginationList,
     nextPageBtn,
     lastPageBtn,
-    );
+  );
 
   const allBtns = bottomPaginationSection.querySelectorAll('.pagination-button');
   allBtns.forEach((btn) => btn.addEventListener('click', (e) => handlePagination(e, articles, curentPage, totalPages)));
@@ -286,22 +242,20 @@ const buildPagination = (articles, totalPages, curentPage) => {
   return bottomPaginationSection;
 };
 
-const buildResults = (articles, page) => {
+buildResults = (articles, page) => {
   articles.sort((a, b) => {
     a.date = +(a.date);
     b.date = +(b.date);
     return b.date - a.date;
   });
-  
+
   const results = createElement('div', { classes: 'blog-results-articles' });
 
   const topPaginationSection = createElement('div', { classes: 'pagination-top-section' });
   const topPagination = createElement('p', { classes: 'pagination-top' });
   const paginationText = getTextLabel('blog pagination number');
 
-  if (firstBuild) {
-    totalArticleCount = paginationText.replace('[$]', articles.length);
-  }
+  if (firstBuild) totalArticleCount = paginationText.replace('[$]', articles.length);
   topPagination.textContent = totalArticleCount;
   topPaginationSection.appendChild(topPagination);
 
@@ -339,12 +293,54 @@ const buildResults = (articles, page) => {
   return results;
 };
 
+const buildSidebar = (articles, titleContent) => {
+  const sidebar = createElement('div', { classes: 'blog-results-sidebar' });
+
+  const titleSection = createElement('div', { classes: 'title-section' });
+  const title = createElement('h4', { classes: 'title' });
+  title.textContent = titleContent.value;
+  const closeButton = createElement('button', {
+    classes: ['close-button', 'fa', 'fa-close'],
+    props: {
+      type: 'button',
+      id: 'close-button',
+    },
+  });
+  closeButton.onclick = () => deleteCats(sidebar);
+  titleSection.append(title, closeButton);
+
+  const filterSection = createElement('div', { classes: 'filter-section' });
+  const filterButton = createElement('button', {
+    classes: 'filter-button',
+    props: {
+      type: 'button',
+    },
+  });
+  filterButton.textContent = 'Filter';
+  filterButton.onclick = () => filterCats();
+  filterSection.append(filterButton);
+
+  const categoriesSection = createElement('div', { classes: 'categories-section' });
+  const amountsAndCategories = reduceCategories(articles);
+
+  amountsAndCategories.forEach((art) => {
+    const [cat, amount] = art;
+    const category = createElement('a', { classes: 'category', props: { id: `${cat}` } });
+
+    category.onclick = (e) => selectCats(e);
+    category.textContent = `${cat} (${amount})`;
+    categoriesSection.appendChild(category);
+  });
+  sidebar.append(titleSection, filterSection, categoriesSection);
+
+  return sidebar;
+};
+
 export default async function decorate(block) {
   const blockProperties = getProperties(block);
   const [titleContent] = blockProperties.filter((el) => el.key === 'title');
 
   const sidebar = buildSidebar(allArticles, titleContent);
-
   const results = buildResults(allArticles, 0);
 
   block.textContent = '';
