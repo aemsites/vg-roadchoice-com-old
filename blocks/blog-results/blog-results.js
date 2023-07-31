@@ -22,7 +22,6 @@ const articlesPerPage = 4;
 let firstBuild = true;
 let totalArticleCount;
 
-
 const divideArray = (mainArray, perChunk) => {
   const dividedArrays = mainArray.reduce((resultArray, item, index) => {
     const chunkIndex = Math.floor(index / perChunk);
@@ -39,48 +38,48 @@ const filterCats = () => {
   firstBuild = true;
   let newResults;
   if (selectedCategories.length === 0) {
-    newResults = buildResults(allArticles, 0)
+    newResults = buildResults(allArticles, 0);
   } else {
     const getArticlesWithCat = (categories, articles) => {
-    const selectedArticles = []
-    categories.forEach(category => {
+    const selectedArticles = [];
+    categories.forEach((category) => {
       let selectedArticle = articles.filter((article) => {
         return article.categories === category;
       });
-      selectedArticles.push(selectedArticle)
+      selectedArticles.push(selectedArticle);
     });
       const groupedArticles = selectedArticles.flat();
-    return groupedArticles
+    return groupedArticles;
     }
-    const newArts = getArticlesWithCat(selectedCategories, allArticles)
-    newResults = buildResults(newArts, 0)
+    const newArts = getArticlesWithCat(selectedCategories, allArticles);
+    newResults = buildResults(newArts, 0);
   }
-    const oldResults = document.querySelector('.blog-results-articles')
-    oldResults.insertAdjacentElement('beforebegin', newResults)
-    oldResults.remove()
+    const oldResults = document.querySelector('.blog-results-articles');
+    oldResults.insertAdjacentElement('beforebegin', newResults);
+    oldResults.remove();
 };
 
 const deleteCats = (sidebar) => {
   firstBuild = true;
-  selectedCategories = []
-  const allBtns = sidebar.querySelectorAll('.category')
+  selectedCategories = [];
+  const allBtns = sidebar.querySelectorAll('.category');
   allBtns.forEach((btn) => delete btn.dataset.active);
 
-  const newResults = buildResults(allArticles, 0)
-  const oldResults = document.querySelector('.blog-results-articles')
-  oldResults.insertAdjacentElement('beforebegin', newResults)
-  oldResults.remove()
+  const newResults = buildResults(allArticles, 0);
+  const oldResults = document.querySelector('.blog-results-articles');
+  oldResults.insertAdjacentElement('beforebegin', newResults);
+  oldResults.remove();
 };
 
 const selectCats = (e) => {
-  const currentBtn = e.target
-  const currentCategory = e.target.id
+  const currentBtn = e.target;
+  const currentCategory = e.target.id;
   if (selectedCategories.includes(currentCategory)) {
-    delete currentBtn.dataset.active
-    const index = selectedCategories.indexOf(currentCategory)
+    delete currentBtn.dataset.active;
+    const index = selectedCategories.indexOf(currentCategory);
     selectedCategories.splice(index, 1);
   } else {
-    currentBtn.dataset.active = true
+    currentBtn.dataset.active = true;
     selectedCategories.push(currentCategory);
   }
 };
@@ -93,11 +92,11 @@ const reduceCategories = (arts) => {
   }, {});
 
   const orderedCategories = Object.keys(reducedCategories).sort().reduce(
-    (obj, key) => { 
-      obj[key] = reducedCategories[key]; 
+    (obj, key) => {
+      obj[key] = reducedCategories[key];
       return obj;
-    }, 
-    {}
+    },
+    {},
   );
 
   const reducedArray = Object.entries(orderedCategories);
@@ -115,79 +114,83 @@ const formatDate = (date) => {
   return `${day}/${month}/${year}`;
 };
 
-const handleBtnStyling = (page, total, activeBtn, value ) => {
-  console.log(page, total, activeBtn, value)
+const handleBtnStyling = (page, total, value, section) => {
+  const previousPage = page + 1;
+  const allBtns = section.querySelectorAll('.pagination-button');
+  allBtns.forEach((btn) => btn.dataset.active = true);
 
-  const allBtns = document.querySelectorAll('.pagination-button')
-  allBtns.forEach(btn => btn.dataset.active = true)
+  const lastBtn = section.querySelector('#btn-last');
+  const firstBtn = section.querySelector('#btn-first');
+  const nextBtn = section.querySelector('#btn-next');
+  const prevBtn = section.querySelector('#btn-prev');
 
-  activeBtn.dataset.active = false
+  const clickedBtn = section.querySelector(`#btn-${value}`);
+  
+  if (!isNaN(value)) clickedBtn.dataset.active = false;
 
-  // if (isNumber) {
-  //   nextPage = buildResults(articles, btnValue - 1)
-  // }
-  // if (btnValue === 'first') {
-  //   nextPage = buildResults(articles, 0)
-  // }
-  // if (btnValue === 'last') {
-  //   nextPage = buildResults(articles, total - 1)
-  // }
-  // if (btnValue === 'prev') {
-  //   if (page === 0) {
-  //     return null
-  //   }
-  //   nextPage = buildResults(articles, page - 1)
-  // }
-  // if (btnValue === 'next') {
-  //   if (page === total - 1) {
-  //     return null
-  //   }
-  //   nextPage = buildResults(articles, page + 1)
-  // }
-
-
+  if (+value === total || value === 'last') {
+    lastBtn.dataset.active = false;
+    nextBtn.dataset.active = false;
+  }
+  if (+value === 1 || value === 'first') {
+    firstBtn.dataset.active = false;
+    prevBtn.dataset.active = false;
+  }
+  if (value === 'next' && previousPage === total - 1) {
+    lastBtn.dataset.active = false;
+    nextBtn.dataset.active = false;
+  }
+  if (value === 'prev' && previousPage === 2) {
+    firstBtn.dataset.active = false;
+    prevBtn.dataset.active = false;
+  }
+  if (value === 'next') {
+    const activeNumber = section.querySelector(`#btn-${previousPage + 1}`);
+    activeNumber.dataset.active = false;
+  }
+  if (value === 'prev') {
+    const activeNumber = section.querySelector(`#btn-${previousPage - 1}`);
+    activeNumber.dataset.active = false;
+  }
 }
 
 const handlePagination = (e, articles, page, total) => {
   firstBuild = false;
   let nextPage;
 
-  const activeBtn = e.target
-
   const btnClassList = [...e.target.classList];
 
-  const isNumber = btnClassList.includes('page-number')
+  const isNumber = btnClassList.includes('page-number');
   const btnId = e.target.id;
-  const btnValue = btnId.slice(4)
+  const btnValue = btnId.slice(4);
 
   if (isNumber) {
-    nextPage = buildResults(articles, btnValue - 1)
+    nextPage = buildResults(articles, btnValue - 1);
   }
   if (btnValue === 'first') {
-    nextPage = buildResults(articles, 0)
+    nextPage = buildResults(articles, 0);
   }
   if (btnValue === 'last') {
-    nextPage = buildResults(articles, total - 1)
+    nextPage = buildResults(articles, total - 1);
   }
   if (btnValue === 'prev') {
     if (page === 0) {
-      return null
+      return null;
     }
-    nextPage = buildResults(articles, page - 1)
+    nextPage = buildResults(articles, page - 1);
   }
   if (btnValue === 'next') {
     if (page === total - 1) {
-      return null
+      return null;
     }
-    nextPage = buildResults(articles, page + 1)
+    nextPage = buildResults(articles, page + 1);
   }
+  const currPage = document.querySelector('.blog-results-articles');
+  currPage.insertAdjacentElement('beforebegin', nextPage);
+  currPage.remove();
 
-  handleBtnStyling(page, total, activeBtn, btnValue)
-
-  const currPage = document.querySelector('.blog-results-articles')
-  currPage.insertAdjacentElement('beforebegin', nextPage)
-  currPage.remove()
-}
+  handleBtnStyling(page, total, btnValue, nextPage);
+};
 
 const buildSidebar = (articles, titleContent) => {
   const sidebar = createElement('div', { classes: 'blog-results-sidebar' });
@@ -238,17 +241,16 @@ const buildSidebar = (articles, titleContent) => {
 const buildPagination = (articles, totalPages, curentPage) => {
   const paginationText = getTextLabel('pagination');
   const paginationLabels = paginationText.split('[/]');
+  const [first, prev, next, last] = paginationLabels;
 
-  const [first, prev, next, last] = paginationLabels
-  
   const bottomPaginationSection = createElement('div', { classes: 'pagination-bottom-section' });
 
   const firstPageBtn = createElement('a', { classes: ['first-page', 'pagination-button'], props: { id: 'btn-first' } });
   firstPageBtn.textContent = first;
-  if (firstBuild) firstPageBtn.dataset.active = false
+  if (firstBuild) firstPageBtn.dataset.active = false;
   const prevPageBtn = createElement('a', { classes: ['prev-page', 'pagination-button'], props: { id: 'btn-prev' } });
   prevPageBtn.textContent = prev;
-  if (firstBuild) prevPageBtn.dataset.active = false
+  if (firstBuild) prevPageBtn.dataset.active = false;
   const nextPageBtn = createElement('a', { classes: ['next-page', 'pagination-button'], props: { id: 'btn-next' } });
   nextPageBtn.textContent = next;
   const lastPageBtn = createElement('a', { classes: ['last-page', 'pagination-button'], props: { id: 'btn-last' } });
@@ -256,22 +258,28 @@ const buildPagination = (articles, totalPages, curentPage) => {
 
   const paginationList = createElement('ul', { classes: 'pagination-list' });
 
-  for (let i = 0; i < totalPages; i++) {
+  for (let i = 0; i < totalPages; i += 1) {
     const pageNumber = i + 1;
-    const pageItem = createElement('li', { classes: ['page-item',  `page-number-${pageNumber}`]})
-    const pageLink = createElement('a', { classes: ['page-number', 'pagination-button'], props: { id: `btn-${pageNumber}` }  })
+    const pageItem = createElement('li', { classes: ['page-item',  `page-number-${pageNumber}`] });
+    const pageLink = createElement('a', { classes: ['page-number', 'pagination-button'], props: { id: `btn-${pageNumber}` }});
     pageLink.textContent = pageNumber;
     if (i === 0 && firstBuild) pageLink.dataset.active = false;
-    pageItem.appendChild(pageLink)
-    paginationList.appendChild(pageItem)
+    pageItem.appendChild(pageLink);
+    paginationList.appendChild(pageItem);
   }
-  bottomPaginationSection.append(firstPageBtn, prevPageBtn, paginationList, nextPageBtn, lastPageBtn)
+  bottomPaginationSection.append(
+    firstPageBtn,
+    prevPageBtn,
+    paginationList,
+    nextPageBtn,
+    lastPageBtn,
+    );
 
-  const allBtns = bottomPaginationSection.querySelectorAll('.pagination-button')
-  allBtns.forEach(btn => btn.addEventListener('click', (e) => handlePagination(e, articles, curentPage, totalPages)));
+  const allBtns = bottomPaginationSection.querySelectorAll('.pagination-button');
+  allBtns.forEach((btn) => btn.addEventListener('click', (e) => handlePagination(e, articles, curentPage, totalPages)));
 
-  return bottomPaginationSection
-}
+  return bottomPaginationSection;
+};
 
 const buildResults = (articles, page) => {
   const results = createElement('div', { classes: 'blog-results-articles' });
@@ -283,18 +291,20 @@ const buildResults = (articles, page) => {
   if (firstBuild) {
     totalArticleCount = paginationText.replace('[$]', articles.length);
   }
-  topPagination.textContent = totalArticleCount
+  topPagination.textContent = totalArticleCount;
   topPaginationSection.appendChild(topPagination);
-  
-  const articleSection = createElement('ul', { classes: 'articles-section' });
-  
-  const groupedArticles = (page === 0 && firstBuild) ? divideArray(articles, articlesPerPage) : articles;
-  const amountOfPages = groupedArticles.length;
 
-  const activePage = groupedArticles[page]
+  const articleSection = createElement('ul', { classes: 'articles-section' });
+
+  const groupedArticles = (page === 0 && firstBuild)
+    ? divideArray(articles, articlesPerPage)
+    : articles;
+
+  const amountOfPages = groupedArticles.length;
+  const activePage = groupedArticles[page];
 
   activePage.forEach((art, idx) => {
-    const article = createElement('li', { classes: ['article', `page-${idx}`]});
+    const article = createElement('li', { classes: ['article', `page-${idx}`] });
     const title = createElement('h2', { classes: 'title' });
     const titleLink = createElement('a', { classes: 'title-link', props: { href: art.path } });
     titleLink.textContent = art.title;
@@ -312,14 +322,11 @@ const buildResults = (articles, page) => {
     article.append(title, date, description, link);
     articleSection.appendChild(article);
   });
-
   const bottomPagination = buildPagination(groupedArticles, amountOfPages, page);
-
   results.append(topPaginationSection, articleSection, bottomPagination);
 
   return results;
 };
-
 
 export default async function decorate(block) {
   const blockProperties = getProperties(block);
