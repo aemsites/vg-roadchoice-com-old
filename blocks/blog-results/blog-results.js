@@ -132,7 +132,7 @@ const handlePaginationStyling = (page, total, value, section) => {
   const clickedBtn = section.querySelector(`#btn-${value}`);
   let activeNumber;
 
-  if (typeof value === 'number') clickedBtn.dataset.active = false;
+  if (Number.isFinite(Number(value))) clickedBtn.dataset.active = false;
 
   if (+value === total || value === 'last') {
     activeNumber = section.querySelector(`#btn-${total}`);
