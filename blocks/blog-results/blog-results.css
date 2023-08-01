@@ -35,7 +35,7 @@
   padding: 15px;
   font-family: var(--ff-fontawesome);
   content: "\f00d";
-  margin: 0 10px 0;
+  margin: 0 10px;
   border-radius: 50%;
   height: 10px;
   width: 10px;
@@ -88,7 +88,7 @@
   cursor: pointer;
 }
 
-.blog-results-sidebar .categories-section a.category[data-active=true] {
+.blog-results-sidebar .categories-section a.category[data-active='true'] {
   color: var(--secondary-red);
   background-color: var(--c-light-red);
   font-family: var(--body-ff-bold);
@@ -110,6 +110,25 @@
 
 .blog-results-articles .articles-section h2.title {
   line-height: 30px;
+}
+
+.blog-results-articles .pagination-bottom-section a {
+  font-size: calc(1px + var(--body-font-size-xs));
+  font-family: var(--body-ff-bold);
+  padding: 5px;
+}
+
+.blog-results-articles ul.pagination-list a {
+  font-family: var(--body-ff);
+}
+
+.blog-results-articles .pagination-bottom-section a:hover {
+  cursor: pointer;
+}
+
+.blog-results-articles .pagination-bottom-section a:nth-last-child(2),
+.blog-results-articles .pagination-bottom-section a:last-of-type {
+  color: var(--primary-red);
 }
 
 .blog-results-articles .articles-section h2.title a {
@@ -152,37 +171,16 @@
   column-gap: 10px;
 }
 
-.blog-results-articles .pagination-bottom-section a {
-  font-size: calc(1px + var(--body-font-size-xs));
-  padding: 5px;
-}
-
-.blog-results-articles .pagination-bottom-section a {
-  font-family: var(--body-ff-bold);
-}
-
-.blog-results-articles .pagination-bottom-section a:nth-last-child(2),
-.blog-results-articles .pagination-bottom-section a:last-of-type {
-  color: var(--primary-red);
-}
-
-.blog-results-articles .pagination-bottom-section a.pagination-button[data-active=false] {
+.blog-results-articles .pagination-bottom-section a.pagination-button[data-active='false'] {
   pointer-events: none;
   opacity: 0.4;
 }
 
-.blog-results-articles .pagination-bottom-section a.pagination-button[data-active=true] {
+.blog-results-articles .pagination-bottom-section a.pagination-button[data-active='true'] {
   pointer-events: auto;
   opacity: 1;
 }
 
-.blog-results-articles .pagination-bottom-section a:hover {
-  cursor: pointer;
-}
-
-.blog-results-articles ul.pagination-list a {
-  font-family: var(--body-ff);
-}
 
 .blog-results-articles ul.pagination-list a:hover {
   background-color: var(--secondary-light-gray);
