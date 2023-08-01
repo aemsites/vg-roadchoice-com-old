@@ -35,6 +35,15 @@ const divideArray = (mainArray, perChunk) => {
   return dividedArrays;
 };
 
+const reduceArrays = (array) => {
+  const initialValue = {};
+  const reduced = array.reduce(
+    (acc, value) => ({ ...acc, [value]: (acc[value] || 0) + 1 }),
+    initialValue,
+  );
+  return reduced;
+};
+
 const filterCats = () => {
   firstBuild = true;
   let newResults;
@@ -85,11 +94,7 @@ const selectCats = (e) => {
 
 const reduceCategories = (arts) => {
   const categoryList = arts.map((x) => x.categories);
-
-  const reducedCategories = categoryList.reduce((accumulator, value) => {
-    return { ...accumulator, [value]: (accumulator[value] || 0) + 1 };
-  }, {});
-
+  const reducedCategories = reduceArrays(categoryList);
   const orderedCategories = Object.keys(reducedCategories).sort().reduce(
     (obj, key) => {
       obj[key] = reducedCategories[key];
@@ -127,7 +132,7 @@ const handlePaginationStyling = (page, total, value, section) => {
   const clickedBtn = section.querySelector(`#btn-${value}`);
   let activeNumber;
 
-  if (!Number.isNaN(value)) clickedBtn.dataset.active = false;
+  if (typeof value === 'number') clickedBtn.dataset.active = false;
 
   if (+value === total || value === 'last') {
     activeNumber = section.querySelector(`#btn-${total}`);
@@ -195,6 +200,7 @@ const handlePagination = (e, articles, page, total) => {
   currPage.remove();
 
   handlePaginationStyling(page, total, btnValue, nextPage);
+  return false;
 };
 
 const buildPagination = (articles, totalPages, curentPage) => {
