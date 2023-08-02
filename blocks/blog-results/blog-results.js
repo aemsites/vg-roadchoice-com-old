@@ -1,30 +1,21 @@
 import {
   createElement,
   getTextLabel,
-  getProperties,
   getAllArticles,
   convertDateExcel,
 } from '../../scripts/scripts.js';
+import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
 const linkText = getTextLabel('read more');
 const btnPagesText = getTextLabel('pagination');
 const pagesText = getTextLabel('blog pagination number');
 
-// TODO change this route when articles are imported and available in excel file
-const route = '/drafts/shomps/blog-articles.json';
-const allArticles = await getAllArticles(route);
-allArticles.sort((a, b) => {
-  a.date = +(a.date);
-  b.date = +(b.date);
-  return b.date - a.date;
-});
-
 let selectedCategories = [];
-// TODO change this amount to 20 as in the live site
-const articlesPerPage = 4;
+let articlesPerPage = 4;
 let firstBuild = true;
-let totalArticleCount;
 
+let totalArticleCount;
+let allArticles;
 let buildResults;
 
 const divideArray = (mainArray, perChunk) => {
@@ -263,7 +254,7 @@ buildResults = (articles, page) => {
 
   const topPaginationSection = createElement('div', { classes: 'pagination-top-section' });
   const topPagination = createElement('p', { classes: 'pagination-top' });
-  const rawText = getTextLabel('blog pagination number');
+  const rawText = pagesText;
 
   if (firstBuild) totalArticleCount = rawText.replace('[$]', articles.length);
   topPagination.textContent = totalArticleCount;
@@ -347,8 +338,16 @@ const buildSidebar = (articles, titleContent) => {
 };
 
 export default async function decorate(block) {
-  const blockProperties = getProperties(block);
-  const [titleContent] = blockProperties.filter((el) => el.key === 'title');
+  const blockConfig = readBlockConfig(block);
+  const [titleContent, url, amount] = Object.values(blockConfig);
+  articlesPerPage = +amount;
+
+  allArticles = await getAllArticles(url);
+  allArticles.sort((a, b) => {
+    a.date = +(a.date);
+    b.date = +(b.date);
+    return b.date - a.date;
+  });
 
   const sidebar = buildSidebar(allArticles, titleContent);
   const results = buildResults(allArticles, 0);

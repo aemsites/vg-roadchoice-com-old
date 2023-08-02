@@ -672,24 +672,6 @@ export function convertDateExcel(excelTimestamp) {
 
 /* Returns a list of properties listed in the block */
 /**
- * @param {Nodelist} block Entire block with divs
- * */
-export function getProperties(block) {
-  const properties = [];
-  const children = [...block.children];
-  children.forEach((e) => {
-    const divs = [...e.children];
-    const object = {
-      key: divs[0].innerText,
-      value: divs[1].innerText,
-    };
-    properties.push(object);
-  });
-  return properties;
-}
-
-/* Returns a list of properties listed in the block */
-/**
  * @param {string} route Fetches an excel sheet and awaits for a json object
  * */
 export const getAllArticles = async (route) => {
