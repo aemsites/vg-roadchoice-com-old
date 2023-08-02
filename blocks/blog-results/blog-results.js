@@ -6,6 +6,10 @@ import {
   convertDateExcel,
 } from '../../scripts/scripts.js';
 
+const linkText = getTextLabel('read more');
+const btnPagesText = getTextLabel('pagination');
+const pagesText = getTextLabel('blog pagination number');
+
 // TODO change this route when articles are imported and available in excel file
 const route = '/drafts/shomps/blog-articles.json';
 const allArticles = await getAllArticles(route);
@@ -204,7 +208,7 @@ const handlePagination = (e, articles, page, total) => {
 };
 
 const buildPagination = (articles, totalPages, curentPage) => {
-  const paginationText = getTextLabel('pagination');
+  const paginationText = btnPagesText;
   const paginationLabels = paginationText.split('[/]');
   const [first, prev, next, last] = paginationLabels;
 
@@ -259,9 +263,9 @@ buildResults = (articles, page) => {
 
   const topPaginationSection = createElement('div', { classes: 'pagination-top-section' });
   const topPagination = createElement('p', { classes: 'pagination-top' });
-  const paginationText = getTextLabel('blog pagination number');
+  const rawText = getTextLabel('blog pagination number');
 
-  if (firstBuild) totalArticleCount = paginationText.replace('[$]', articles.length);
+  if (firstBuild) totalArticleCount = rawText.replace('[$]', articles.length);
   topPagination.textContent = totalArticleCount;
   topPaginationSection.appendChild(topPagination);
 
@@ -288,7 +292,7 @@ buildResults = (articles, page) => {
     description.textContent = art.description;
 
     const link = createElement('a', { classes: 'link', props: { href: art.path } });
-    link.textContent = getTextLabel('read more');
+    link.textContent = linkText;
 
     article.append(title, date, description, link);
     articleSection.appendChild(article);
