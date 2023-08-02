@@ -46,6 +46,12 @@ main .section.dealer-locator-container > div {
   overflow: hidden;
 }
 
+.dealer-locator.overflow,
+.dealer-locator.overflow #map,
+.dealer-locator.overflow .partsasist-form .regForm #select-form #eloquaForm .row {
+  overflow: initial;
+}
+
 .dealer-locator.search-bar-added {
   height: calc(100% - 9.6em);
 }
