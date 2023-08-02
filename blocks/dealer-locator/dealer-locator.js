@@ -8,6 +8,15 @@ export default async function decorate(block) {
   // add the zip code to the input search, if it is present
   const zipCode = hasZipLocation ? searchParams.get('whereToBuy') : null;
   const datasource = block.textContent.trim();
+  const observer = new MutationObserver((list) => {
+    list.forEach((change) => {
+      if (change.target.dataset.blockStatus !== 'loaded') return;
+      block.classList.add('overflow');
+      setTimeout(() => { block.classList.remove('overflow'); }, 500);
+      observer.disconnect();
+    });
+  });
+  observer.observe(block, { attributes: true, attributeFilter: ['data-block-status'] });
   window.locatorConfig = {
     asist: false,
     showAsistDialog: true,
