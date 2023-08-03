@@ -1,17 +1,15 @@
-import { createElement, getTextLabel, convertDateExcel } from '../../scripts/scripts.js';
+import {
+  createElement,
+  getTextLabel,
+  convertDateExcel,
+  getAllArticles,
+} from '../../scripts/scripts.js';
 
 const title = getTextLabel('recommendations title');
 const linkText = getTextLabel('read more');
 const [homeTitle, recommendationsTitle] = title.split('[/]');
 
 const isBlogArticle = document.querySelector('.blog-article');
-
-export const getAllArticles = async () => {
-  // TODO change this route
-  const response = await fetch('/drafts/shomps/blog-articles.json');
-  const json = await response.json();
-  return json.data;
-};
 
 export const getLimit = (block) => {
   const classes = block.classList;
@@ -42,7 +40,10 @@ const formatDate = (date) => {
 
 export default async function decorate(block) {
   const limit = Number(getLimit(block));
-  const allArticles = await getAllArticles();
+
+  // TODO change this route
+  const route = '/drafts/shomps/blog-articles.json';
+  const allArticles = await getAllArticles(route);
 
   const sortedArticles = allArticles.sort((a, b) => {
     a.date = +(a.date);
