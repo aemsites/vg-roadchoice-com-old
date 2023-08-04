@@ -13,18 +13,18 @@ const TEMPLATES = {
   searchBy: `
   <div class="search__search-by__container">
     <label class="search__search-by__label" name="SearchBy">Search By</label>
-    <div class="search__buttons__wrapper shadow">
-      <button class="button search__cross-reference__btn active" type="button" name="crossReference">
+    <div class="search__buttons__wrapper">
+      <button class="button search__cross-reference__btn shadow active " type="button" name="crossReference">
         Cross-Reference
       </button>
-      <button class="button search__part-number__btn" type="button" name="partNumber">
+      <button class="button search__part-number__btn shadow" type="button" name="partNumber">
         Part Number
       </button>
     </div>
   </div>
   `,
   filters: `
-  <div class="search__filters__container hide">
+  <div class="search__filters__container">
     <div class="search__make-filter__wrapper">
       <label class="search__make-filter__label">Make</label>
       <select class="search__make-filter__select shadow">
@@ -55,7 +55,7 @@ const TEMPLATES = {
   </div>
   `,
   inputPN: `
-  <div class="search__input-pn__container hide">
+  <div class="search__input-pn__container">
     <label class="search__input-pn__label">Part Number</label>
     <div class="search__input-pn__wrapper">
       <input class="search__input-pn__input shadow" type="search" placeholder="${PLACEHOLDERS.partNumber}" />
@@ -88,11 +88,11 @@ function addSearchByListeners(wrapper, form) {
     form.querySelector('.search__part-number__btn').classList.toggle('active', isCrossRefActive);
     isCrossRefActive = !isCrossRefActive;
     // swap inputs and filters
-    form.querySelector('.search__filters__container').classList.toggle('hide', isCrossRefActive);
-    form.querySelector('.search__input-pn__container').classList.toggle('hide', isCrossRefActive);
+    form.querySelector('.search__filters-input__container').classList.toggle('hide', isCrossRefActive);
     form.querySelector('.search__input-cr__container').classList.toggle('hide', !isCrossRefActive);
     // remove the value from the not active input
     form.querySelector(`.search__input-${isCrossRefActive ? 'pn' : 'cr'}__input`).value = '';
+    // reset filters
     if (isCrossRefActive) {
       form.querySelector('.search__make-filter__select').selectedIndex = 0;
       resetModelsFilter(form.querySelector('.search__model-filter__select'));
@@ -144,11 +144,12 @@ async function getAndApplyFiltersData(form) {
 export default function decorate(block) {
   const formWrapper = createElement('div', { classes: 'search-wrapper' });
   const form = createElement('form', { classes: 'search-form' });
-  form.innerHTML = TEMPLATES.searchBy;
-  form.innerHTML += TEMPLATES.inputCR;
+  const pnContainer = createElement('div', { classes: ['search__filters-input__container', 'hide'] });
+  form.innerHTML = TEMPLATES.searchBy + TEMPLATES.inputCR;
   // Part number input and its filters are hidden by default
-  form.innerHTML += TEMPLATES.filters;
-  form.innerHTML += TEMPLATES.inputPN;
+  pnContainer.innerHTML = TEMPLATES.filters + TEMPLATES.inputPN;
+  form.appendChild(pnContainer);
+  // add listeners and fill filters with data
   addSearchByListeners(form.querySelector('.search__buttons__wrapper'), form);
   getAndApplyFiltersData(form);
   // insert templates to form

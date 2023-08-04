@@ -47,25 +47,10 @@
 
 .search .search__buttons__wrapper {
   border-radius: 10px;
-  width: fit-content;
+  width: 100%;
 }
 
-.search .search__cross-reference__btn {
-  border-radius: 10px 0 0 10px;
-}
-
-.search .search__part-number__btn {
-  border-radius: 0 10px 10px 0;
-}
-
-.search .search__part-number__btn:not(.active) {
-  box-shadow: inset 1px 0 3px var(--primary-black);
-}
-
-.search .search__cross-reference__btn:not(.active) {
-  box-shadow: inset -1px 0 3px var(--primary-black);
-}
-
+.search .search__filters-input__container,
 .search .search__input-cr__wrapper,
 .search .search__input-pn__wrapper,
 .search .search__buttons__wrapper,
@@ -81,9 +66,16 @@
 }
 
 .search .search__filters__container {
-  gap: 2rem;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.search .search__filters__wrapper {
+  width: 100%;
+}
+
+.search .search__search-by__label {
+  white-space: nowrap;
 }
 
 .search .search__input-cr__container,
@@ -97,12 +89,19 @@
   flex: 1;
 }
 
+.search .search__model-filter__wrapper {
+  width: 100%;
+}
+
 .search input,
 .search .search__filters__container select {
   padding: 1.5rem;
   border-radius: 5px;
 }
 
+.search .search__buttons__wrapper,
+.search .search__filters-input__container,
+.search .search__filters__container,
 .search .search__input-cr__wrapper,
 .search .search__input-pn__wrapper {
   gap: 2rem;
@@ -118,29 +117,44 @@
   .search input {
     flex: 1;
   }
+}
 
-  .search .search__filters__container {
-    grid-template-columns: 1fr 1fr 15%;
+@media (min-width: 768px) {
+  .search .button {
+    white-space: nowrap;
+  }
+
+  .search .search__filters-input__container {
+    flex-flow: row wrap;
+  }
+
+  .search .search__input-pn__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search .search__input-pn__container,
+  .search .search__input-pn__wrapper {
+    flex: 1;
   }
 }
 
 @media (min-width: 992px) {
-  .search .search__search-by__container,
   .search .search-form {
     flex-direction: revert;
     align-items: end;
+  }
+
+  .search .search__search-by__container {
+    gap: unset;
   }
 
   .search .search__search-by__label {
     padding-block-end: 0.5rem;
   }
 
-  .search .search__filters__container {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .search .search__input-cr__container,
-  .search .search__input-pn__container {
+  .search .search__filters-input__container,
+  .search .search__input-cr__container {
     flex: 1;
   }
 }
