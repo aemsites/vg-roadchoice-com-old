@@ -1,12 +1,11 @@
-import { createElement } from '../../scripts/scripts.js';
+import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
 const modelsItems = [];
 
-// TODO add the placeholder to the placeholders.json
 const PLACEHOLDERS = {
-  crossReference: 'Cross-Reference No',
-  partNumber: 'Part No',
+  crossReference: getTextLabel('Cross-Reference No'),
+  partNumber: getTextLabel('Part No'),
 };
 
 const TEMPLATES = {
@@ -74,7 +73,7 @@ function resetModelsFilter(models, disabled = true) {
 }
 
 async function getFiltersData() {
-  const filtersUrl = '/drafts/jlledo/search-filters.json'; // TODO update the url with its final position
+  const filtersUrl = '/search/search-filters.json';
   const response = await fetch(filtersUrl);
   const json = await response.json();
   return json;
