@@ -107,6 +107,11 @@
   gap: 2rem;
 }
 
+.search .search__filters__container select {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 @media (min-width: 360px) {
   .search .search__input-cr__wrapper,
   .search .search__input-pn__wrapper,
@@ -126,6 +131,10 @@
 
   .search .search__filters-input__container {
     flex-flow: row wrap;
+  }
+
+  .search .search__filters__container select {
+    max-width: 150px;
   }
 
   .search .search__input-pn__container {
