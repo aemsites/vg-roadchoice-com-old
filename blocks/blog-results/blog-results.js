@@ -299,7 +299,7 @@ const buildSidebar = (articles, titleContent) => {
 
   const titleSection = createElement('div', { classes: 'title-section' });
   const title = createElement('h4', { classes: 'title' });
-  title.textContent = titleContent.value;
+  title.textContent = titleContent;
   const closeButton = createElement('button', {
     classes: ['close-button', 'fa', 'fa-close'],
     props: {
