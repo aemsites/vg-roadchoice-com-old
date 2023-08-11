@@ -2,6 +2,8 @@ import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
 const modelsItems = [];
+let crData;
+let pnData;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
@@ -140,7 +142,64 @@ async function getAndApplyFiltersData(form) {
   };
 }
 
+function searchCRPartNumValue(value) {
+  const partNumberBrands = ['OEM_num', 'Road Choice Part Number', 'Volvo Part Number', 'Mack Part Number'];
+  let results;
+  partNumberBrands.forEach((brand, i) => {
+    if (results && results.length > 0) return;
+    const data = i < 2 ? crData : pnData;
+    const tempResults = data.filter(
+      (item) => item[brand].toUpperCase() === value.toUpperCase(),
+    );
+    results = tempResults.length > 0 ? tempResults : null;
+  });
+  return results;
+}
+
+function searchPartNumValue(value, make, model) {
+  const isMakeNull = make === 'null';
+  const isModelNull = model === 'null';
+  const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
+  let results = [];
+  partNumberBrands.forEach((brand) => {
+    let tempResults = pnData.filter((item) => new RegExp(value, 'i').test(item[brand]));
+    if (!isMakeNull && tempResults.length > 0) {
+      tempResults = tempResults.filter((item) => item.Make.toLowerCase() === make.toLowerCase());
+    }
+    if (!isModelNull && tempResults.length > 0) {
+      tempResults = tempResults.filter((item) => item.Model.toLowerCase() === model.toLowerCase());
+    }
+    if (results.length > 0) {
+      const isEqualLength = results.length === tempResults.length;
+      results = isEqualLength && results.filter((item, i) => item !== tempResults[i]);
+    }
+    results = tempResults.length > 0 ? results.concat(tempResults) : [...results];
+  });
+  return results;
+}
+
+function getFieldValue(selector, items) {
+  return items.filter((item) => item.classList.contains(selector))[0]?.value;
+}
+
+function formListener(form) {
+  form.onsubmit = async (e) => {
+    const items = [...form];
+    const value = getFieldValue(`search__input-${isCrossRefActive ? 'cr' : 'pn'}__input`, items);
+    const makeFilterValue = getFieldValue('search__make-filter__select', items);
+    const modelFilterValue = getFieldValue('search__model-filter__select', items);
+    e.preventDefault();
+    if (!crData || !pnData) return;
+    const results = isCrossRefActive
+      ? searchCRPartNumValue(value)
+      : searchPartNumValue(value, makeFilterValue, modelFilterValue);
+    // TODO: open results page to show the results
+    console.log({results, value});
+  };
+}
+
 export default function decorate(block) {
+  const worker = new Worker('/blocks/search/worker.js');
   const formWrapper = createElement('div', { classes: 'search-wrapper' });
   const form = createElement('form', { classes: 'search-form' });
   const pnContainer = createElement('div', { classes: ['search__filters-input__container', 'hide'] });
@@ -151,7 +210,14 @@ export default function decorate(block) {
   // add listeners and fill filters with data
   addSearchByListeners(form.querySelector('.search__buttons__wrapper'), form);
   getAndApplyFiltersData(form);
+  formListener(form);
   // insert templates to form
   formWrapper.appendChild(form);
   block.appendChild(formWrapper);
+  // run the worker in parallel
+  worker.postMessage('run');
+  worker.onmessage = (e) => {
+    crData = e.data.crData;
+    pnData = e.data.pnData;
+  };
 }
