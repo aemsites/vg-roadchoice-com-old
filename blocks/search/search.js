@@ -193,8 +193,14 @@ function formListener(form) {
     const results = isCrossRefActive
       ? searchCRPartNumValue(value)
       : searchPartNumValue(value, makeFilterValue, modelFilterValue);
-    // TODO: open results page to show the results
-    console.log({results, value});
+
+      console.log(results);
+      sessionStorage.setItem('results', JSON.stringify(results));
+      sessionStorage.setItem('value', value);
+
+      let homeUrl = getTextLabel('home url');
+      homeUrl = `${homeUrl}search/?q=${value}`;
+      window.location.href = homeUrl;
   };
 }
 
