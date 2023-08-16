@@ -3,11 +3,6 @@ const URLs = {
   partNumber: '/product-data/road-choice-make-model-part-filter-options.json',
 };
 let limit = 100;
-const changeLimit = () => {
-  setTimeout(() => {
-    return 100_000;
-  }, 1000);
-}
 // const limit = 60_000;
 // let isCrossRefActive = true;
 let crData;
@@ -37,7 +32,6 @@ async function getMoreData(url, total, offset = 0) {
 }
 
 onmessage = async () => {
-  limit = await changeLimit()
   const crJson = await getJSONData({ url: URLs.crossReference, limit });
   const pnJson = await getJSONData({ url: URLs.partNumber, limit });
   const crInitialData = [...crJson.data];
