@@ -194,12 +194,12 @@ function formListener(form) {
       ? searchCRPartNumValue(value)
       : searchPartNumValue(value, makeFilterValue, modelFilterValue);
 
-      sessionStorage.setItem('results', JSON.stringify(results));
-      sessionStorage.setItem('value', value);
+    sessionStorage.setItem('results', JSON.stringify(results));
+    sessionStorage.setItem('value', value);
 
-      let homeUrl = getTextLabel('home url');
-      homeUrl = `${homeUrl}search/?q=${value}`;
-      window.location.href = homeUrl;
+    let homeUrl = getTextLabel('home url');
+    homeUrl = `${homeUrl}search/?q=${value}`;
+    window.location.href = homeUrl;
   };
 }
 
