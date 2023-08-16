@@ -194,7 +194,6 @@ function formListener(form) {
       ? searchCRPartNumValue(value)
       : searchPartNumValue(value, makeFilterValue, modelFilterValue);
 
-      console.log(results);
       sessionStorage.setItem('results', JSON.stringify(results));
       sessionStorage.setItem('value', value);
 
