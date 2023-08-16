@@ -196,6 +196,7 @@ function formListener(form) {
 
     sessionStorage.setItem('results', JSON.stringify(results));
     sessionStorage.setItem('value', value);
+    console.log(results)
 
     let homeUrl = getTextLabel('home url');
     homeUrl = `${homeUrl}search/?q=${value}`;
