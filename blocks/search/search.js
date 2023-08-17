@@ -196,12 +196,10 @@ function formListener(form) {
 
     sessionStorage.setItem('results', JSON.stringify(results));
     sessionStorage.setItem('value', value);
-    console.log(results)
 
     let url = getTextLabel('home url');
     url = `${url}search/?q=${value}`;
-    console.log(url)
-    // window.location.href = homeUrl;
+    window.location.href = homeUrl;
   };
 }
 

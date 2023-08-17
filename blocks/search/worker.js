@@ -32,6 +32,9 @@ async function getMoreData(url, total, offset = 0) {
 }
 
 onmessage = async () => {
+  await setTimeout(() => {
+    console.log('ready')
+  }, 2000);
   const crJson = await getJSONData({ url: URLs.crossReference, limit });
   const pnJson = await getJSONData({ url: URLs.partNumber, limit });
   const crInitialData = [...crJson.data];
