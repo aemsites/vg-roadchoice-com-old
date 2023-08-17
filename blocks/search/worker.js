@@ -2,11 +2,8 @@ const URLs = {
   crossReference: '/cross-reference-data/cross-reference-data.json',
   partNumber: '/product-data/road-choice-make-model-part-filter-options.json',
 };
-// const limit = 100;
-let limit = 100;
-setTimeout(() => {
-  limit = 100_000;
-}, 2000);
+
+let limit = 100_000;
 // const limit = 60_000;
 // let isCrossRefActive = true;
 let crData;
@@ -36,15 +33,11 @@ async function getMoreData(url, total, offset = 0) {
 }
 
 onmessage = async () => {
-  // setTimeout(() => {
-  //   console.log('ready')
-  // }, 2000).then
   const crJson = await getJSONData({ url: URLs.crossReference, limit });
   const pnJson = await getJSONData({ url: URLs.partNumber, limit });
-  console.log(crJson.data);
-  console.log(pnJson.data);
   const crInitialData = [...crJson.data];
   const pnInitialData = [...pnJson.data];
+  console.log(crJson.data)
   let crRemainingData;
   let pnRemainingData;
   if (crJson.data.length < crJson.total) {
