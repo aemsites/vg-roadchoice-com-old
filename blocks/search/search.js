@@ -198,9 +198,10 @@ function formListener(form) {
     sessionStorage.setItem('value', value);
     console.log(results)
 
-    let homeUrl = getTextLabel('home url');
-    homeUrl = `${homeUrl}search/?q=${value}`;
-    window.location.href = homeUrl;
+    let url = getTextLabel('home url');
+    url = `${url}search/?q=${value}`;
+    console.log(url)
+    // window.location.href = homeUrl;
   };
 }
 

@@ -2,7 +2,7 @@ const URLs = {
   crossReference: '/cross-reference-data/cross-reference-data.json',
   partNumber: '/product-data/road-choice-make-model-part-filter-options.json',
 };
-let limit = 100;
+const limit = 100_000;
 // const limit = 60_000;
 // let isCrossRefActive = true;
 let crData;
