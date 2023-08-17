@@ -2,8 +2,8 @@ import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
 const modelsItems = [];
-let crData;
-let pnData;
+// let crData;
+// let pnData;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
@@ -194,17 +194,18 @@ function formListener(form) {
       ? searchCRPartNumValue(value)
       : searchPartNumValue(value, makeFilterValue, modelFilterValue);
 
-    sessionStorage.setItem('results', JSON.stringify(results));
+    // sessionStorage.setItem('results', JSON.stringify(results));
     sessionStorage.setItem('value', value);
 
     let url = getTextLabel('home url');
     url = `${url}search/?q=${value}`;
+    console.log(url)
     window.location.href = homeUrl;
   };
 }
 
 export default function decorate(block) {
-  const worker = new Worker('/blocks/search/worker.js');
+  // const worker = new Worker('/blocks/search/worker.js');
   const formWrapper = createElement('div', { classes: 'search-wrapper' });
   const form = createElement('form', { classes: 'search-form' });
   const pnContainer = createElement('div', { classes: ['search__filters-input__container', 'hide'] });
@@ -220,9 +221,9 @@ export default function decorate(block) {
   formWrapper.appendChild(form);
   block.appendChild(formWrapper);
   // run the worker in parallel
-  worker.postMessage('run');
-  worker.onmessage = (e) => {
-    crData = e.data.crData;
-    pnData = e.data.pnData;
-  };
+  // worker.postMessage('run');
+  // worker.onmessage = (e) => {
+  //   crData = e.data.crData;
+  //   pnData = e.data.pnData;
+  // };
 }

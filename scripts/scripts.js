@@ -3,6 +3,7 @@ import {
   buildBlock,
   loadHeader,
   loadFooter,
+  loadWorker,
   decorateIcons,
   decorateBlocks,
   decorateBlock,
@@ -362,6 +363,7 @@ async function loadLazy(doc) {
 
   loadHeader(header);
   loadFooter(doc.querySelector('footer'));
+  loadWorker()
 
   if (subnav) {
     loadBlock(subnav);

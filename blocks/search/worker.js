@@ -37,7 +37,6 @@ onmessage = async () => {
   const pnJson = await getJSONData({ url: URLs.partNumber, limit });
   const crInitialData = [...crJson.data];
   const pnInitialData = [...pnJson.data];
-  console.log(crJson.data)
   let crRemainingData;
   let pnRemainingData;
   if (crJson.data.length < crJson.total) {

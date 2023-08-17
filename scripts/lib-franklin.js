@@ -572,6 +572,20 @@ export function loadFooter(footer) {
 }
 
 /**
+ * Loads the Worker that gets all the products.
+ */
+export function loadWorker() {
+  const worker = new Worker('/blocks/search/worker.js');
+  worker.postMessage('run');
+  worker.onmessage = (e) => {
+    let data = e.data
+    console.log(data);
+    // crData = e.data.crData;
+    // pnData = e.data.pnData;
+  };
+}
+
+/**
  * Setup block utils.
  */
 export function setup() {
