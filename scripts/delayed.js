@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { sampleRUM } from './lib-franklin.js';
+import { sampleRUM, loadWorker } from './lib-franklin.js';
 
 // Core Web Vitals RUM collection
 sampleRUM('cwv');
@@ -37,3 +37,6 @@ async function loadGoogleTagManager() {
   a.appendChild(r);
 })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
 /* eslint-enable */
+
+//This Worker loads all the product information into de global object window
+loadWorker();

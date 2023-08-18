@@ -363,7 +363,6 @@ async function loadLazy(doc) {
 
   loadHeader(header);
   loadFooter(doc.querySelector('footer'));
-  loadWorker();
 
   if (subnav) {
     loadBlock(subnav);
