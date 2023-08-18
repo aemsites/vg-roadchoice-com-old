@@ -3,7 +3,6 @@ import {
   buildBlock,
   loadHeader,
   loadFooter,
-  loadWorker,
   decorateIcons,
   decorateBlocks,
   decorateBlock,

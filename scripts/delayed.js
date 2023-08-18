@@ -38,5 +38,5 @@ async function loadGoogleTagManager() {
 })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
 /* eslint-enable */
 
-//This Worker loads all the product information into de global object window
+// This Worker loads all the product information into de global object window
 loadWorker();
