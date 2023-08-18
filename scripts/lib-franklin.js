@@ -579,10 +579,6 @@ export function loadWorker() {
   worker.postMessage('run');
   worker.onmessage = (e) => {
     window.allProducts = e.data;
-    const buttons = document.querySelectorAll('.search-button');
-    buttons.forEach((btn) => {
-      btn.disabled = false;
-    });
   };
 }
 
