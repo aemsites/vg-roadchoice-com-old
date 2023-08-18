@@ -578,7 +578,6 @@ export function loadWorker() {
   const worker = new Worker('/blocks/search/worker.js');
   worker.postMessage('run');
   worker.onmessage = (e) => {
-    console.log(e.data);
     window.allProducts = e.data;
     const buttons = document.querySelectorAll('.search-button');
     buttons.forEach((btn) => {
