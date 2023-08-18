@@ -2,8 +2,8 @@ import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
 const modelsItems = [];
-// let crData;
-// let pnData;
+let crData;
+let pnData;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
@@ -15,7 +15,7 @@ const TEMPLATES = {
   <div class="search__search-by__container">
     <label class="search__search-by__label" name="SearchBy">Search By</label>
     <div class="search__buttons__wrapper">
-      <button class="button search__cross-reference__btn shadow active " type="button" name="crossReference">
+      <button class="button search__cross-reference__btn shadow active" type="button" name="crossReference">
         Cross-Reference
       </button>
       <button class="button search__part-number__btn shadow" type="button" name="partNumber">
@@ -48,7 +48,7 @@ const TEMPLATES = {
     <label class="search__input-cr__label">Cross-Reference Number</label>
     <div class="search__input-cr__wrapper">
       <input class="search__input-cr__input shadow" type="search" placeholder="${PLACEHOLDERS.crossReference}" />
-      <button class="button search__input-cr__submit shadow" type="submit">
+      <button disabled class="button search__input-cr__submit shadow search-button" type="submit">
         SEARCH &nbsp;
         <span class="fa fa-search"></span>
       </button>
@@ -60,7 +60,7 @@ const TEMPLATES = {
     <label class="search__input-pn__label">Part Number</label>
     <div class="search__input-pn__wrapper">
       <input class="search__input-pn__input shadow" type="search" placeholder="${PLACEHOLDERS.partNumber}" />
-      <button class="button search__input-pn__submit shadow" type="submit">
+      <button disabled class="button search__input-pn__submit shadow search-button" type="submit">
         SEARCH &nbsp;
         <span class="fa fa-search"></span>
       </button>
@@ -184,6 +184,9 @@ function getFieldValue(selector, items) {
 
 function formListener(form) {
   form.onsubmit = async (e) => {
+    crData = window.allProducts.crData;
+    pnData = window.allProducts.pnData;
+
     const items = [...form];
     const value = getFieldValue(`search__input-${isCrossRefActive ? 'cr' : 'pn'}__input`, items);
     const makeFilterValue = getFieldValue('search__make-filter__select', items);
@@ -194,18 +197,26 @@ function formListener(form) {
       ? searchCRPartNumValue(value)
       : searchPartNumValue(value, makeFilterValue, modelFilterValue);
 
-    // sessionStorage.setItem('results', JSON.stringify(results));
-    sessionStorage.setItem('value', value);
+    let url = window.location.pathname;
+    const searchType = isCrossRefActive ? 'cross' : `parts&make=${makeFilterValue}&model=${modelFilterValue}`;
+    const isHomepage = url === '/' ? 'search/' : '';
+    const query = {
+      searchType,
+      value,
+    };
+    if (!isCrossRefActive) {
+      query.make = makeFilterValue;
+      query.model = modelFilterValue;
+    }
+    sessionStorage.setItem('query', JSON.stringify(query));
+    sessionStorage.setItem('results', JSON.stringify(results));
 
-    let url = getTextLabel('home url');
-    url = `${url}search/?q=${value}`;
-    console.log(url)
-    window.location.href = homeUrl;
+    url = `${url}${isHomepage}?q=${value}&st=${searchType}`;
+    window.location.href = url;
   };
 }
 
 export default function decorate(block) {
-  // const worker = new Worker('/blocks/search/worker.js');
   const formWrapper = createElement('div', { classes: 'search-wrapper' });
   const form = createElement('form', { classes: 'search-form' });
   const pnContainer = createElement('div', { classes: ['search__filters-input__container', 'hide'] });
@@ -220,10 +231,4 @@ export default function decorate(block) {
   // insert templates to form
   formWrapper.appendChild(form);
   block.appendChild(formWrapper);
-  // run the worker in parallel
-  // worker.postMessage('run');
-  // worker.onmessage = (e) => {
-  //   crData = e.data.crData;
-  //   pnData = e.data.pnData;
-  // };
 }

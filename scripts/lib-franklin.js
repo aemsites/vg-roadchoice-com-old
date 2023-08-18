@@ -578,10 +578,11 @@ export function loadWorker() {
   const worker = new Worker('/blocks/search/worker.js');
   worker.postMessage('run');
   worker.onmessage = (e) => {
-    let data = e.data
-    console.log(data);
-    // crData = e.data.crData;
-    // pnData = e.data.pnData;
+    window.allProducts = e.data;
+    const buttons = document.querySelectorAll('.search-button');
+    buttons.forEach((btn) => {
+      btn.disabled = false;
+    });
   };
 }
 

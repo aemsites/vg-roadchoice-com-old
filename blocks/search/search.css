@@ -112,6 +112,14 @@
   text-overflow: ellipsis;
 }
 
+.search button.search-button:disabled {
+  opacity: 0.5;
+}
+
+.search button.search-button:disabled:hover {
+  cursor: auto;
+}
+
 @media (min-width: 360px) {
   .search .search__input-cr__wrapper,
   .search .search__input-pn__wrapper,
