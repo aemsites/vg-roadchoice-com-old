@@ -1,0 +1,118 @@
+.cata-results-articles ul , .cata-results-articles ul.groupByTypeproductSheet{
+    flex-wrap: wrap;
+    display: flex;
+    border: 1px solid red;
+    margin: 1px 0px 40px 1px;
+}
+.cata-results-articles ul.groupByTypeCatalog li, .cata-results-articles ul.groupByTypeproductSheet li{
+    flex: 0 0 33.33%;
+}
+.cata-results-articles ul.groupBylangSpanish li, .cata-results-articles ul.groupBylangFrench li{
+    flex: 0 0 50%;
+}
+.cata-results-articles ul li {
+    border-top: 0px solid red;
+    border-bottom: 1px solid red;
+    border-left: 1px solid red;
+    border-right: 0px solid red;
+    font-size: 18px;
+    vertical-align: middle;
+    padding: 5px;
+    border-collapse: collapse;
+}
+.cata-results-articles ul li:nth-child(1) {
+    border-right: 0px solid #000;
+  }
+a.categoryLink {
+    margin: 10px 2px;
+    color: #b92530;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 20px;
+    vertical-align: text-top;
+    padding-bottom: 0;
+}
+.catalog-content h1{
+    font-size: var(--heading-font-size-xl);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: "Nexa Black", var(--fallback-ff);
+    color: var(--primary-red);
+}
+.catalog-content p{
+    font-family: var(--body-ff);
+    font-size: var(--body-font-size-s);
+    color: var(--secondary-dark-gray);
+}
+.catalog-content p a {
+    color: var(--primary-red);
+    text-decoration: none;
+}
+main .section.resource-list{
+    padding: 0px 32px;
+}
+.resource-list h3 {
+    font-family: "Nexa Black", var(--fallback-ff);
+    font-size: var(--body-font-size-m);
+    font-weight: 500;
+    color: var(--primary-red);
+    line-height: 22px;
+    margin-bottom: 15px;
+}
+.resource-list ul {
+    list-style-type: disc;
+    color: var(--primary-red);
+    padding-left: 10px; 
+    margin: 0 0 20px 20px;
+}
+.resource-list ul li {
+    font-size: var(--body-font-size-s);
+    font-weight: 400;
+    color: var(  --primary-black);
+}
+.resource-list ul li a {
+    font-family: var(--body-ff);
+    font-size: var(--body-font-size-s);
+    text-decoration: none;
+    font-weight: 400;
+    color: var(--primary-red);
+}
+.cata-results-articles h2 {
+    font-family: var(--headings-ff-black);
+    font-size: var(--body-font-size-m);
+    font-weight: 500;
+}
+
+
+
+
+table, td, th {
+    border: solid 2px #d2d2d2;
+    background: #fff;
+    border-collapse: collapse;
+    vertical-align: middle;
+  }
+  
+  table {
+    border: 1px solid #000;
+    color: #000;
+    height: auto !important;
+    display: table;
+    overflow-x: auto;
+    width: 100%;
+    border-spacing: 0;
+  }
+  table tbody tr {
+    border: 1px solid #000;
+}
+main #content #main-page-content .field-content table tbody tr td {
+    border: 1px solid #000;
+    font-family: Nexa-Regular;
+    font-size: 18px;
+    width: 246px;
+    height: 14px;
+    vertical-align: middle;
+    padding: 5px;
+    text-align: left;
+    font-weight: normal;
+}
