@@ -1,28 +1,46 @@
 .cata-results-articles ul , .cata-results-articles ul.groupByTypeproductSheet{
     flex-wrap: wrap;
     display: flex;
+    margin-bottom: 40px;
     border: 1px solid red;
-    margin: 1px 0px 40px 1px;
 }
 .cata-results-articles ul.groupByTypeCatalog li, .cata-results-articles ul.groupByTypeproductSheet li{
     flex: 0 0 33.33%;
 }
-.cata-results-articles ul.groupBylangSpanish li, .cata-results-articles ul.groupBylangFrench li{
+.cata-results-articles ul.groupByTypeCatalog li:nth-last-child(-n+3), .cata-results-articles ul.groupByTypeproductSheet li:nth-last-child(-n+3){
+    margin-bottom: -1px;
+}
+.cata-results-articles ul.groupByTypeCatalog li:nth-child(3n),.cata-results-articles ul.groupByTypeproductSheet li:nth-child(3n){
+    border-right: 0px solid red;
+    margin-top: 1px;
+}
+    .cata-results-articles ul.groupBylangSpanish li, .cata-results-articles ul.groupBylangFrench li{
     flex: 0 0 50%;
 }
-.cata-results-articles ul li {
-    border-top: 0px solid red;
-    border-bottom: 1px solid red;
-    border-left: 1px solid red;
+.cata-results-articles ul.groupBylangSpanish li:nth-child(2n), .cata-results-articles ul.groupBylangFrench li:nth-child(2n){
     border-right: 0px solid red;
+}
+.cata-results-articles ul.groupBylangSpanish li:nth-last-child(-n + 2), .cata-results-articles ul.groupBylangFrench li:nth-last-child(-n + 2){
+        margin-bottom: -1px;
+}
+.cata-results-articles ul.groupBylangSpanish li:last-child, .cata-results-articles ul.groupBylangFrench li:last-child {
+ border-bottom: 0px;
+}
+.cata-results-articles ul li {
+    border-bottom: 1px solid red;
+    border-right: 1px solid red;
     font-size: 18px;
     vertical-align: middle;
     padding: 5px;
     border-collapse: collapse;
 }
 .cata-results-articles ul li:nth-child(1) {
-    border-right: 0px solid #000;
-  }
+    border-right: 1px solid red; 
+}
+
+/* .cata-results-articles ul li:last-child {
+    border-right: 1px solid red; 
+} */
 a.categoryLink {
     margin: 10px 2px;
     color: #b92530;
@@ -81,38 +99,4 @@ main .section.resource-list{
     font-family: var(--headings-ff-black);
     font-size: var(--body-font-size-m);
     font-weight: 500;
-}
-
-
-
-
-table, td, th {
-    border: solid 2px #d2d2d2;
-    background: #fff;
-    border-collapse: collapse;
-    vertical-align: middle;
-  }
-  
-  table {
-    border: 1px solid #000;
-    color: #000;
-    height: auto !important;
-    display: table;
-    overflow-x: auto;
-    width: 100%;
-    border-spacing: 0;
-  }
-  table tbody tr {
-    border: 1px solid #000;
-}
-main #content #main-page-content .field-content table tbody tr td {
-    border: 1px solid #000;
-    font-family: Nexa-Regular;
-    font-size: 18px;
-    width: 246px;
-    height: 14px;
-    vertical-align: middle;
-    padding: 5px;
-    text-align: left;
-    font-weight: normal;
 }
