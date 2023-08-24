@@ -1,7 +1,7 @@
 {
-  "total": 7,
+  "total": 8,
   "offset": 0,
-  "limit": 7,
+  "limit": 8,
   "data": [
     {
       "Key": "brand name",
@@ -30,6 +30,14 @@
     {
       "Key": "catalog-title",
       "Text": "CATALOGS[/]SPANISH RESOURCES[/]FRENCH RESOURCES[/]PRODUCT SHEETS AND MORE"
+    },
+    {
+      "Key": "Cross-Reference No",
+      "Text": "Cross-Reference No"
+    },
+    {
+      "Key": "Part No",
+      "Text": "Part No"
     }
   ],
   ":type": "sheet"
