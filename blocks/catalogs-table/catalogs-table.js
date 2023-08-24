@@ -110,6 +110,15 @@ buildResults = (catalogs) => {
 
   return results;
 };
+
+// Trim the resource links
+const resourceListAnchors = document.querySelectorAll('.resource-list a');
+resourceListAnchors.forEach((anchor) => {
+  anchor.removeAttribute('target');
+  anchor.href = anchor.href.replace('http://', '#').toUpperCase();
+  anchor.href.endsWith('/') ? anchor.href.slice(0, -1) : anchor.href;
+});
+
 export default async function decorate(block) {
   const blockConfig = readBlockConfig(block);
   const [url] = Object.values(blockConfig);
