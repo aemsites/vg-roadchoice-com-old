@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   createElement,
   getAllCatolog,
@@ -6,119 +5,108 @@ import {
 } from '../../scripts/scripts.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
-const catalogPerPage = 100;
 const btnPagesText = getTextLabel('catalog-title');
-const firstBuild = true;
 let allCatalog;
 let buildResults;
 
-const divideArray = (mainArray, perChunk) => {
-  const dividedArrays = mainArray.reduce((resultArray, item, index) => {
-    const chunkIndex = Math.floor(index / perChunk);
-    if (!resultArray[chunkIndex]) {
-      resultArray[chunkIndex] = [];
-    }
-    resultArray[chunkIndex].push(item);
-    return resultArray;
-  }, []);
-  return dividedArrays;
-};
-
 // eslint-disable-next-line prefer-const
-buildResults = (catalogs, page) => {
-  const groupedCatolog = (page === 0 && firstBuild)
-    ? divideArray(catalogs, catalogPerPage)
-    : catalogs;
-  //   const activePage = groupedArticles[page];
-
+buildResults = (catalogs) => {
   const tableText = btnPagesText;
   const tableLabels = tableText.split('[/]');
   const [catalogTitle, spanish, french, product] = tableLabels;
 
-  const groupByType = groupedCatolog[page];
-  const groupByTable = groupedCatolog[page];
   const results = createElement('div', { classes: 'cata-results-articles' });
   // eslint-disable-next-line no-undef
 
   const catalogHeading = createElement('h2', { classes: ['catalogHeading'], props: { id: 'CATALOGS' } });
   catalogHeading.textContent = catalogTitle;
 
-  const groupByTypeCatalog1 = createElement('ul', { classes: 'groupByTypeCatalog' });
-  groupByType.forEach((ctype, idx) => {
-    if (groupByType[idx].type === 'catalog') {
-      const catalog1 = createElement('li', { classes: ['catalog', `category-${idx}`] });
-
-      const categoryLink1 = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
-      categoryLink1.textContent = ctype.category;
-
-      //   const category = createElement('td', { classes: 'category' });
-      //   category.appendChild(categoryLink);
-
-      catalog1.append(categoryLink1);
-      groupByTypeCatalog1.appendChild(catalog1);
-    }
-  });
-  results.append(catalogHeading, groupByTypeCatalog1);
-
-  // Spanish Table
-  const spanishHeading = createElement('h2', { classes: ['spanishHeading'] });
-  spanishHeading.textContent = spanish;
-  const groupBylangSpanish = createElement('ul', { classes: 'groupBylangSpanish', props: { id: 'SPANISHRESOURCES' } });
-  groupByType.forEach((ctype, idx) => {
-    if (groupByType[idx].language === 'es') {
+  const groupByTypeCatalog = createElement('ul', { classes: 'groupByTypeCatalog' });
+  catalogs.forEach((ctype, idx) => {
+    if (catalogs[idx].type === 'catalog' && catalogs[idx].language === 'en') {
       const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
 
       const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
       categoryLink.textContent = ctype.category;
-
-      //   const category = createElement('td', { classes: 'category' });
-      //   categoryLink.appendChild(categoryLink);
-
-      catalog.append(categoryLink);
-      groupBylangSpanish.appendChild(catalog);
-    }
-  });
-  results.append(spanishHeading, groupBylangSpanish);
-
-  // FenchTable
-  const frenchHeading = createElement('h2', { classes: ['frenchHeading'] });
-  frenchHeading.textContent = french;
-  const groupBylangFrench = createElement('ul', { classes: 'groupBylangFrench', props: { id: 'FRENCHRESOURCES' } });
-  groupByType.forEach((ctype, idx) => {
-    if (groupByType[idx].language === 'fr') {
-      const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
-
-      const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
-      categoryLink.textContent = ctype.category;
-
-      //   const category = createElement('td', { classes: 'category' });
-      //   category.appendChild(categoryLink);
+      const catagoryNote = createElement('sub', { classes: 'notes' });
+      if (catalogs[idx].notes) {
+        catagoryNote.textContent = `(${ctype.notes})`;
+      }
 
       catalog.append(categoryLink);
-      groupBylangFrench.appendChild(catalog);
+      catalog.appendChild(catagoryNote);
+      groupByTypeCatalog.appendChild(catalog);
     }
   });
-  results.append(frenchHeading, groupBylangFrench);
+  results.append(catalogHeading, groupByTypeCatalog);
 
   // product-dat-sheet Table
   const productHeading = createElement('h2', { classes: ['productHeading'] });
   productHeading.textContent = product;
   const groupByTypeproductSheet = createElement('ul', { classes: 'groupByTypeproductSheet', props: { id: 'PRODUCTSHEETSANDMORE' } });
-  groupByType.forEach((ctype, idx) => {
-    if (groupByType[idx].type === 'product-data-sheet') {
+  catalogs.forEach((ctype, idx) => {
+    if (catalogs[idx].type === 'product-data-sheet' && catalogs[idx].language === 'en') {
+      const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
+
+      const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
+      categoryLink.textContent = ctype.category;
+      const catagoryNote = createElement('sub', { classes: 'notes' });
+      if (catalogs[idx].notes) {
+        catagoryNote.textContent = `(${ctype.notes})`;
+      }
+
+      catalog.append(categoryLink);
+      catalog.appendChild(catagoryNote);
+      groupByTypeproductSheet.appendChild(catalog);
+    }
+  });
+  results.append(productHeading, groupByTypeproductSheet);
+
+  // Spanish Table
+  const spanishHeading = createElement('h2', { classes: ['spanishHeading'] });
+  spanishHeading.textContent = spanish;
+  const groupBylangSpanish = createElement('ul', { classes: 'groupBylangSpanish', props: { id: 'SPANISHRESOURCES' } });
+  catalogs.forEach((ctype, idx) => {
+    if (catalogs[idx].language === 'es') {
       const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
 
       const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
       categoryLink.textContent = ctype.category;
 
-      //   const category = createElement('td', { classes: 'category' });
-      //   category.appendChild(categoryLink);
+      const catagoryNote = createElement('sub', { classes: 'notes' });
+      if (catalogs[idx].notes) {
+        catagoryNote.textContent = `(${ctype.notes})`;
+      }
 
       catalog.append(categoryLink);
-      groupByTypeproductSheet.appendChild(catalog);
+      catalog.appendChild(catagoryNote);
+      groupBylangSpanish.appendChild(catalog);
     }
   });
-  results.append(productHeading, groupByTypeproductSheet);
+  results.append(spanishHeading, groupBylangSpanish);
+
+  // FrenchTable
+  const frenchHeading = createElement('h2', { classes: ['frenchHeading'] });
+  frenchHeading.textContent = french;
+  const groupBylangFrench = createElement('ul', { classes: 'groupBylangFrench', props: { id: 'FRENCHRESOURCES' } });
+  catalogs.forEach((ctype, idx) => {
+    if (catalogs[idx].language === 'fr') {
+      const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
+
+      const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
+      categoryLink.textContent = ctype.category;
+
+      const catagoryNote = createElement('sub', { classes: 'notes' });
+      if (catalogs[idx].notes) {
+        catagoryNote.textContent = `(${ctype.notes})`;
+      }
+
+      catalog.append(categoryLink);
+      catalog.appendChild(catagoryNote);
+      groupBylangFrench.appendChild(catalog);
+    }
+  });
+  results.append(frenchHeading, groupBylangFrench);
 
   return results;
 };

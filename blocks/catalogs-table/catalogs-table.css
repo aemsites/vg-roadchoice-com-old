@@ -16,12 +16,14 @@
 
   &.groupByTypeCatalog li, &.groupByTypeproductSheet li {
     flex: 0 0 33.33%;
+    text-transform: capitalize;
   }
   &.groupByTypeCatalog li:nth-child(3n), &.groupByTypeproductSheet li:nth-child(3n){
       border-right: 0px;
   }
   &.groupBylangSpanish li, &.groupBylangFrench li {
     flex: 0 0 50%;
+    text-transform: uppercase;
   }
 
   &::after {
@@ -45,6 +47,8 @@ a.categoryLink {
   padding-bottom: 0;
   font-family: var(--headings-ff-black);
 }
+
+sub.notes{font-size: var(--body-font-size-s);}
 
 .catalog-content h1 {
   font-size: var(--heading-font-size-xl);
