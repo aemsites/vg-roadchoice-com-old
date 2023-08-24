@@ -109,7 +109,7 @@ const formatDate = (date) => {
   const month = convertedDate.getMonth() + 1;
   const year = convertedDate.getFullYear();
 
-  return `${day}/${month}/${year}`;
+  return `${month}/${day}/${year}`;
 };
 
 const handlePaginationStyling = (page, total, value, section) => {
