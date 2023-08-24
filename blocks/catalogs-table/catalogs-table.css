@@ -5,9 +5,9 @@
   position: relative;
 
   & li {
-    border-bottom: 1px solid red;
-    border-right: 1px solid red;
-    font-size: 18px;
+    border-bottom: 1px solid var(--primary-black);
+    border-right: 1px solid var(--primary-black);
+    font-size: var(--body-font-size-s);
     vertical-align: middle;
     padding: 5px;
     border-collapse: collapse;
@@ -17,7 +17,9 @@
   &.groupByTypeCatalog li, &.groupByTypeproductSheet li {
     flex: 0 0 33.33%;
   }
-
+  &.groupByTypeCatalog li:nth-child(3n), &.groupByTypeproductSheet li:nth-child(3n){
+      border-right: 0px;
+  }
   &.groupBylangSpanish li, &.groupBylangFrench li {
     flex: 0 0 50%;
   }
@@ -26,7 +28,7 @@
     content: '';
     display: block;
     position: absolute;
-    border: 1px solid red;
+    border: 1px solid var(--primary-black);
     width: 100%;
     height: 100%;
     z-index: 0;
@@ -37,10 +39,11 @@ a.categoryLink {
   margin: 10px 2px;
   color: #b92530;
   text-decoration: none;
-  font-weight: 700;
-  font-size: 20px;
+  font-weight: 500;
+  font-size: var(--body-font-size-m);
   vertical-align: text-top;
   padding-bottom: 0;
+  font-family: var(--headings-ff-black);
 }
 
 .catalog-content h1 {
@@ -49,12 +52,17 @@ a.categoryLink {
   text-transform: uppercase;
   font-family: "Nexa Black", var(--fallback-ff);
   color: var(--primary-red);
+  line-height: 1;
 }
 
 .catalog-content p {
   font-family: var(--body-ff);
   font-size: var(--body-font-size-s);
   color: var(--secondary-dark-gray);
+  margin-top: 10px;
+}
+.catalog-content p:nth-child(3){
+    margin-bottom: 40px;
 }
 
 .catalog-content p a {

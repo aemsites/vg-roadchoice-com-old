@@ -6,12 +6,11 @@ import {
 } from '../../scripts/scripts.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
-const catalogPerPage = 20;
+const catalogPerPage = 100;
 const btnPagesText = getTextLabel('catalog-title');
 const firstBuild = true;
 let allCatalog;
 let buildResults;
-let buildResulttype;
 
 const divideArray = (mainArray, perChunk) => {
   const dividedArrays = mainArray.reduce((resultArray, item, index) => {
