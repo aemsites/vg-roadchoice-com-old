@@ -7,7 +7,7 @@ export default async function decorate(block) {
       iframe.height = fixedHeightClass;
     }
     iframe.src = link;
+    iframe.loading = 'lazy';
     iframe.setAttribute('frameborder', 0);
     block.replaceChildren(iframe);
-  }
-  
+}
