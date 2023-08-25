@@ -63,7 +63,7 @@ buildResults = (catalogs) => {
   results.append(productHeading, groupByTypeproductSheet);
 
   // Spanish Table
-  const spanishHeading = createElement('h2', { classes: ['spanishHeading'] });
+  const spanishHeading = createElement('h2', { classes: ['spanishHeading'], props: { id: 'SPANISHRESOURCES' } });
   spanishHeading.textContent = spanish;
   const groupBylangSpanish = createElement('ul', { classes: 'groupBylangSpanish', props: { id: 'SPANISHRESOURCES' } });
   catalogs.forEach((ctype, idx) => {
@@ -86,9 +86,9 @@ buildResults = (catalogs) => {
   results.append(spanishHeading, groupBylangSpanish);
 
   // FrenchTable
-  const frenchHeading = createElement('h2', { classes: ['frenchHeading'] });
+  const frenchHeading = createElement('h2', { classes: ['frenchHeading'], props: { id: 'frenchResources' } });
   frenchHeading.textContent = french;
-  const groupBylangFrench = createElement('ul', { classes: 'groupBylangFrench', props: { id: 'FRENCHRESOURCES' } });
+  const groupBylangFrench = createElement('ul', { classes: 'groupBylangFrench' });
   catalogs.forEach((ctype, idx) => {
     if (catalogs[idx].language === 'fr') {
       const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
@@ -112,12 +112,20 @@ buildResults = (catalogs) => {
 };
 
 // Trim the resource links
-const resourceListAnchors = document.querySelectorAll('.resource-list a');
-resourceListAnchors.forEach((anchor) => {
+const resourceListAnchors = document.querySelectorAll('.resource-list li a');
+resourceListAnchors.forEach((anchor, i) => {
   anchor.removeAttribute('target');
-  anchor.href = anchor.href.replace('http://', '#').toUpperCase();
-  anchor.href.endsWith('/') ? anchor.href.slice(0, -1) : anchor.href;
+  anchor.removeAttribute('href');
+  anchor.setAttribute('id', `link${i}`);
+
+  const link1 = document.getElementById('link0');
+  link1.setAttribute('href', '#CATALOGS');
 });
+const link2 = document.getElementById('link1');
+link2.setAttribute('href', '#CATALOGS');
+
+const link3 = document.getElementById('link2');
+link3.setAttribute('href', '#frenchResources');
 
 export default async function decorate(block) {
   const blockConfig = readBlockConfig(block);
