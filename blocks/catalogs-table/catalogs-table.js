@@ -122,7 +122,7 @@ resourceListAnchors.forEach((anchor, i) => {
   link1.setAttribute('href', '#CATALOGS');
 });
 const link2 = document.getElementById('link1');
-link2.setAttribute('href', '#CATALOGS');
+link2.setAttribute('href', '#SPANISHRESOURCES');
 
 const link3 = document.getElementById('link2');
 link3.setAttribute('href', '#frenchResources');

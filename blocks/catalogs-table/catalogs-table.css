@@ -112,6 +112,7 @@ main .section.resource-list {
   font-family: var(--headings-ff-black);
   font-size: var(--body-font-size-m);
   font-weight: 500;
+  scroll-margin-block-start: 200px;
 }
 
 @media (max-width: 768px){
