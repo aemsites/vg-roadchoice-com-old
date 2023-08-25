@@ -1,4 +1,4 @@
-.cata-results-articles ul {
+.allCatalogs ul {
   flex-wrap: wrap;
   display: flex;
   margin-bottom: 40px;
@@ -14,16 +14,14 @@
     z-index: 1;
   }
 
-  &.groupByTypeCatalog li, &.groupByTypeproductSheet li {
+  &.groupCatalog li, &.groupproductSheet li {
     flex: 0 0 33.33%;
     text-transform: capitalize;
   }
-
-  &.groupByTypeCatalog li:nth-child(3n), &.groupByTypeproductSheet li:nth-child(3n) {
-    border-right: 0;
+  &.groupCatalog li:nth-child(3n), &.groupproductSheet li:nth-child(3n){
+      border-right: 0px;
   }
-
-  &.groupBylangSpanish li, &.groupBylangFrench li {
+  &.groupSpanish li, &.groupFrench li {
     flex: 0 0 50%;
     text-transform: uppercase;
   }
@@ -120,8 +118,24 @@ main .section.resource-list {
   scroll-margin-block-start: 200px;
 }
 
+.tableContent{
+  margin-bottom: 50px;
+}
+
 @media (max-width: 768px) {
   .catalog-content h1 {
     font-size: var(--body-font-size-xl);
   }
+
+@media (max-width: 667px){
+    .catalog-content h1 {
+        font-size: var(--body-font-size-xl);
+    }
+    .tableContent{
+      overflow-y:scroll;
+    }
+    .tableContent ul{
+      width: 700px;
+      overflow: scroll;
+    }
 }

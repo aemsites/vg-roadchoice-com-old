@@ -15,16 +15,17 @@ buildResults = (catalogs) => {
   const tableLabels = tableText.split('[/]');
   const [catalogTitle, spanish, french, product] = tableLabels;
 
-  const results = createElement('div', { classes: 'cata-results-articles' });
+  const results = createElement('div', { classes: 'allCatalogs' });
   // eslint-disable-next-line no-undef
 
-  const catalogHeading = createElement('h2', { classes: ['catalogHeading'], props: { id: 'CATALOGS' } });
+  const catalogHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'CATALOGS' } });
   catalogHeading.textContent = catalogTitle;
 
-  const groupByTypeCatalog = createElement('ul', { classes: 'groupByTypeCatalog' });
+  const contentCatalog = createElement('div', { classes: 'tableContent' });
+  const groupByTypeCatalog = createElement('ul', { classes: 'groupCatalog' });
   catalogs.forEach((ctype, idx) => {
     if (catalogs[idx].type === 'catalog' && catalogs[idx].language === 'en') {
-      const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
+      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
 
       const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
       categoryLink.textContent = ctype.category;
@@ -36,17 +37,19 @@ buildResults = (catalogs) => {
       catalog.append(categoryLink);
       catalog.appendChild(catagoryNote);
       groupByTypeCatalog.appendChild(catalog);
+      contentCatalog.appendChild(groupByTypeCatalog);
     }
   });
-  results.append(catalogHeading, groupByTypeCatalog);
+  results.append(catalogHeading, contentCatalog);
 
   // product-dat-sheet Table
-  const productHeading = createElement('h2', { classes: ['productHeading'] });
+  const productHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'PRODUCT' } });
   productHeading.textContent = product;
-  const groupByTypeproductSheet = createElement('ul', { classes: 'groupByTypeproductSheet', props: { id: 'PRODUCTSHEETSANDMORE' } });
+  const contentProduct = createElement('div', { classes: 'tableContent' });
+  const groupByTypeproductSheet = createElement('ul', { classes: 'groupproductSheet', props: { id: 'PRODUCTSHEETSANDMORE' } });
   catalogs.forEach((ctype, idx) => {
     if (catalogs[idx].type === 'product-data-sheet' && catalogs[idx].language === 'en') {
-      const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
+      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
 
       const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
       categoryLink.textContent = ctype.category;
@@ -58,17 +61,19 @@ buildResults = (catalogs) => {
       catalog.append(categoryLink);
       catalog.appendChild(catagoryNote);
       groupByTypeproductSheet.appendChild(catalog);
+      contentProduct.appendChild(groupByTypeproductSheet);
     }
   });
-  results.append(productHeading, groupByTypeproductSheet);
+  results.append(productHeading, contentProduct);
 
   // Spanish Table
-  const spanishHeading = createElement('h2', { classes: ['spanishHeading'], props: { id: 'SPANISHRESOURCES' } });
+  const spanishHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'SPANISHRESOURCES' } });
   spanishHeading.textContent = spanish;
-  const groupBylangSpanish = createElement('ul', { classes: 'groupBylangSpanish', props: { id: 'SPANISHRESOURCES' } });
+  const contentSpanish = createElement('div', { classes: 'tableContent' });
+  const groupBylangSpanish = createElement('ul', { classes: 'groupSpanish' });
   catalogs.forEach((ctype, idx) => {
     if (catalogs[idx].language === 'es') {
-      const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
+      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
 
       const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
       categoryLink.textContent = ctype.category;
@@ -81,17 +86,20 @@ buildResults = (catalogs) => {
       catalog.append(categoryLink);
       catalog.appendChild(catagoryNote);
       groupBylangSpanish.appendChild(catalog);
+      contentSpanish.appendChild(groupBylangSpanish);
     }
   });
-  results.append(spanishHeading, groupBylangSpanish);
+  results.append(spanishHeading, contentSpanish);
 
   // FrenchTable
-  const frenchHeading = createElement('h2', { classes: ['frenchHeading'], props: { id: 'frenchResources' } });
+  const frenchHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'frenchResources' } });
   frenchHeading.textContent = french;
-  const groupBylangFrench = createElement('ul', { classes: 'groupBylangFrench' });
+
+  const contentFrench = createElement('div', { classes: 'tableContent' });
+  const groupBylangFrench = createElement('ul', { classes: 'groupFrench' });
   catalogs.forEach((ctype, idx) => {
     if (catalogs[idx].language === 'fr') {
-      const catalog = createElement('li', { classes: ['catalog', `category-${idx}`] });
+      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
 
       const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
       categoryLink.textContent = ctype.category;
@@ -104,9 +112,10 @@ buildResults = (catalogs) => {
       catalog.append(categoryLink);
       catalog.appendChild(catagoryNote);
       groupBylangFrench.appendChild(catalog);
+      contentFrench.appendChild(groupBylangFrench);
     }
   });
-  results.append(frenchHeading, groupBylangFrench);
+  results.append(frenchHeading, contentFrench);
 
   return results;
 };
@@ -116,16 +125,16 @@ const resourceListAnchors = document.querySelectorAll('.resource-list li a');
 resourceListAnchors.forEach((anchor, i) => {
   anchor.removeAttribute('target');
   anchor.removeAttribute('href');
-  anchor.setAttribute('id', `link${i}`);
+  anchor.setAttribute('id', `resources-${i}`);
 
-  const link1 = document.getElementById('link0');
-  link1.setAttribute('href', '#CATALOGS');
+  const resourceEnglish = document.getElementById('resources-0');
+  resourceEnglish.setAttribute('href', '#CATALOGS');
 });
-const link2 = document.getElementById('link1');
-link2.setAttribute('href', '#SPANISHRESOURCES');
+const resourceSpanish = document.getElementById('resources-1');
+resourceSpanish.setAttribute('href', '#SPANISHRESOURCES');
 
-const link3 = document.getElementById('link2');
-link3.setAttribute('href', '#frenchResources');
+const resourceFrench = document.getElementById('resources-2');
+resourceFrench.setAttribute('href', '#frenchResources');
 
 export default async function decorate(block) {
   const blockConfig = readBlockConfig(block);
