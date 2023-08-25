@@ -113,3 +113,9 @@ main .section.resource-list {
   font-size: var(--body-font-size-m);
   font-weight: 500;
 }
+
+@media (max-width: 768px){
+    .catalog-content h1 {
+        font-size: var(--body-font-size-xl);
+    }
+}
