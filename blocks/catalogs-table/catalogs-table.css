@@ -54,29 +54,34 @@ sub.notes {
   font-size: var(--body-font-size-s);
 }
 
-.catalog-content h1 {
-  font-size: var(--heading-font-size-xl);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-family: "Nexa Black", var(--fallback-ff);
-  color: var(--primary-red);
-  line-height: 1;
-}
+.catalog-content {
+  position: inherit;
+  
+  & h1{
+      font-size: var(--heading-font-size-xl);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-family: "Nexa Black", var(--fallback-ff);
+      color: var(--primary-red);
+      line-height: 1;
+  }
 
-.catalog-content p {
-  font-family: var(--body-ff);
-  font-size: var(--body-font-size-s);
-  color: var(--secondary-dark-gray);
-  margin-top: 10px;
-}
+  & p {
+    font-family: var(--body-ff);
+    font-size: var(--body-font-size-s);
+    color: var(--secondary-dark-gray);
+    margin-top: 10px;
+  }
 
-.catalog-content p:nth-child(3) {
-  margin-bottom: 40px;
-}
+  & p:nth-child(3) {
+    margin-bottom: 40px;
+  }
 
-.catalog-content p a {
-  color: var(--primary-red);
-  text-decoration: none;
+  & p a {
+    color: var(--primary-red);
+    text-decoration: none;
+  }
+
 }
 
 main .section.resource-list {
@@ -97,20 +102,22 @@ main .section.resource-list {
   color: var(--primary-red);
   padding-left: 10px;
   margin: 0 0 20px 20px;
-}
 
-.resource-list ul li {
-  font-size: var(--body-font-size-s);
-  font-weight: 400;
-  color: var(--primary-black);
-}
 
-.resource-list ul li a {
-  font-family: var(--body-ff);
-  font-size: var(--body-font-size-s);
-  text-decoration: none;
-  font-weight: 400;
-  color: var(--primary-red);
+  & li {
+    font-size: var(--body-font-size-s);
+    font-weight: 400;
+    color: var(--primary-black);
+  }
+
+  & li a {
+    font-family: var(--body-ff);
+    font-size: var(--body-font-size-s);
+    text-decoration: none;
+    font-weight: 400;
+    color: var(--primary-red);
+  }
+  
 }
 
 .allCatalogs h2 {
@@ -137,10 +144,12 @@ main .section.resource-list {
 
   .tableContent {
     overflow-y: scroll;
+
+    & ul {
+      width: 700px;
+      overflow: scroll;
+    }
+    
   }
 
-  .tableContent ul {
-    width: 700px;
-    overflow: scroll;
-  }
 }
