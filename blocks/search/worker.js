@@ -1,5 +1,5 @@
 const URLs = {
-  crossReference: '/cross-reference-data/cross-reference-data.json',
+  crossReference: '/cross-reference-data/cr-data.json',
   partNumber: '/product-data/road-choice-make-model-part-filter-options.json',
 };
 

@@ -1,0 +1,37 @@
+.filter-section {
+  width: 100%;
+  line-height: 22px;
+  padding: 0 0 20px;
+}
+
+.filter-section h3.title {
+  font-family: var(--headings-ff-bold);
+  font-size: var(--body-font-size-m);
+  color: var(--primary-white);
+  background-color: var(--primary-red);
+  text-align: center;
+  text-transform: uppercase;
+  padding: 15px 30px;
+}
+
+.filter-section ul li.item {
+  background-color: var(--c-light-gray);
+  text-align: left;
+  border: 1px solid var(--primary-medium-gray);
+  border-top: none;
+  padding: 10px;
+}
+
+.filter-section ul li.item:first-of-type {
+  border-top: 1px solid var(--primary-medium-gray);;
+}
+
+.filter-section ul li.item a {
+  font-size: var(--body-font-size-xs);
+  color: var(--secondary-gray-4);
+  text-decoration: none;
+}
+
+.filter-section ul li.item a:hover {
+  color: var(--primary-red);
+}

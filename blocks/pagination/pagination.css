@@ -1,0 +1,50 @@
+.pagination-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination-section h2.title {
+  font-family: var(--headings-ff-black);
+  font-size: var(--heading-font-size-s);
+  color: var(--c-medium-gray-1);
+  text-transform: uppercase;
+  text-align: left;
+  padding: 15px 0 0;
+}
+
+.more-section {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pagination-section .more-section p.displayed-text {
+  font-family: var(--headings-ff-bold);
+  font-size: var(--body-font-size-xs);
+  color: var(--c-medium-gray-1);
+}
+
+.pagination-section .more-section button.more-button {
+  font-family: var(--body-ff);
+  font-size: calc(var(--body-font-size-xs) - 2px);
+  color: var(--primary-red);
+  margin: 0 0 0 5px;
+}
+
+@media (min-width: 496px) {
+  .pagination-section {
+    flex-direction: row;
+    justify-content: left;
+    align-items: baseline;
+  }
+
+  .pagination-section .more-section p.displayed-text {
+    margin: 0 0 0 20px;
+  }
+
+  .pagination-section h2.title {
+    padding: 0;
+  }
+}

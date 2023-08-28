@@ -1,7 +1,7 @@
 {
-  "total": 8,
+  "total": 9,
   "offset": 0,
-  "limit": 8,
+  "limit": 9,
   "data": [
     {
       "Key": "brand name",
@@ -34,6 +34,22 @@
     {
       "Key": "Part No",
       "Text": "Part No"
+    },
+    {
+      "Key": "search results title",
+      "Text": "Search Results for"
+    },
+    {
+      "Key": "part number",
+      "Text": "Part Number"
+    },
+    {
+      "Key": "pagination text",
+      "Text": "Showing top [$] results"
+    },
+    {
+      "Key": "pagination button",
+      "Text": "View All"
     }
   ],
   ":type": "sheet"
