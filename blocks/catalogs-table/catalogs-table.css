@@ -1,6 +1,6 @@
 /* stylelint-disable */
 
-.allCatalogs ul {
+.all-catalogs ul {
   flex-wrap: wrap;
   display: flex;
   margin-bottom: 40px;
@@ -45,7 +45,6 @@ a.categoryLink {
   margin: 10px 2px;
   color: #b92530;
   text-decoration: none;
-  font-weight: 500;
   font-size: var(--body-font-size-m);
   vertical-align: text-top;
   padding-bottom: 0;
@@ -61,9 +60,8 @@ sub.notes {
 
   & h1{
       font-size: var(--heading-font-size-xl);
-      font-weight: 700;
       text-transform: uppercase;
-      font-family: "Nexa Black", var(--fallback-ff);
+      font-family: var(--headings-ff-black);
       color: var(--primary-red);
       line-height: 1;
   }
@@ -88,15 +86,14 @@ sub.notes {
 
 main .section.resource-list {
   padding: 0px 32px;
-}
 
-.resource-list h3 {
-  font-family: "Nexa Black", var(--fallback-ff);
-  font-size: var(--body-font-size-m);
-  font-weight: 500;
-  color: var(--primary-red);
-  line-height: 22px;
-  margin-bottom: 15px;
+  & h3 {
+    font-family: var(--headings-ff-black);
+    font-size: var(--body-font-size-m);
+    color: var(--primary-red);
+    line-height: 22px;
+    margin-bottom: 15px;
+  }
 }
 
 .resource-list ul {
@@ -108,7 +105,6 @@ main .section.resource-list {
 
   & li {
     font-size: var(--body-font-size-s);
-    font-weight: 400;
     color: var(--primary-black);
   }
 
@@ -116,20 +112,18 @@ main .section.resource-list {
     font-family: var(--body-ff);
     font-size: var(--body-font-size-s);
     text-decoration: none;
-    font-weight: 400;
     color: var(--primary-red);
   }
   
 }
 
-.allCatalogs h2 {
+.all-catalogs h2 {
   font-family: var(--headings-ff-black);
   font-size: var(--body-font-size-m);
-  font-weight: 500;
   scroll-margin-block-start: 200px;
 }
 
-.tableContent {
+.table-content {
   margin-bottom: 50px;
 }
 
@@ -144,7 +138,7 @@ main .section.resource-list {
     font-size: var(--body-font-size-xl);
   }
 
-  .tableContent {
+  .table-content {
     overflow-y: scroll;
 
     & ul {
