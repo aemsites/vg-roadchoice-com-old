@@ -1,7 +1,7 @@
 {
-  "total": 6,
+  "total": 8,
   "offset": 0,
-  "limit": 6,
+  "limit": 8,
   "data": [
     {
       "Key": "brand name",
@@ -26,6 +26,14 @@
     {
       "Key": "pagination",
       "Text": "First[/]Previous[/]Next[/]Last"
+    },
+    {
+      "Key": "Cross-Reference No",
+      "Text": "Cross-Reference No"
+    },
+    {
+      "Key": "Part No",
+      "Text": "Part No"
     }
   ],
   ":type": "sheet"
