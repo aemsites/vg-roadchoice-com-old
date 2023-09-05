@@ -49,7 +49,7 @@
     },
     {
       "Key": "pagination button",
-      "Text": "View All"
+      "Text": "Show More"
     }
   ],
   ":type": "sheet"

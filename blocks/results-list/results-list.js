@@ -2,7 +2,8 @@ import { createElement } from '../../scripts/scripts.js';
 import productCard from './product-card.js';
 import productsWorker from '../../scripts/delayed.js';
 
-const amountOfProducts = 12;
+// const amountOfProducts = 12;
+const amountOfProducts = 6;
 let products;
 let query;
 let hasImagesData = false;
@@ -52,7 +53,8 @@ export default async function decorate(block) {
         }
         return null;
       });
-      const productItem = productCard(prod, searchType, idx, amountOfProducts);
+      const productItem = productCard(prod, searchType);
+      if (idx >= amountOfProducts) productItem.classList.add('hidden');
       productList.appendChild(productItem);
     });
   });

@@ -1,9 +1,7 @@
 import { getTextLabel, createElement } from '../../scripts/scripts.js';
 
 let amount;
-let newText;
 let products;
-let displayBtn;
 const partNumberText = getTextLabel('part number');
 const displayedTextContent = getTextLabel('pagination text');
 const buttonTextContent = getTextLabel('pagination button');
@@ -15,17 +13,24 @@ if (isSearchResult) {
   products = JSON.parse(sessionStorage.getItem('results'));
 }
 
-if ([...products].length <= amount) {
-  newText = displayedTextContent.replace('[$]', [...products].length);
-  displayBtn = false;
-} else {
-  newText = displayedTextContent.replace('[$]', amount);
-  displayBtn = true;
-}
+const hasMoreItems = products && [...products].length > amount;
+let currentAmount = hasMoreItems ? amount : [...products].length;
+const newText = displayedTextContent.replace('[$]', currentAmount);
 
-const loadMoreProducts = () => {
-  // todo make more products appear at the end and update the amount
-  console.log('click');
+const loadMoreProducts = (props) => {
+  const { hidden, btn, amountText } = props;
+  const { length } = hidden;
+  const isLessThanAmount = length < amount;
+  const nextAmount = isLessThanAmount ? length : amount;
+  currentAmount += nextAmount;
+
+  for (let i = 0; i < nextAmount; i += 1) {
+    hidden[i].classList.remove('hidden');
+  }
+
+  amountText.textContent = displayedTextContent.replace('[$]', currentAmount);
+
+  if (isLessThanAmount) btn.classList.add('hidden');
 };
 
 export default async function decorate(block) {
@@ -33,15 +38,34 @@ export default async function decorate(block) {
 
   const paginationTitle = createElement('h2', { classes: 'title', textContent: `${firstWord}s` });
 
-  const moreProductsSection = createElement('div', { classes: 'more-section' });
+  const showingSection = createElement('div', { classes: 'showing-section' });
   const displayedText = createElement('p', { classes: 'displayed-text', textContent: `${newText}` });
-  moreProductsSection.append(displayedText);
+  showingSection.append(displayedText);
 
-  const moreBtn = createElement('button', { classes: 'more-button', textContent: buttonTextContent });
-  moreBtn.onclick = () => loadMoreProducts();
-  if (displayBtn) moreProductsSection.append(moreBtn);
+  if (hasMoreItems) {
+    const moreBtn = createElement('button', {
+      classes: ['more-button', 'hidden'], textContent: buttonTextContent,
+    });
+    const bottomMoreBtn = createElement('button', {
+      classes: ['bottom-more-button', 'hidden'], textContent: buttonTextContent,
+    });
+    const resultsListBlock = document.querySelector('.results-list.block');
+    moreBtn.onclick = () => loadMoreProducts({
+      hidden: resultsListBlock.querySelectorAll('.product.hidden'),
+      btn: moreBtn,
+      amountText: displayedText,
+    });
+    showingSection.append(moreBtn);
 
-  paginationSection.append(paginationTitle, moreProductsSection);
+    document.addEventListener('ImagesLoaded', () => {
+      resultsListBlock.querySelector('.results-section').appendChild(bottomMoreBtn);
+      moreBtn.classList.remove('hidden');
+    });
+
+    // TODO add an observer to check if resultsListBlock has data-block-status="loaded"
+  }
+
+  paginationSection.append(paginationTitle, showingSection);
 
   block.textContent = '';
   block.append(paginationSection);

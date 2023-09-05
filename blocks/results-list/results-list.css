@@ -16,6 +16,10 @@ ul.results-list {
   flex-direction: column;
 }
 
+.product.hidden {
+  display: none;
+}
+
 .product .image img {
   margin: 0 0 12px;
   width: 200px;

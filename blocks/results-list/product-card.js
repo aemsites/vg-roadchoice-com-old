@@ -25,12 +25,6 @@ const getProperties = (prod, st) => {
 const productCard = (product, searchType) => {
   const object = getProperties(product, searchType);
 
-  // todo unfinished... a way to add a page number to make the pagination
-  // let page = 1;
-  // amount = 2;
-  // if (idx === amount) page += 1;
-  // console.log(page);
-
   const {
     category,
     name,
