@@ -1,9 +1,11 @@
 import { createElement } from '../../scripts/scripts.js';
 import productCard from './product-card.js';
+import productsWorker from '../../scripts/delayed.js';
 
 const amountOfProducts = 12;
 let products;
 let query;
+let hasImagesData = false;
 const isSearchResult = document.querySelector('.search-results') !== null;
 
 if (isSearchResult) {
@@ -14,41 +16,41 @@ if (isSearchResult) {
 
 const searchType = (query.searchType === 'cross' && 'cross') || 'parts';
 
-// todo delete this
+// TODO delete this
 // import mock from './mock.js';
 // products = mock;
-
-const getJSONData = async (url) => {
-  const results = await fetch(url);
-  const json = await results.json();
-  return json;
-};
-
-const getImageUrls = (prods, images) => {
-  prods.forEach((prod) => {
-    prod.hasImage = false;
-    // todo make this work on time
-    images.data.find((e) => {
-      if (e['Part Number'] === prod['Base Part Number']) {
-        prod.hasImage = true;
-      }
-      return null;
-    });
-  });
-};
-
-const imagesUrl = '/product-images/road-choice-website-images.json';
-const imageData = await getJSONData(imagesUrl);
-
-await getImageUrls(products, imageData);
 
 export default async function decorate(block) {
   const resultsSection = createElement('div', { classes: 'results-section' });
   const productList = createElement('ul', { classes: 'results-list' });
 
-  products.forEach(async (product, idx) => {
-    const productItem = productCard(product, searchType, idx, amountOfProducts);
-    productList.appendChild(productItem);
+  productsWorker.onmessage = ({ data }) => {
+    if (data.imgData && !hasImagesData) {
+      hasImagesData = true;
+      const event = new CustomEvent('ImagesLoaded', { detail: data.imgData });
+      document.dispatchEvent(event);
+    }
+    if (data.crData && data.pnData && data.imgData) {
+      window.allProducts = data;
+    }
+  };
+
+  const loadingElement = createElement('div', { classes: 'loading', textContent: 'Loading...' });
+  resultsSection.append(loadingElement);
+
+  document.addEventListener('ImagesLoaded', ({ detail }) => {
+    loadingElement.remove();
+    products.forEach((prod, idx) => {
+      prod.hasImage = false;
+      detail.find((e) => {
+        if (e['Part Number'] === prod['Base Part Number']) {
+          prod.hasImage = true;
+        }
+        return null;
+      });
+      const productItem = productCard(prod, searchType, idx, amountOfProducts);
+      productList.appendChild(productItem);
+    });
   });
 
   resultsSection.append(productList);

@@ -5,7 +5,6 @@ import {
   loadFooter,
   decorateIcons,
   decorateBlocks,
-  decorateBlock,
   decorateTemplateAndTheme,
   getMetadata,
   waitForLCP,
@@ -210,9 +209,9 @@ function buildHeroBlock(main) {
 function buildSearchForm(main, head) {
   const noSearchBlock = head.querySelector('meta[name="no-search"]');
   if (noSearchBlock) return;
-  const block = buildBlock('search', []);
-  main.prepend(block);
-  decorateBlock(block);
+  const section = createElement('div');
+  section.appendChild(buildBlock('search', []));
+  main.prepend(section);
 }
 
 /**
@@ -673,12 +672,24 @@ export function convertDateExcel(excelTimestamp) {
   return Number.isNaN(parsed) ? null : new Date(parsed);
 }
 
-/* Returns a list of properties listed in the block */
 /**
- * @param {string} route Fetches an excel sheet and awaits for a json object
+ * Returns a list of properties listed in the block
+ * @param {string} route get the Json data from the route
+ * @returns {Object} the json data object
  * */
-export const getAllArticles = async (route) => {
+export const getJSONData = async (route) => {
   const response = await fetch(route);
   const json = await response.json();
-  return json.data;
+  return json;
 };
+
+/**
+ * Launch the search worker to load all the products
+ * @returns {Worker} the search worker
+ */
+export function loadWorker() {
+  const worker = new Worker('/blocks/search/worker.js');
+  // this just launch the worker, and the message listener is triggered in another script
+  worker.postMessage('run');
+  return worker;
+}

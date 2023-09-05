@@ -1,7 +1,7 @@
 import {
   createElement,
   getTextLabel,
-  getAllArticles,
+  getJSONData as getAllArticles,
   convertDateExcel,
 } from '../../scripts/scripts.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
@@ -344,7 +344,7 @@ export default async function decorate(block) {
   articlesPerPage = +amount;
 
   allArticles = await getAllArticles(url);
-  allArticles.sort((a, b) => {
+  allArticles?.data.sort((a, b) => {
     a.date = +(a.date);
     b.date = +(b.date);
     return b.date - a.date;

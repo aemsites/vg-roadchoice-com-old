@@ -34,7 +34,7 @@ export default async function decorate(block) {
   const paginationTitle = createElement('h2', { classes: 'title', textContent: `${firstWord}s` });
 
   const moreProductsSection = createElement('div', { classes: 'more-section' });
-  const displayedText = createElement('p', { classes: 'displayed-text', textContent: `${newText} -` });
+  const displayedText = createElement('p', { classes: 'displayed-text', textContent: `${newText}` });
   moreProductsSection.append(displayedText);
 
   const moreBtn = createElement('button', { classes: 'more-button', textContent: buttonTextContent });

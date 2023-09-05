@@ -2,7 +2,7 @@ import {
   createElement,
   getTextLabel,
   convertDateExcel,
-  getAllArticles,
+  getJSONData as getAllArticles,
 } from '../../scripts/scripts.js';
 
 const title = getTextLabel('recommendations title');
@@ -45,7 +45,7 @@ export default async function decorate(block) {
   const route = '/drafts/shomps/blog-articles.json';
   const allArticles = await getAllArticles(route);
 
-  const sortedArticles = allArticles.sort((a, b) => {
+  const sortedArticles = allArticles?.data.sort((a, b) => {
     a.date = +(a.date);
     b.date = +(b.date);
     return b.date - a.date;
