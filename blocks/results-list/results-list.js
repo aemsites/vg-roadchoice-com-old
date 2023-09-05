@@ -30,8 +30,11 @@ export default async function decorate(block) {
       const event = new CustomEvent('ImagesLoaded', { detail: data.imgData });
       document.dispatchEvent(event);
     }
+    // when all messages are send, save the data in the window object again
     if (data.crData && data.pnData && data.imgData) {
-      window.allProducts = data;
+      if (!Object.prototype.hasOwnProperty.call(window, 'allProducts')) {
+        window.allProducts = data;
+      }
     }
   };
 
@@ -45,6 +48,7 @@ export default async function decorate(block) {
       detail.find((e) => {
         if (e['Part Number'] === prod['Base Part Number']) {
           prod.hasImage = true;
+          prod.imgUrl = e['Image URL'];
         }
         return null;
       });

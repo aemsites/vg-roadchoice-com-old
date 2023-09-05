@@ -142,7 +142,7 @@ function searchCRPartNumValue(value) {
   partNumberBrands.forEach((brand) => {
     if (results && results.length > 0) return;
     const tempResults = crData.filter(
-      (item) => item[brand].toUpperCase() === value.toUpperCase(),
+      (item) => new RegExp(value, 'i').test(item[brand]),
     );
     results = tempResults.length > 0 ? tempResults : null;
   });
