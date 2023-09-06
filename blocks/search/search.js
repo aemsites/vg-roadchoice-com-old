@@ -155,16 +155,14 @@ function filterResults(results, filter, isMake = true) {
 }
 
 function searchPartNumValue(value, make, model) {
-  const isMakeNull = make === 'null';
-  const isModelNull = model === 'null';
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
   let results = [];
   partNumberBrands.forEach((brand) => {
     let tempResults = pnData.filter((item) => new RegExp(value, 'i').test(item[brand]));
-    if (!isMakeNull && tempResults.length > 0) {
+    if (make !== 'null' && tempResults.length > 0) {
       tempResults = filterResults(tempResults, make);
     }
-    if (!isModelNull && tempResults.length > 0) {
+    if (model !== 'null' && tempResults.length > 0) {
       tempResults = filterResults(tempResults, model, false);
     }
     if (results.length > 0) {
