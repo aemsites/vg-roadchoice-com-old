@@ -2,8 +2,7 @@ import { createElement } from '../../scripts/scripts.js';
 import productCard from './product-card.js';
 import productsWorker from '../../scripts/delayed.js';
 
-// const amountOfProducts = 12;
-const amountOfProducts = 6;
+const amountOfProducts = 12;
 let products;
 let query;
 let hasImagesData = false;
@@ -16,10 +15,6 @@ if (isSearchResult) {
 }
 
 const searchType = (query.searchType === 'cross' && 'cross') || 'parts';
-
-// TODO delete this
-// import mock from './mock.js';
-// products = mock;
 
 export default async function decorate(block) {
   const resultsSection = createElement('div', { classes: 'results-section' });

@@ -26,14 +26,23 @@
   color: var(--c-medium-gray-1);
 }
 
-.pagination-section .showing-section button.more-button {
+.results-list .more-button {
+  font-size: calc(var(--body-font-size-s) - 2px);;
+}
+
+.results-list .more-button,
+.pagination-section .showing-section .more-button {
   font-family: var(--body-ff);
-  font-size: calc(var(--body-font-size-xs) - 2px);
   color: var(--primary-red);
   margin: 0 0 0 5px;
 }
 
-.pagination-section .showing-section button.more-button.hidden {
+.pagination-section .showing-section .more-button {
+  font-size: calc(var(--body-font-size-xs) - 2px);
+}
+
+.results-list .more-button.hidden,
+.pagination-section .showing-section .more-button.hidden {
   display: none;
 }
 

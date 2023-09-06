@@ -2,6 +2,7 @@ import { getTextLabel, createElement } from '../../scripts/scripts.js';
 
 let amount;
 let products;
+let moreBtns = [];
 const partNumberText = getTextLabel('part number');
 const displayedTextContent = getTextLabel('pagination text');
 const buttonTextContent = getTextLabel('pagination button');
@@ -18,7 +19,7 @@ let currentAmount = hasMoreItems ? amount : [...products].length;
 const newText = displayedTextContent.replace('[$]', currentAmount);
 
 const loadMoreProducts = (props) => {
-  const { hidden, btn, amountText } = props;
+  const { hidden, amountText } = props;
   const { length } = hidden;
   const isLessThanAmount = length < amount;
   const nextAmount = isLessThanAmount ? length : amount;
@@ -30,7 +31,14 @@ const loadMoreProducts = (props) => {
 
   amountText.textContent = displayedTextContent.replace('[$]', currentAmount);
 
-  if (isLessThanAmount) btn.classList.add('hidden');
+  if (isLessThanAmount) moreBtns.forEach((btn) => btn.classList.add('hidden'));
+};
+
+const addShowMoreHandler = (btn, resultsListBlock, amountText) => {
+  btn.onclick = () => loadMoreProducts({
+    hidden: resultsListBlock.querySelectorAll('.product.hidden'),
+    amountText,
+  });
 };
 
 export default async function decorate(block) {
@@ -47,22 +55,18 @@ export default async function decorate(block) {
       classes: ['more-button', 'hidden'], textContent: buttonTextContent,
     });
     const bottomMoreBtn = createElement('button', {
-      classes: ['bottom-more-button', 'hidden'], textContent: buttonTextContent,
+      classes: ['more-button', 'bottom-more-button'], textContent: buttonTextContent,
     });
     const resultsListBlock = document.querySelector('.results-list.block');
-    moreBtn.onclick = () => loadMoreProducts({
-      hidden: resultsListBlock.querySelectorAll('.product.hidden'),
-      btn: moreBtn,
-      amountText: displayedText,
-    });
+    addShowMoreHandler(moreBtn, resultsListBlock, displayedText);
+    addShowMoreHandler(bottomMoreBtn, resultsListBlock, displayedText);
     showingSection.append(moreBtn);
 
     document.addEventListener('ImagesLoaded', () => {
       resultsListBlock.querySelector('.results-section').appendChild(bottomMoreBtn);
       moreBtn.classList.remove('hidden');
+      moreBtns = [moreBtn, bottomMoreBtn];
     });
-
-    // TODO add an observer to check if resultsListBlock has data-block-status="loaded"
   }
 
   paginationSection.append(paginationTitle, showingSection);
