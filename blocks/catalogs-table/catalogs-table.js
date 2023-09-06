@@ -1,146 +1,100 @@
 import {
   createElement,
-  getAllCatolog,
-  getTextLabel,
+  getJsonFromUrl,
 } from '../../scripts/scripts.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
-const btnPagesText = getTextLabel('catalog-title');
-let allCatalog;
-let buildResults;
+const blockName = 'catalogs';
 
-// eslint-disable-next-line prefer-const
-buildResults = (catalogs) => {
-  const tableText = btnPagesText;
-  const tableLabels = tableText.split('[/]');
-  const [catalogTitle, spanish, french, product] = tableLabels;
-
-  const results = createElement('div', { classes: 'allCatalogs' });
-  // eslint-disable-next-line no-undef
-
-  const catalogHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'CATALOGS' } });
-  catalogHeading.textContent = catalogTitle;
-
-  const contentCatalog = createElement('div', { classes: 'tableContent' });
-  const groupByTypeCatalog = createElement('ul', { classes: 'groupCatalog' });
-  catalogs.forEach((ctype, idx) => {
-    if (catalogs[idx].type === 'catalog' && catalogs[idx].language === 'en') {
-      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
-
-      const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
-      categoryLink.textContent = ctype.category;
-      const catagoryNote = createElement('sub', { classes: 'notes' });
-      if (catalogs[idx].notes) {
-        catagoryNote.textContent = `(${ctype.notes})`;
-      }
-
-      catalog.append(categoryLink);
-      catalog.appendChild(catagoryNote);
-      groupByTypeCatalog.appendChild(catalog);
-      contentCatalog.appendChild(groupByTypeCatalog);
-    }
-  });
-  results.append(catalogHeading, contentCatalog);
-
-  // product-dat-sheet Table
-  const productHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'PRODUCT' } });
-  productHeading.textContent = product;
-  const contentProduct = createElement('div', { classes: 'tableContent' });
-  const groupByTypeproductSheet = createElement('ul', { classes: 'groupproductSheet', props: { id: 'PRODUCTSHEETSANDMORE' } });
-  catalogs.forEach((ctype, idx) => {
-    if (catalogs[idx].type === 'product-data-sheet' && catalogs[idx].language === 'en') {
-      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
-
-      const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
-      categoryLink.textContent = ctype.category;
-      const catagoryNote = createElement('sub', { classes: 'notes' });
-      if (catalogs[idx].notes) {
-        catagoryNote.textContent = `(${ctype.notes})`;
-      }
-
-      catalog.append(categoryLink);
-      catalog.appendChild(catagoryNote);
-      groupByTypeproductSheet.appendChild(catalog);
-      contentProduct.appendChild(groupByTypeproductSheet);
-    }
-  });
-  results.append(productHeading, contentProduct);
-
-  // Spanish Table
-  const spanishHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'SPANISHRESOURCES' } });
-  spanishHeading.textContent = spanish;
-  const contentSpanish = createElement('div', { classes: 'tableContent' });
-  const groupBylangSpanish = createElement('ul', { classes: 'groupSpanish' });
-  catalogs.forEach((ctype, idx) => {
-    if (catalogs[idx].language === 'es') {
-      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
-
-      const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
-      categoryLink.textContent = ctype.category;
-
-      const catagoryNote = createElement('sub', { classes: 'notes' });
-      if (catalogs[idx].notes) {
-        catagoryNote.textContent = `(${ctype.notes})`;
-      }
-
-      catalog.append(categoryLink);
-      catalog.appendChild(catagoryNote);
-      groupBylangSpanish.appendChild(catalog);
-      contentSpanish.appendChild(groupBylangSpanish);
-    }
-  });
-  results.append(spanishHeading, contentSpanish);
-
-  // FrenchTable
-  const frenchHeading = createElement('h2', { classes: ['subHeading'], props: { id: 'frenchResources' } });
-  frenchHeading.textContent = french;
-
-  const contentFrench = createElement('div', { classes: 'tableContent' });
-  const groupBylangFrench = createElement('ul', { classes: 'groupFrench' });
-  catalogs.forEach((ctype, idx) => {
-    if (catalogs[idx].language === 'fr') {
-      const catalog = createElement('li', { classes: ['cataloglist', `category-${idx}`] });
-
-      const categoryLink = createElement('a', { classes: 'categoryLink', props: { href: ctype.file, target: '_blank' } });
-      categoryLink.textContent = ctype.category;
-
-      const catagoryNote = createElement('sub', { classes: 'notes' });
-      if (catalogs[idx].notes) {
-        catagoryNote.textContent = `(${ctype.notes})`;
-      }
-
-      catalog.append(categoryLink);
-      catalog.appendChild(catagoryNote);
-      groupBylangFrench.appendChild(catalog);
-      contentFrench.appendChild(groupBylangFrench);
-    }
-  });
-  results.append(frenchHeading, contentFrench);
-
-  return results;
+const buildPairs = (titles, filters) => {
+  const pairs = [];
+  for (let i = 1; i < titles.length; i += 1) {
+    const pair = {
+      title: titles[i],
+      filters: filters[i],
+      position: i,
+    };
+    pairs.push(pair);
+  }
+  return pairs;
 };
 
-// Trim the resource links
-const resourceListAnchors = document.querySelectorAll('.resource-list li a');
-resourceListAnchors.forEach((anchor, i) => {
-  anchor.removeAttribute('target');
-  anchor.removeAttribute('href');
-  anchor.setAttribute('id', `resources-${i}`);
+const buildCriteriaSets = (filter) => {
+  const criteria = filter.split('&');
+  const sets = [];
 
-  const resourceEnglish = document.getElementById('resources-0');
-  resourceEnglish.setAttribute('href', '#CATALOGS');
-});
-const resourceSpanish = document.getElementById('resources-1');
-resourceSpanish.setAttribute('href', '#SPANISHRESOURCES');
+  criteria.forEach((el) => {
+    const [cat, value] = el.split('=');
+    const set = {
+      cat: cat.trim().toLowerCase(),
+      value: value.trim().toLowerCase(),
+    };
+    sets.push(set);
+  });
+  return sets;
+};
 
-const resourceFrench = document.getElementById('resources-2');
-resourceFrench.setAttribute('href', '#frenchResources');
+const buildTables = (pairs, catalogs) => {
+  const catalogsSection = createElement('div', { classes: `${blockName}-section` });
+  pairs.forEach((pair) => {
+    const catalogsSubsection = createElement('div', {
+      classes: [
+        `${blockName}-subsection`,
+        `${blockName}-subsection-${pair.position}`,
+      ],
+    });
+
+    const { title, filters } = pair;
+    const heading = createElement('h2', {
+      classes: `${blockName}-heading`,
+      props: { id: title },
+      textContent: (title.replaceAll('-', ' ')),
+    });
+    const tableSection = createElement('ul', { classes: `${blockName}-table` });
+
+    const criteria = buildCriteriaSets(filters);
+    const selectedCatalogs = catalogs.filter((catalog) => {
+      const conditions = [];
+      criteria.forEach((cr) => {
+        const { cat, value } = cr;
+
+        const condition = catalog[cat] === value;
+        conditions.push(condition);
+      });
+      const checker = conditions.every((e) => e === true);
+      return checker && catalog;
+    });
+
+    selectedCatalogs.forEach((cat) => {
+      const catalog = createElement('li', { classes: 'table-item' });
+      const link = createElement('a', {
+        classes: 'item-link',
+        props: { href: cat.file },
+        textContent: cat.category,
+      });
+      const note = createElement('p', { classes: 'item-note', textContent: cat.notes });
+
+      catalog.append(link);
+      if (cat.notes.length > 0) catalog.append(note);
+      tableSection.append(catalog);
+    });
+    catalogsSubsection.append(heading, tableSection);
+    catalogsSection.append(catalogsSubsection);
+  });
+  return catalogsSection;
+};
 
 export default async function decorate(block) {
   const blockConfig = readBlockConfig(block);
-  const [url] = Object.values(blockConfig);
-  allCatalog = await getAllCatolog(url);
-  const results = buildResults(allCatalog, 0);
+  const { url } = blockConfig;
+
+  const titles = Object.keys(blockConfig);
+  const filters = Object.values(blockConfig);
+  const pairs = buildPairs(titles, filters);
+
+  const allCatalogs = await getJsonFromUrl(url);
+  const tables = buildTables(pairs, allCatalogs);
+
   block.textContent = '';
-  block.append(results);
+  block.append(tables);
 }

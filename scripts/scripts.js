@@ -677,18 +677,8 @@ export function convertDateExcel(excelTimestamp) {
 /**
  * @param {string} route Fetches an excel sheet and awaits for a json object
  * */
-export const getAllArticles = async (route) => {
+export const getJsonFromUrl = async (route) => {
   const response = await fetch(route);
-  const json = await response.json();
-  return json.data;
-};
-
-/* Returns a list of properties listed in the block */
-/**
- * @param {string} route1 Fetches an excel sheet and awaits for a json object
- * */
-export const getAllCatolog = async (route1) => {
-  const response = await fetch(route1);
   const json = await response.json();
   return json.data;
 };
