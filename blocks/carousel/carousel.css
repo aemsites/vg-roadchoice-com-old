@@ -3,7 +3,6 @@ main .section.carousel-container {
 }
 
 .section > .carousel-wrapper {
-  margin: auto -16px;
   max-width: unset;
 }
 
@@ -13,6 +12,7 @@ main .section.carousel-container {
   height: 500px;
   overflow: hidden;
   width: 100vw;
+  max-width: 100%;
   position: relative;
   touch-action: pan-y;
   user-select: none;
@@ -38,9 +38,13 @@ main .section.carousel-container {
   position: relative;
   color: var(--primary-white);
   text-align: center;
-  font-size: 19px;
   line-height: 19px;
   min-width: 100%;
+}
+
+.carousel .carousel-slide,
+.carousel .carousel-slide a {
+  font-size: 19px;
 }
 
 .carousel .carousel-slide h1 {
@@ -130,6 +134,7 @@ main .section.carousel-container {
   .carousel .carousel-slide,
   .carousel .carousel-slide a {
     font-size: 25px;
+    line-height: 25px;
   }
 
   .carousel .carousel-slide h1 {
@@ -139,17 +144,18 @@ main .section.carousel-container {
 }
 
 @media (min-width: 768px) {
-  .section > .carousel-wrapper {
-    margin: auto -32px;
-  }
-
   .carousel .carousel-slide,
   .carousel .carousel-slide a {
     font-size: 36px;
+    line-height: 50px;
   }
 
   .carousel .carousel-slide h1 {
     font-size: 46px;
+  }
+
+  .carousel .carousel-slide-list {
+    overflow: hidden;
   }
 
   .carousel .carousel-arrows-controls {
@@ -169,7 +175,8 @@ main .section.carousel-container {
     line-height: 70px;
   }
 
-  .carousel .carousel-slide p {
+  .carousel .carousel-slide,
+  .carousel .carousel-slide a {
     font-size: 52px;
   }
 }

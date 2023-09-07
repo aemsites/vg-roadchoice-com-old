@@ -1,7 +1,7 @@
 {
-  "total": 4,
+  "total": 8,
   "offset": 0,
-  "limit": 4,
+  "limit": 8,
   "data": [
     {
       "Key": "brand name",
@@ -18,6 +18,22 @@
     {
       "Key": "read more",
       "Text": "READ MORE"
+    },
+    {
+      "Key": "blog pagination number",
+      "Text": "There are [$] results"
+    },
+    {
+      "Key": "pagination",
+      "Text": "First[/]Previous[/]Next[/]Last"
+    },
+    {
+      "Key": "Cross-Reference No",
+      "Text": "Cross-Reference No"
+    },
+    {
+      "Key": "Part No",
+      "Text": "Part No"
     }
   ],
   ":type": "sheet"

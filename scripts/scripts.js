@@ -33,11 +33,12 @@ function addBackgroundImage(section, picture) {
  * @param {string} tagName the tag
  * @param {Object} options the element options
  * @param {string[]|string} [options.classes=[]] the class or classes to add
- * @param {Object} [options.props={}] any other attributes to add to the element
+ * @param {Object.<string, string>} [options.props={}] any other attributes to add to the element
+ * @param {string} [options.textContent=null] add text content into the element
  * @returns {HTMLElement} the element
  */
 export function createElement(tagName, options = {}) {
-  const { classes = [], props = {} } = options;
+  const { classes = [], props = {}, textContent = null } = options;
   const elem = document.createElement(tagName);
   const isString = typeof classes === 'string';
   if (classes || (isString && classes !== '') || (!isString && classes.length > 0)) {
@@ -51,6 +52,10 @@ export function createElement(tagName, options = {}) {
       const value = propName === props[propName] ? '' : props[propName];
       elem.setAttribute(propName, value);
     });
+  }
+
+  if (textContent) {
+    elem.textContent = textContent;
   }
 
   return elem;
@@ -202,13 +207,12 @@ function buildHeroBlock(main) {
   }
 }
 
-function buildSubNavigation(main, head) {
-  const subnav = head.querySelector('meta[name="sub-navigation"]');
-  if (subnav && subnav.content.startsWith('/')) {
-    const block = buildBlock('sub-nav', []);
-    main.previousElementSibling.prepend(block);
-    decorateBlock(block);
-  }
+function buildSearchForm(main, head) {
+  const noSearchBlock = head.querySelector('meta[name="no-search"]');
+  if (noSearchBlock) return;
+  const block = buildBlock('search', []);
+  main.prepend(block);
+  decorateBlock(block);
 }
 
 /**
@@ -219,7 +223,7 @@ function buildAutoBlocks(main, head) {
   try {
     buildHeroBlock(main);
     if (head) {
-      buildSubNavigation(main, head);
+      buildSearchForm(main, head);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -310,9 +314,8 @@ async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
-  const { head } = doc;
   if (main) {
-    decorateMain(main, head);
+    decorateMain(main, doc.head);
     document.body.classList.add('appear');
     await waitForLCP(LCP_BLOCKS);
   }
@@ -669,3 +672,13 @@ export function convertDateExcel(excelTimestamp) {
   const parsed = excelTimestampAsUnixTimestamp + delta;
   return Number.isNaN(parsed) ? null : new Date(parsed);
 }
+
+/* Returns a list of properties listed in the block */
+/**
+ * @param {string} route Fetches an excel sheet and awaits for a json object
+ * */
+export const getAllArticles = async (route) => {
+  const response = await fetch(route);
+  const json = await response.json();
+  return json.data;
+};
