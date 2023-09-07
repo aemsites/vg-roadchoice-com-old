@@ -23,7 +23,7 @@ const tableInfo = [
     position: 2,
   },
   {
-    title: 'spanish catalogs',
+    title: 'spanish-catalogs',
     criteria: [
       { type: 'catalog' },
       { language: 'es' },
@@ -31,7 +31,7 @@ const tableInfo = [
     position: 3,
   },
   {
-    title: 'french catalogs',
+    title: 'french-catalogs',
     criteria: [
       { type: 'catalog' },
       { language: 'fr' },
