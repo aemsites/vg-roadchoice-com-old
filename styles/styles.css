@@ -226,3 +226,7 @@ a.button {
   font-size: var(--body-font-size-m);
   text-decoration: none;
 }
+
+.hide {
+  display: none;
+}

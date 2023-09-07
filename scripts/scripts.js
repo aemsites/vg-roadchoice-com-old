@@ -306,31 +306,6 @@ async function loadTemplate(doc, templateName) {
   }
 }
 
-async function loadPDP(doc, pathSegments) {
-  try {
-    const cssLoaded = new Promise((resolve) => {
-      loadCSS(`${window.hlx.codeBasePath}/templates/pdp/pdp.css`, resolve);
-    });
-    const decorationComplete = new Promise((resolve) => {
-      (async () => {
-        try {
-          const mod = await import(`../templates/pdp/pdp.js`);
-          if (mod.default) {
-            await mod.default(doc);
-          }
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log(`failed to load module for PDP template`, error);
-        }
-        resolve();
-      })();
-    });
-    await Promise.all([cssLoaded, decorationComplete]);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(`failed to load PDP template`, error);
-  }
-}
 
 /**
  * Loads everything needed to get to LCP.
@@ -369,9 +344,6 @@ export function addFavIcon(href) {
   }
 }
 
-export function getPathSegments(){
-  return window.location.pathname.split('/');
-}
 /**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
@@ -386,16 +358,6 @@ async function loadLazy(doc) {
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
- 
-  debugger;
-  const pathSegments = getPathSegments(); 
-  const isPartsPage = pathSegments[1] === 'parts';
-
-  if (isPartsPage && pathSegments.length === 4) {
-    await loadPDP(doc, pathSegments);
-  } else {
-    doc.getElementById('part-details').innerText = 'Invalid URL'; //TODO: Placeholder string
-  }
 
   const header = doc.querySelector('header');
   const subnav = header.querySelector('.block.sub-nav');
