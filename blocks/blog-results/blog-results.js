@@ -342,7 +342,8 @@ export default async function decorate(block) {
   const [titleContent, url, amount] = Object.values(blockConfig);
   articlesPerPage = +amount;
 
-  allArticles = await getJsonFromUrl(url);
+  const json = await getJsonFromUrl(url);
+  allArticles = json.data;
   allArticles.sort((a, b) => {
     a.date = +(a.date);
     b.date = +(b.date);

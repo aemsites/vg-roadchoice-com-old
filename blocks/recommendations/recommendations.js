@@ -43,7 +43,8 @@ export default async function decorate(block) {
 
   // TODO change this route
   const route = '/drafts/shomps/blog-articles.json';
-  const allArticles = await getJsonFromUrl(route);
+  const json = await getJsonFromUrl(route);
+  const allArticles = json.data;
 
   const sortedArticles = allArticles.sort((a, b) => {
     a.date = +(a.date);
