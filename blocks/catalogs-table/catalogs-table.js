@@ -92,8 +92,7 @@ export default async function decorate(block) {
   const filters = Object.values(blockConfig);
   const pairs = buildPairs(titles, filters);
 
-  const json = await getJsonFromUrl(url);
-  const allCatalogs = json.data;
+  const { data: allCatalogs } = await getJsonFromUrl(url);
   const tables = buildTables(pairs, allCatalogs);
 
   block.textContent = '';
