@@ -1,18 +1,77 @@
-import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
+import { createElement } from '../../scripts/scripts.js';
 
-export default function decorate(block) {
-  /* change to ul, li */
-  const ul = document.createElement('ul');
+const blockName = 'cards';
+
+const buildCards = (block) => {
+  const ul = createElement('ul', { classes: `${blockName}-list` });
+
   [...block.children].forEach((row) => {
-    const li = document.createElement('li');
-    li.innerHTML = row.innerHTML;
-    [...li.children].forEach((div) => {
-      if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-card-image';
-      else div.className = 'cards-card-body';
+    const item = createElement('li', { classes: `${blockName}-item` });
+    const cardContent = createElement('div', { classes: `${blockName}-content` });
+    const ctas = createElement('div', { classes: `${blockName}-buttons` });
+
+    const image = row.querySelector('picture');
+
+    const headings = [...row.querySelectorAll('h1, h2, h3, h4, h5, h6')];
+    headings.forEach((heading) => heading.classList.add(`${blockName}-heading`));
+
+    const buttons = [...row.querySelectorAll('a')];
+    buttons.forEach((btn) => btn.classList.add(`${blockName}-button`));
+
+    const textElmts = [];
+    row.querySelectorAll('p').forEach((p) => {
+      const hasButton = [...p.classList].includes('button-container');
+      const isEmpty = (p.textContent.trim().length === 0);
+
+      if (!isEmpty && !hasButton) textElmts.push(p);
     });
-    ul.append(li);
+    textElmts.forEach((e) => e.classList.add(`${blockName}-text`));
+
+    if (image) {
+      image.classList.add(`${blockName}-image`);
+      cardContent.appendChild(image);
+    }
+    cardContent.append(...headings, ...textElmts);
+    ctas.append(...buttons);
+
+    item.append(cardContent, ctas);
+
+    ul.append(item);
   });
-  ul.querySelectorAll('img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
+
   block.textContent = '';
   block.append(ul);
+};
+
+const buildResourcesCards = (block) => {
+  const ul = createElement('ul', { classes: 'cards-list' });
+
+  [...block.children].forEach((row) => {
+    const image = row.querySelector('picture');
+    const aElmt = row.querySelector('a');
+
+    const item = createElement('li', { classes: `${blockName}-item` });
+    const card = createElement('a', { classes: `${blockName}-card`, props: { href: aElmt.href } });
+    const text = createElement('p', { classes: `${blockName}-text`, textContent: aElmt.textContent });
+
+    image.classList.add(`${blockName}-image`);
+    card.append(image, text);
+
+    item.appendChild(card);
+    ul.append(item);
+  });
+
+  block.textContent = '';
+  block.append(ul);
+};
+
+export default function decorate(block) {
+  const variant = [...block.classList];
+
+  // This detects what block needs to be render and calls the corresponding function.
+  if (variant.includes('resources')) {
+    buildResourcesCards(block);
+  } else {
+    buildCards(block);
+  }
 }
