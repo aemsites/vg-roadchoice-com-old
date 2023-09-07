@@ -682,3 +682,15 @@ export const getJsonFromUrl = async (route) => {
   const json = await response.json();
   return json.data;
 };
+
+/* checks for white spacing required in document */
+const makeSpace = () => {
+  const pElmts = document.querySelectorAll('p');
+  pElmts.forEach(p => {
+    if (p.textContent === '[*space*]') {
+      p.classList.add('space');
+      p.textContent = '';
+    }
+  });
+};
+makeSpace();

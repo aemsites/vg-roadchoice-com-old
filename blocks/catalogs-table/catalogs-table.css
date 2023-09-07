@@ -46,3 +46,13 @@
 .catalogs-table .catalogs-table .item-note {
   font-size: var(--body-font-size-s);
 }
+
+@media (min-width: 496px) {
+  .section.catalogs-table-container {
+    padding: 0 50px;
+   }
+
+  .catalogs-table .catalogs-subsection {
+    margin: 0 0 60px;
+  }
+}
