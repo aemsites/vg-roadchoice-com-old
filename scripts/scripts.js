@@ -680,7 +680,7 @@ export function convertDateExcel(excelTimestamp) {
 export const getJsonFromUrl = async (route) => {
   const response = await fetch(route);
   const json = await response.json();
-  return json.data;
+  return json;
 };
 
 /* checks for white spacing required in document */
