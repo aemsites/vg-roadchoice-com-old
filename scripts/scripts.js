@@ -688,8 +688,8 @@ const makeSpace = () => {
   const pElmts = document.querySelectorAll('p');
   pElmts.forEach((el) => {
     if (el.textContent === '[*space*]') {
-      el.classList.add('space');
-      el.textContent = '';
+      const space = createElement('br');
+      el.replaceWith(space);
     }
   });
 };
