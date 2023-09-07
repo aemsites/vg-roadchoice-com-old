@@ -228,7 +228,3 @@ a.button {
   font-size: var(--body-font-size-m);
   text-decoration: none;
 }
-
-.section {
-  scroll-margin-top: calc(var(--nav-height) + 55px);
-}
