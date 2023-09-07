@@ -8,10 +8,14 @@ const displayedTextContent = getTextLabel('pagination text');
 const buttonTextContent = getTextLabel('pagination button');
 const firstWord = partNumberText.split(' ')[0];
 const isSearchResult = document.querySelector('.search-results') !== null;
+const category = new URLSearchParams(window.location.search).get('cat');
 
 if (isSearchResult) {
   amount = JSON.parse(sessionStorage.getItem('amount'));
   products = JSON.parse(sessionStorage.getItem('results'));
+  if (category) {
+    products = products.filter((item) => item['Part Category'] === category);
+  }
 }
 
 const hasMoreItems = products && [...products].length > amount;

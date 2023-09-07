@@ -5,6 +5,7 @@ const modelsItems = [];
 const FILTERS_DATA = '/search/search-filters.json';
 let crData;
 let pnData;
+const amountOfProducts = 12;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
@@ -181,6 +182,8 @@ function getFieldValue(selector, items) {
 function formListener(form) {
   form.onsubmit = async (e) => {
     ({ crData, pnData } = window.allProducts);
+    const ssData = ['query', 'results', 'amount'];
+    ssData.forEach((item) => sessionStorage.removeItem(item));
 
     const items = [...form];
     const value = getFieldValue(`search__input-${isCrossRefActive ? 'cr' : 'pn'}__input`, items);
@@ -203,8 +206,8 @@ function formListener(form) {
       query.make = makeFilterValue;
       query.model = modelFilterValue;
     }
-    sessionStorage.setItem('query', JSON.stringify(query));
-    sessionStorage.setItem('results', JSON.stringify(results));
+    const ssDataItems = [query, results, amountOfProducts];
+    ssData.forEach((item, i) => sessionStorage.setItem(item, JSON.stringify(ssDataItems[i])));
 
     url = `${url}${isHomepage}?q=${value}&st=${searchType}`;
     window.location.href = url;

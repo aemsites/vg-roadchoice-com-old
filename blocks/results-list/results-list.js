@@ -2,16 +2,21 @@ import { createElement } from '../../scripts/scripts.js';
 import productCard from './product-card.js';
 import productsWorker from '../../scripts/delayed.js';
 
-const amountOfProducts = 12;
+let amountOfProducts;
 let products;
 let query;
+let category;
 let hasImagesData = false;
 const isSearchResult = document.querySelector('.search-results') !== null;
 
 if (isSearchResult) {
-  sessionStorage.setItem('amount', amountOfProducts);
+  amountOfProducts = JSON.parse(sessionStorage.getItem('amount'));
   products = JSON.parse(sessionStorage.getItem('results'));
   query = JSON.parse(sessionStorage.getItem('query'));
+  category = new URLSearchParams(window.location.search).get('cat');
+  if (category) {
+    products = products.filter((item) => item['Part Category'] === category);
+  }
 }
 
 const searchType = (query.searchType === 'cross' && 'cross') || 'parts';
@@ -44,7 +49,6 @@ export default async function decorate(block) {
       detail.find((e) => {
         if (e['Part Number'] === prod['Base Part Number']) {
           prod.hasImage = true;
-          prod.imgUrl = e['Image URL'];
         }
         return null;
       });

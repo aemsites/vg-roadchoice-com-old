@@ -1,9 +1,9 @@
-import { createElement } from '../../scripts/scripts.js';
+import { getTextLabel, createElement } from '../../scripts/scripts.js';
 
 let products;
-// todo make this come from te placeholder
-const titleContent = 'Categories';
+const titleContent = getTextLabel('Categories');
 const isSearchResult = document.querySelector('.search-results') !== null;
+const urlCategory = new URLSearchParams(window.location.search).get('cat');
 
 if (isSearchResult) products = JSON.parse(sessionStorage.getItem('results'));
 
@@ -18,7 +18,9 @@ const reduceArrays = (array) => {
 
 const reduceCategories = (cats) => {
   const categoryList = cats.map((x) => x['Part Category']);
-  const reducedCategories = reduceArrays(categoryList);
+  const catToReduce = urlCategory
+    ? categoryList.filter((item) => item === urlCategory) : categoryList;
+  const reducedCategories = reduceArrays(catToReduce);
   const orderedCategories = Object.keys(reducedCategories).sort().reduce(
     (obj, key) => {
       obj[key] = reducedCategories[key];
@@ -35,12 +37,19 @@ const buildFilter = (cats) => {
   const section = createElement('div', { classes: 'filter-section' });
   const title = createElement('h3', { classes: 'title', textContent: titleContent });
   const list = createElement('ul', { classes: 'list' });
+  const currentUrl = new URL(window.location.href);
+  const urlParams = new URLSearchParams(currentUrl.search);
 
   cats.forEach((cat) => {
     const [category, amount] = cat;
+    urlParams.set('cat', category);
+    const filterUrl = `${currentUrl.pathname}?${urlParams.toString()}`;
     const item = createElement('li', { classes: 'item' });
-    const link = createElement('a', { classes: 'link', props: { href: 'link' } });
-    link.textContent = `${category} (${amount})`;
+    const link = createElement('a', {
+      classes: 'categories-link',
+      props: { href: filterUrl },
+      textContent: `${category} (${amount})`,
+    });
     item.appendChild(link);
     list.appendChild(item);
   });
