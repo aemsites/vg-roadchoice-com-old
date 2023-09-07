@@ -78,10 +78,10 @@ const buildTables = (catalogs) => {
         props: { href: file },
         textContent: category,
       });
-      const note = createElement('p', { classes: 'item-note', textContent: notes });
+      const note = createElement('span', { classes: 'item-note', textContent: notes });
 
       catalog.append(link);
-      if (notes.length > 0) catalog.append(note);
+      if (notes.length > 0) link.append(note);
       tableSection.append(catalog);
     });
     catalogsSubsection.append(heading, tableSection);
