@@ -677,8 +677,20 @@ export function convertDateExcel(excelTimestamp) {
 /**
  * @param {string} route Fetches an excel sheet and awaits for a json object
  * */
-export const getAllArticles = async (route) => {
+export const getJsonFromUrl = async (route) => {
   const response = await fetch(route);
   const json = await response.json();
-  return json.data;
+  return json;
 };
+
+/* checks for white spacing required in document */
+const makeSpace = () => {
+  const pElmts = document.querySelectorAll('p');
+  pElmts.forEach((el) => {
+    if (el.textContent === '[*space*]') {
+      const space = createElement('br');
+      el.replaceWith(space);
+    }
+  });
+};
+makeSpace();
