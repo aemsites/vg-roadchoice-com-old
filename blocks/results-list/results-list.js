@@ -15,7 +15,7 @@ if (isSearchResult) {
   query = JSON.parse(sessionStorage.getItem('query'));
   category = new URLSearchParams(window.location.search).get('cat');
   if (category) {
-    products = products.filter((item) => item['Part Category'] === category);
+    products = products.filter((item) => item['Part Category'].toLowerCase() === category);
   }
 }
 

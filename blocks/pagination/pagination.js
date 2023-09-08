@@ -14,7 +14,7 @@ if (isSearchResult) {
   amount = JSON.parse(sessionStorage.getItem('amount'));
   products = JSON.parse(sessionStorage.getItem('results'));
   if (category) {
-    products = products.filter((item) => item['Part Category'] === category);
+    products = products.filter((item) => item['Part Category'].toLowerCase() === category);
   }
 }
 

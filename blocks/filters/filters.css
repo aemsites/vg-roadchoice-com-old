@@ -30,6 +30,7 @@
   font-size: var(--body-font-size-xs);
   color: var(--secondary-gray-4);
   text-decoration: none;
+  text-transform: capitalize;
 }
 
 .filter-section ul li.item a:hover {

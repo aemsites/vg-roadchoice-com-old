@@ -19,7 +19,7 @@ const reduceArrays = (array) => {
 const reduceCategories = (cats) => {
   const categoryList = cats.map((x) => x['Part Category']);
   const catToReduce = urlCategory
-    ? categoryList.filter((item) => item === urlCategory) : categoryList;
+    ? categoryList.filter((item) => item.toLowerCase() === urlCategory) : categoryList;
   const reducedCategories = reduceArrays(catToReduce);
   const orderedCategories = Object.keys(reducedCategories).sort().reduce(
     (obj, key) => {
@@ -42,13 +42,13 @@ const buildFilter = (cats) => {
 
   cats.forEach((cat) => {
     const [category, amount] = cat;
-    urlParams.set('cat', category);
+    urlParams.set('cat', category.toLowerCase());
     const filterUrl = `${currentUrl.pathname}?${urlParams.toString()}`;
     const item = createElement('li', { classes: 'item' });
     const link = createElement('a', {
       classes: 'categories-link',
       props: { href: filterUrl },
-      textContent: `${category} (${amount})`,
+      textContent: `${category.toLowerCase()} (${amount})`,
     });
     item.appendChild(link);
     list.appendChild(item);
