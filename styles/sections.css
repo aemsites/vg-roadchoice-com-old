@@ -9,7 +9,10 @@
   height: 40px;
 }
 
-resource-list section metadata
+/* section metadata styling */
+
+/* resource-list */
+
 .section.resource-list {
   padding: 0 30px;
 }
