@@ -1,8 +1,5 @@
-import { getMetadata } from '../../scripts/lib-franklin.js';
 import { createElement } from '../../scripts/scripts.js';
 
-const title = getMetadata('og:title');
-const description = getMetadata('og:description');
 const docRange = document.createRange();
 
 async function buildSection(container, sectionName = '') {
@@ -38,32 +35,35 @@ export async function getPDPData(pathSegments) {
     const { data } = await response.json();
     return findPartBySKU(data, sku);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching part data:', error);
   }
   return null;
 }
 
 function findPartImagesBySKU(parts, sku) {
-  return parts.data.find((part) => part['Part Number'].toLowerCase() === sku.toLowerCase());
+  return parts.filter((part) => part['Part Number'].toLowerCase() === sku.toLowerCase());
 }
 
 async function fetchPartImages(sku) {
   try {
     const route = '/product-images/road-choice-website-images.json';
     const response = await fetch(route);
-    const data = await response.json();
+    const { data } = await response.json();
     const images = findPartImagesBySKU(data, sku);
 
-    if (images.length !== 0 ) {
+    if (images.length !== 0) {
       return images;
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching part image(s):', error);
   }
   return ['default-placeholder-image'];
 }
 
 function renderColDetails(part, listEle) {
+  // use an array to exclude certain details from json
   const colKeys = ['Base Part Number',
     'Mack Part Number',
     'Volvo Part Number',
@@ -87,34 +87,33 @@ function renderColDetails(part, listEle) {
   });
 }
 
+function renderImages(images, imgWraper) {
+  const imageList = createElement('ul', { classes: 'pdp-image-list' });
+  images.forEach((image, idx) => {
+    const liFragment = docRange.createContextualFragment(`<li class="pdp-image-item ${idx === 0 ? 'active' : ''}"> 
+      <img class="pdp-gallery-image" src=${image['Image URL']} />
+    </li>`);
+    imageList.append(liFragment);
+  });
+  imgWraper.append(imageList);
+}
+
 // TODO: fetch part image(s) based on part number and render them along with part info.
 async function renderPartDetails(part, block) {
-  const image = await fetchPartImages(part['Base Part Number']);
+  const images = await fetchPartImages(part['Base Part Number']);
   const fragment = `
     <div class="pdp-details-wrapper">
       <div class="pdp-image-column">
         <div class="pdp-image-wrapper">
           <div class="pdp-selected-image">
-            <img class="pdp-image" src="https://adobe.sharepoint.com/:i:/r/sites/HelixProjects/Shared%20Documents/sites/VolvoGroup/vg-roadchoice-com/media/images/24CRC--0.jpg"/>
+            <img class="pdp-image" src=${images[0]['Image URL']} />
           </div>
-          <ul class="pdp-image-list">
-            <li class="pdp-image-item active"> 
-              <img src="https://adobe.sharepoint.com/:i:/r/sites/HelixProjects/Shared%20Documents/sites/VolvoGroup/vg-roadchoice-com/media/images/24CRC--0.jpg" />
-            </li>
-            <li class="pdp-image-item"> 
-              <img src="https://adobe.sharepoint.com/:i:/r/sites/HelixProjects/Shared%20Documents/sites/VolvoGroup/vg-roadchoice-com/media/images/24CRC--1.jpg" />
-            </li>
-            <li class="pdp-image-item"> 
-              <img src="https://adobe.sharepoint.com/:i:/r/sites/HelixProjects/Shared%20Documents/sites/VolvoGroup/vg-roadchoice-com/media/images/24CRC--2.jpg" />
-            </li>
-          </ul>
         </div>
       </div>
       <div class="pdp-content-coulmn">
         <h1 class="pdp-title">${part['Base Part Number']}</h1>
         <div class="pdp-description"> ${part['Part Name']}</div>
-        <ul class="pdp-list">
-        </ul>
+        <ul class="pdp-list"></ul>
       </div>
     </div>
   `;
@@ -122,6 +121,11 @@ async function renderPartDetails(part, block) {
   const pdpFragment = docRange.createContextualFragment(fragment);
   block.append(pdpFragment);
   renderColDetails(part, block.querySelector('.pdp-list'));
+
+  // if there are more than 1 image show gallery below
+  if (images.length > 1) {
+    renderImages(images, block.querySelector('.pdp-image-wrapper'));
+  }
 }
 
 // filter the catalogs by category and group them by language
@@ -146,12 +150,14 @@ async function fetchCatalogPDS(category) {
 
     return findCatalogsPDSByCategory(data, category);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching part catalogs:', error);
   }
   return null;
 }
 
 function renderCatlaogsPDS(catalogs) {
+  // eslint-disable-next-line no-console
   console.log('Inside rendering catalogs', catalogs);
 }
 
