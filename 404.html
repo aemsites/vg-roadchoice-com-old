@@ -14,35 +14,57 @@
     import { sampleRUM } from '/scripts/lib-franklin.js';
 
     window.addEventListener('load', () => {
-      if (document.referrer) {
-        const { origin, pathname } = new URL(document.referrer);
-        if (origin === window.location.origin) {
-          const backBtn = document.createElement('a');
-          backBtn.classList.add('button', 'error-button-back');
-          backBtn.href = pathname;
-          backBtn.textContent = 'Go back';
-          backBtn.title = 'Go back';
-          const btnContainer = document.querySelector('.button-container');
-          btnContainer.append(backBtn);
-        }
-      }
+      const breadcrumb = document.querySelector('[data-not-found]');
+      const observer = new MutationObserver((list) => {
+        list.forEach((item) => {
+          if (item.target.dataset.blockStatus !== 'loaded') return;
+          const lastChild = item.target.querySelector('.breadcrumb-list > li:last-child a');
+          lastChild.textContent = breadcrumb.dataset.notFound;
+          observer.disconnect();
+        });
+      });
+
+      observer.observe(breadcrumb, {attributes: true, attributeFilter: ['data-block-status']})
       sampleRUM('404', { source: document.referrer, target: window.location.href });
     });
   </script>
   <link rel="stylesheet" href="/styles/styles.css">
   <style>
-    main.error {
-      min-height: calc(100vh - var(--nav-height));
-      display: flex;
-      align-items: center;
+    * {
+      font-smooth: antialiased;
+      font-feature-settings: "ss02" 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale
     }
 
-    main.error .error-number {
-      width: 100%;
+    .error {
+      font-size: 18px;
+      color: #252525;
     }
 
-    main.error .error-number text {
-      font-family: var(--fixed-font-family);
+    .error h1 {
+      color: var(--primary-red);
+      font-size: 50px;
+    }
+
+    .error .default ul {
+      list-style: initial;
+      padding-inline-start: 2.5rem;
+      padding-block: 1rem;
+    }
+
+    .error .default ul ::marker {
+      color: var(--primary-red);
+      font-size: 13px;
+    }
+
+    .error a {
+      color: var(--primary-red);
+      text-decoration: none;
+    }
+
+    .error p strong {
+      font-family: var(--headings-ff-x-bold);
     }
   </style>
   <link rel="stylesheet" href="/styles/lazy-styles.css">
@@ -51,14 +73,49 @@
 <body>
   <header></header>
   <main class="error">
-    <div class="section">
-      <svg viewBox="1 0 38 18" class="error-number">
-        <text x="0" y="17">404</text>
-      </svg>
-      <h2 class="error-message">Page Not Found</h2>
-      <p class="button-container">
-        <a href="/" class="button secondary error-button-home">Go home</a>
-      </p>
+    <!-- breadcrumb -->
+    <div>
+      <div data-not-found="404 Not Found" class="breadcrumb"></div>
+    </div>
+
+    <!-- default section -->
+    <div class="default">
+      <h1>OUR BAD.</h1>
+      <p><strong>Looks like something went wrong on our end. We hate it when that happens.</strong></p>
+      <ul>
+        <li>
+          <p>Use the navigation above to find what you're looking for or go back to the  <a href="/">home page</a></p>
+        </li>
+        <li>
+          <p>Still can’t find what you’re looking for?&nbsp;<a href="/contact-us">Contact us</a></p>
+        </li>
+      </ul>
+      <p>We love receiving emails almost as much as we hate 404 pages.</p>
+    </div>
+
+    <!-- find dealer -->
+    <div>
+      <div class="find-dealer">
+        <div>
+          <div>Find Road Choice parts at more than 600 retailers across the United States and Canada.</div>
+          <div>
+            <h3 id="where-to-buy">WHERE TO BUY</h3>
+          </div>
+        </div>
+      </div>
+      <div class="section-metadata">
+        <div>
+          <div>background</div>
+          <div>
+            <picture>
+              <source type="image/webp" srcset="./media_1c9a4e764e11d611e189a5c326224bcd0992aaa4a.png?width=2000&format=webply&optimize=medium" media="(min-width: 600px)">
+              <source type="image/webp" srcset="./media_1c9a4e764e11d611e189a5c326224bcd0992aaa4a.png?width=750&format=webply&optimize=medium">
+              <source type="image/png" srcset="./media_1c9a4e764e11d611e189a5c326224bcd0992aaa4a.png?width=2000&format=png&optimize=medium" media="(min-width: 600px)">
+              <img loading="lazy" alt="" src="./media_1c9a4e764e11d611e189a5c326224bcd0992aaa4a.png?width=750&format=png&optimize=medium" width="704" height="246">
+            </picture>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
   <footer></footer>
