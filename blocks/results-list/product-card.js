@@ -21,7 +21,14 @@ const getProperties = (prod, st) => {
   return cardContent;
 };
 
-// const productCard = (product, searchType, idx, amount) => {
+const optimizePicture = (imgUrl) => createOptimizedPicture(
+  imgUrl,
+  'product image',
+  false,
+  [{ width: '200' }],
+  true,
+);
+
 const productCard = (product, searchType) => {
   const object = getProperties(product, searchType);
 
@@ -37,22 +44,22 @@ const productCard = (product, searchType) => {
   // TODO check if this is the way to point to the repository
   const repository = 'https://adobe.sharepoint.com/:i:/r/sites/HelixProjects/Shared%20Documents/sites/VolvoGroup/vg-roadchoice-com';
 
-  const productImageUrl = `${repository}/media/images/${partNumber}--0.jpg`;
-  const placeholderImageUrl = `${repository}/media/images/000-rc-placeholder-image.png`;
-  const imageUrl = hasImage ? productImageUrl : placeholderImageUrl;
-
   // TODO check how the link content should finally be
   const linkUrl = `${window.location.href}/${category}/${partNumber}`;
   const imageLink = createElement('a', { classes: 'image-link', props: { href: linkUrl } });
-  const picture = createOptimizedPicture(
-    imageUrl,
-    'product image',
-    false,
-    [{ width: '200' }],
-    true,
-  );
+
+  const productImageUrl = `${repository}/media/images/${partNumber}--0.jpg`;
+  const placeholderImageUrl = `${repository}/media/images/000-rc-placeholder-image.png`;
+  const imageUrl = hasImage ? productImageUrl : placeholderImageUrl;
+  const placeholderPicture = optimizePicture(placeholderImageUrl);
+  const picture = optimizePicture(imageUrl);
   picture.classList.add('image');
-  imageLink.appendChild(picture);
+  placeholderPicture.classList.add('image', 'hidden');
+  picture.querySelector('img').setAttribute('onerror', `
+    this.parentElement.classList.add("hidden");
+    this.parentElement.previousElementSibling.classList.remove("hidden");
+    `);
+  imageLink.append(placeholderPicture, picture);
 
   const titleLink = createElement('a', { classes: 'title-link', props: { href: linkUrl } });
   const title = createElement('h6', { classes: 'title', textContent: name });

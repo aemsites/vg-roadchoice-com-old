@@ -168,7 +168,8 @@ function searchPartNumValue(value, make, model) {
     }
     if (results.length > 0) {
       const isEqualLength = results.length === tempResults.length;
-      results = isEqualLength && results.filter((item, i) => item !== tempResults[i]);
+      results = (isEqualLength && [...results])
+        || results.filter((item, i) => item !== tempResults[i]);
     }
     results = tempResults.length > 0 ? results.concat(tempResults) : [...results];
   });

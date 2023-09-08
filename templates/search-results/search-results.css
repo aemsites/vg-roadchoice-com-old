@@ -8,6 +8,54 @@
   line-height: 1.27;
 }
 
+.search-results .search-results-section.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.no-results .filters-wrapper,
+.no-results .pagination-wrapper {
+  display: none;
+}
+
+.no-results-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  & .no-results-subtitle {
+    font-family: var(--body-ff);
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    margin-block-start: 1rem;
+  }
+
+  & .no-results-subtitle,
+  & .no-results-help {
+    font-size: 16px;
+  }
+
+  & .no-results-options {
+    margin-block-start: 5rem;
+    color: var(--secondary-gray-4);
+
+    & .no-results-contact {
+      font-size: 70%;
+
+      & .no-results-contact-link {
+        color: var(--primary-red);
+
+        &:visited {
+          color: var(--secondary-red);
+        }
+      }
+    }
+  }
+}
+
 @media (min-width: 1200px) {
   .search-results-section .title-section {
     grid-area: title;

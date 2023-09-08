@@ -1,7 +1,7 @@
 {
-  "total": 14,
+  "total": 18,
   "offset": 0,
-  "limit": 14,
+  "limit": 18,
   "data": [
     {
       "Key": "brand name",
@@ -58,6 +58,22 @@
     {
       "Key": "Categories",
       "Text": "Categories"
+    },
+    {
+      "Key": "no results title",
+      "Text": "SORRY, YOUR SEARCH FOR \"[$]\" RETURNED NO RESULTS!"
+    },
+    {
+      "Key": "no results subtitle",
+      "Text": "LET'S REFINE, OR TRY SEARCHING BY CROSS-REFERENCE INSTEAD."
+    },
+    {
+      "Key": "no results need help",
+      "Text": "NEED HELP FINDING YOUR PART?"
+    },
+    {
+      "Key": "no results contact us",
+      "Text": "contact us at"
     }
   ],
   ":type": "sheet"

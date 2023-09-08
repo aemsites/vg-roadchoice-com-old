@@ -20,6 +20,10 @@ ul.results-list {
   display: none;
 }
 
+.product .image.hidden {
+  display: none;
+}
+
 .product .image img {
   margin: 0 0 12px;
   width: 200px;
