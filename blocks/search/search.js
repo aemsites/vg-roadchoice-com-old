@@ -1,4 +1,4 @@
-import { createElement, getJSONData as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
+import { createElement, getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
 const modelsItems = [];

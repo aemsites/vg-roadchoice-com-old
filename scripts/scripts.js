@@ -677,7 +677,7 @@ export function convertDateExcel(excelTimestamp) {
  * @param {string} route get the Json data from the route
  * @returns {Object} the json data object
  * */
-export const getJSONData = async (route) => {
+export const getJsonFromUrl = async (route) => {
   const response = await fetch(route);
   const json = await response.json();
   return json;
@@ -695,3 +695,18 @@ export function loadWorker() {
   worker.onmessage = (e) => { window.allProducts = e.data; };
   return worker;
 }
+
+/**
+ * checks for white spacing required in document
+ */
+const makeSpace = () => {
+  const pElmts = document.querySelectorAll('p');
+  pElmts.forEach((el) => {
+    if (el.textContent === '[*space*]') {
+      const space = createElement('br');
+      el.replaceWith(space);
+    }
+  });
+};
+
+makeSpace();

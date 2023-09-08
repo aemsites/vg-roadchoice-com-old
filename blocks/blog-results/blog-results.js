@@ -1,7 +1,7 @@
 import {
   createElement,
   getTextLabel,
-  getJSONData as getAllArticles,
+  getJsonFromUrl,
   convertDateExcel,
 } from '../../scripts/scripts.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
@@ -109,7 +109,7 @@ const formatDate = (date) => {
   const month = convertedDate.getMonth() + 1;
   const year = convertedDate.getFullYear();
 
-  return `${day}/${month}/${year}`;
+  return `${month}/${day}/${year}`;
 };
 
 const handlePaginationStyling = (page, total, value, section) => {
@@ -343,8 +343,9 @@ export default async function decorate(block) {
   const [titleContent, url, amount] = Object.values(blockConfig);
   articlesPerPage = +amount;
 
-  allArticles = await getAllArticles(url);
-  allArticles?.data.sort((a, b) => {
+  const json = await getJsonFromUrl(url);
+  allArticles = json.data;
+  allArticles.sort((a, b) => {
     a.date = +(a.date);
     b.date = +(b.date);
     return b.date - a.date;
