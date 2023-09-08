@@ -29,6 +29,11 @@ ul.results-list {
   width: 200px;
 }
 
+.product .image-link {
+  display: inline-flex;
+  justify-content: center;
+}
+
 .product a.title-link {
   text-decoration: none;
 }
@@ -75,5 +80,11 @@ ul.results-list {
 @media (min-width: 523px) {
   .product .part-number {
     flex-direction: row;
+  }
+}
+
+@media (min-width: 1200px) {
+  .product .image-link {
+    justify-content: start;
   }
 }
