@@ -339,7 +339,6 @@ const buildSidebar = (articles, titleContent) => {
 
 export default async function decorate(block) {
   const blockConfig = readBlockConfig(block);
-  console.log(blockConfig);
   const [titleContent, url, amount] = Object.values(blockConfig);
   articlesPerPage = +amount;
 
