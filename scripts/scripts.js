@@ -306,7 +306,6 @@ async function loadTemplate(doc, templateName) {
   }
 }
 
-
 /**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
