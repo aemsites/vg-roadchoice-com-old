@@ -420,6 +420,8 @@ header .nav-tools .categories a {
   header .nav-tools .categories[aria-expanded="true"] {
     background-color: var(--nav-background);
     display: block;
+    overflow: scroll;
+    height: 100vh;
   }
 
   header .nav-tools .categories[aria-expanded="true"] .level-2 {
