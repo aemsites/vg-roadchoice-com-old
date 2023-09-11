@@ -2,16 +2,6 @@ import { createElement } from '../../scripts/scripts.js';
 
 const docRange = document.createRange();
 
-async function buildSection(container, sectionName = '') {
-  const selectedContent = container.querySelector(`.${sectionName}-container .${sectionName}-wrapper`);
-  const sectionClassList = sectionName === 'breadcrumbs' ? ['section', 'template', 'pdp', `${sectionName}-container`] : `${sectionName}-container`;
-  const sectionContainer = createElement('div', { classes: sectionClassList });
-
-  sectionContainer.append(selectedContent);
-
-  return sectionContainer;
-}
-
 function getQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
   return { category: urlParams.get('category'), sku: urlParams.get('sku') };
@@ -156,9 +146,69 @@ async function fetchCatalogPDS(category) {
   return null;
 }
 
-function renderCatlaogsPDS(catalogs) {
-  // eslint-disable-next-line no-console
-  console.log('Inside rendering catalogs', catalogs);
+function renderCatlaogsPDS(catalogs, block) {
+  const fragment = docRange.createContextualFragment(`
+    <div class="pdp-catalogs-wrapper">
+      <h3 class="pdp-catalogs-title">CATALOGS, PRODUCT SHEETS, ECATALOGS AND MORE</h3>
+      <div class="pdp-catalogs-text">
+        <p>We have created a variety of Road Choice collateral available as PDFs for downloading and printing.</p>
+        <p>Looking for a basic overview? Learn more in our brand brochure.</p>
+        <p>It’s never been easier to do business with Road Choice. Search our All-Makes Parts and Accessories Catalog for your general application parts.</p>
+      </div>
+      <ul class="pdp-catalogs-list"></ul>
+    </div>
+  `);
+  block.append(fragment);
+
+  Object.entries(catalogs).forEach(([language, catalog]) => {
+    const catalogFragment = docRange.createContextualFragment(`
+      <li class="pdp-catalogs-list-item">
+        <div class="pdp-catalogs-list-title">${language}</div>
+        <div class="pdp-catalogs-list-link">
+          <a href="${catalog[0].file}">${catalog[0].title}</a>
+        </div>
+      </li>
+    `);
+    block.querySelector('.pdp-catalogs-list').append(catalogFragment);
+  });
+}
+
+// Check if product has catalog, product sheet , ecatalaogs section
+async function fetchSDS(category) {
+  try {
+    const route = '/sds-categories.json';
+    const response = await fetch(route);
+    const { data } = await response.json();
+
+    const sdsList = data.filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
+    return sdsList;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching part SDS:', error);
+  }
+  return null;
+}
+
+function renderSDS(sdsList, block) {
+  const fragment = docRange.createContextualFragment(`
+    <div class="pdp-sds-wrapper">
+      <h3 class="pdp-sds-title">SAFETY DATA SHEETS (SDS)</h3>
+      <div class="pdp-sds-text">
+        <p>Road Choice Truck Parts has a library of Safety Data Sheets (SDS) available for your review in English, French and Spanish for your convenience. Click any of the below topics to late your relevant SDS reference material.</p>
+      </div>
+      <ul class="pdp-sds-list"></ul>
+    </div>
+  `);
+  block.append(fragment);
+
+  sdsList.forEach((sds) => {
+    const sdsFragment = docRange.createContextualFragment(`
+      <li class="pdp-sds-list-item">
+        <a href="${sds.file}">${sds.title}</a>
+      </li>
+    `);
+    block.querySelector('.pdp-sds-list').append(sdsFragment);
+  });
 }
 
 export default async function decorate(block) {
@@ -173,6 +223,12 @@ export default async function decorate(block) {
   // check if we have catalogs, PDS section
   const catalogs = await fetchCatalogPDS(pathSegments.category);
   if (catalogs) {
-    renderCatlaogsPDS(catalogs);
+    renderCatlaogsPDS(catalogs, block);
+  }
+
+  // check if we have SDS
+  const sdsList = await fetchSDS(pathSegments.category);
+  if (sdsList) {
+    renderSDS(sdsList, block);
   }
 }
