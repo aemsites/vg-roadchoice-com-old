@@ -703,8 +703,8 @@ const makeSpace = () => {
   const pElmts = document.querySelectorAll('p');
   pElmts.forEach((el) => {
     if (el.textContent === '[*space*]') {
-      const space = createElement('br');
-      el.replaceWith(space);
+      el.classList.add('space');
+      el.textContent = '';
     }
   });
 };
