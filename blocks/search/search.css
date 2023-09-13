@@ -1,5 +1,5 @@
 /* stylelint-disable selector-class-pattern */
-.search.section {
+.search-container.section {
   padding: 0;
   background-color: var(--primary-dark-gray);
   color: var(--primary-white);

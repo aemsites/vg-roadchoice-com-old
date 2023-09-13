@@ -1,7 +1,7 @@
 {
-  "total": 8,
+  "total": 18,
   "offset": 0,
-  "limit": 8,
+  "limit": 18,
   "data": [
     {
       "Key": "brand name",
@@ -34,6 +34,46 @@
     {
       "Key": "Part No",
       "Text": "Part No"
+    },
+    {
+      "Key": "search results title",
+      "Text": "Search Results for"
+    },
+    {
+      "Key": "catalog-title",
+      "Text": "Catalog[/]Spanish[/]French[/]PRODUCT SHEETS AND MORE"
+    },
+    {
+      "Key": "part number",
+      "Text": "Part Number"
+    },
+    {
+      "Key": "pagination text",
+      "Text": "Showing top [$] results"
+    },
+    {
+      "Key": "pagination button",
+      "Text": "Show More"
+    },
+    {
+      "Key": "Categories",
+      "Text": "Categories"
+    },
+    {
+      "Key": "no results title",
+      "Text": "SORRY, YOUR SEARCH FOR \"[$]\" RETURNED NO RESULTS!"
+    },
+    {
+      "Key": "no results subtitle",
+      "Text": "LET'S REFINE, OR TRY SEARCHING BY CROSS-REFERENCE INSTEAD."
+    },
+    {
+      "Key": "no results need help",
+      "Text": "NEED HELP FINDING YOUR PART?"
+    },
+    {
+      "Key": "no results contact us",
+      "Text": "contact us at"
     }
   ],
   ":type": "sheet"

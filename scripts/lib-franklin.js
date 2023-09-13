@@ -447,12 +447,13 @@ export function getHref() {
  * @param {string} [alt] The image alternative text
  * @param {boolean} [eager] Set loading attribute to eager
  * @param {Array} [breakpoints] Breakpoints and corresponding params (eg. width)
+ * @param {boolean} isExternal True if src is external
  * @returns {Element} The picture element
  */
-export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }]) {
+export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }], isExternal = false) {
   const url = new URL(src, getHref());
   const picture = document.createElement('picture');
-  const { pathname } = url;
+  const pathname = (isExternal && src) || url.pathname;
   const ext = pathname.substring(pathname.lastIndexOf('.') + 1);
 
   // webp
@@ -569,17 +570,6 @@ export function loadFooter(footer) {
   footer.append(footerBlock);
   decorateBlock(footerBlock);
   return loadBlock(footerBlock);
-}
-
-/**
- * Loads the Worker that gets all the products.
- */
-export function loadWorker() {
-  const worker = new Worker('/blocks/search/worker.js');
-  worker.postMessage('run');
-  worker.onmessage = (e) => {
-    window.allProducts = e.data;
-  };
 }
 
 /**
