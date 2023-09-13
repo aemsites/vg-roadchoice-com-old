@@ -234,32 +234,6 @@ main img {
   height: auto;
 }
 
-ul {
-  list-style: circle;
-  padding: 5px 0 5px 10px;
-  margin: 0 0 20px 20px;
-}
-
-ul > li {
-  font-size: var(--body-font-size-s);
-  color: var(--primary-red);
-  list-style-type: disc;
-}
-
-ul > li::marker {
-  color: var(--primary-black);
-}
-
-li > a {
-  color: var(--primary-red);
-  text-decoration: none;
-}
-
-li > strong {
-  font-family: var(--body-ff-bold);
-
-}
-
 /* SECTION styling */
 main .section {
   padding: 64px 16px;
@@ -308,4 +282,30 @@ a.button {
   height: 40px;
   margin: 0;
   padding: 0;
+}
+
+.default-content-wrapper ul {
+  list-style: circle;
+  padding: 5px 0 5px 10px;
+  margin: 0 0 20px 20px;
+}
+
+.default-content-wrapper ul > li {
+  font-size: var(--body-font-size-s);
+  color: var(--primary-red);
+  list-style-type: disc;
+}
+
+.default-content-wrapper ul > li::marker {
+  color: var(--primary-black);
+}
+
+.default-content-wrapper li > a {
+  color: var(--primary-red);
+  text-decoration: none;
+}
+
+.default-content-wrapper li > strong {
+  font-family: var(--body-ff-bold);
+
 }
