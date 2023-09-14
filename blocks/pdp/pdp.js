@@ -36,6 +36,7 @@ function findPartImagesBySKU(parts, sku) {
 }
 
 async function fetchPartImages(sku) {
+  const placeholderImage = '/product-images/rc-placeholder-image.png';
   try {
     const route = '/product-images/road-choice-website-images.json';
     const response = await fetch(route);
@@ -49,7 +50,7 @@ async function fetchPartImages(sku) {
     // eslint-disable-next-line no-console
     console.error('Error fetching part image(s):', error);
   }
-  return ['default-placeholder-image'];
+  return [{ 'Image URL': placeholderImage }];
 }
 
 function renderColDetails(part, listEle) {
@@ -86,6 +87,15 @@ function renderImages(images, imgWraper) {
     imageList.append(liFragment);
   });
   imgWraper.append(imageList);
+  imgWraper.addEventListener('click', (e) => {
+    const target = e.target.closest('.pdp-image-item');
+    if (target) {
+      const activeImage = imgWraper.querySelector('.pdp-image-item.active');
+      activeImage.classList.remove('active');
+      target.classList.add('active');
+      imgWraper.querySelector('.pdp-selected-image img').src = target.querySelector('img').src;
+    }
+  });
 }
 
 // TODO: fetch part image(s) based on part number and render them along with part info.
@@ -112,7 +122,6 @@ async function renderPartDetails(part, block) {
   block.append(pdpFragment);
   renderColDetails(part, block.querySelector('.pdp-list'));
 
-  // if there are more than 1 image show gallery below
   if (images.length > 1) {
     renderImages(images, block.querySelector('.pdp-image-wrapper'));
   }
@@ -161,7 +170,7 @@ function renderCatlaogsPDS(catalogs) {
       <li class="pdp-catalogs-list-item">
         <div class="pdp-catalogs-list-title">${language}</div>
         <div class="pdp-catalogs-list-link">
-          <a href="${catalog[0].file}">${catalog[0].title}</a>
+          <a target="_blank" href="${catalog[0].file}">${catalog[0].title}</a>
         </div>
       </li>
     `);
@@ -199,7 +208,7 @@ function renderSDS(sdsList) {
   sdsList.forEach((sds) => {
     const sdsFragment = docRange.createContextualFragment(`
       <li class="pdp-sds-list-item">
-        <a href="${sds.file}">${sds.title}</a>
+        <a target="_blank" href="${sds.file}">${sds.title}</a>
       </li>
     `);
     sdsBlock.querySelector('.pdp-sds-list').append(sdsFragment);
@@ -236,7 +245,7 @@ function renderManuals(manualList) {
   manualList.forEach((manual) => {
     const manualFragment = docRange.createContextualFragment(`
       <li class="pdp-manuals-list-item">
-        <a href="${manual.file}">${manual.title}</a>
+        <a target="_blank" href="${manual.file}">${manual.title}</a>
       </li>
     `);
     manualBlock.querySelector('.pdp-manuals-list').append(manualFragment);
@@ -270,4 +279,10 @@ export default async function decorate(block) {
   if (manualList) {
     renderManuals(manualList);
   }
+
+  document.querySelector('main').addEventListener('click', (e) => {
+    if (e.target.matches('.section.accordion h3')) {
+      e.target.closest('.section.accordion').classList.toggle('accordion-open');
+    }
+  });
 }
