@@ -126,7 +126,7 @@ function findCatalogsPDSByCategory(data, category) {
     return catalogs.reduce((acc, cur) => {
       (acc[cur.language] = acc[cur[catalogs]] || []).push(cur);
       return acc;
-    }, []);
+    }, {});
   }
   return [];
 }
@@ -146,19 +146,15 @@ async function fetchCatalogPDS(category) {
   return null;
 }
 
-function renderCatlaogsPDS(catalogs, block) {
+function renderCatlaogsPDS(catalogs) {
+  const catalogContainer = document.querySelector('.pdp-catalogs-container');
+  const catalogBlock = document.querySelector('.pdp-catalogs');
+  if (!catalogBlock || !catalogContainer || !Object.keys(catalogs).length) return;
+
   const fragment = docRange.createContextualFragment(`
-    <div class="pdp-catalogs-wrapper">
-      <h3 class="pdp-catalogs-title">CATALOGS, PRODUCT SHEETS, ECATALOGS AND MORE</h3>
-      <div class="pdp-catalogs-text">
-        <p>We have created a variety of Road Choice collateral available as PDFs for downloading and printing.</p>
-        <p>Looking for a basic overview? Learn more in our brand brochure.</p>
-        <p>It’s never been easier to do business with Road Choice. Search our All-Makes Parts and Accessories Catalog for your general application parts.</p>
-      </div>
       <ul class="pdp-catalogs-list"></ul>
-    </div>
   `);
-  block.append(fragment);
+  catalogBlock.append(fragment);
 
   Object.entries(catalogs).forEach(([language, catalog]) => {
     const catalogFragment = docRange.createContextualFragment(`
@@ -169,8 +165,9 @@ function renderCatlaogsPDS(catalogs, block) {
         </div>
       </li>
     `);
-    block.querySelector('.pdp-catalogs-list').append(catalogFragment);
+    catalogBlock.querySelector('.pdp-catalogs-list').append(catalogFragment);
   });
+  catalogContainer.classList.remove('hide');
 }
 
 // Check if product has catalog, product sheet , ecatalaogs section
@@ -189,17 +186,15 @@ async function fetchSDS(category) {
   return null;
 }
 
-function renderSDS(sdsList, block) {
+function renderSDS(sdsList) {
+  const sdsContainer = document.querySelector('.pdp-sds-container');
+  const sdsBlock = document.querySelector('.pdp-sds');
+  if (!sdsBlock || !sdsContainer || !sdsList.length) return;
+
   const fragment = docRange.createContextualFragment(`
-    <div class="pdp-sds-wrapper">
-      <h3 class="pdp-sds-title">SAFETY DATA SHEETS (SDS)</h3>
-      <div class="pdp-sds-text">
-        <p>Road Choice Truck Parts has a library of Safety Data Sheets (SDS) available for your review in English, French and Spanish for your convenience. Click any of the below topics to late your relevant SDS reference material.</p>
-      </div>
-      <ul class="pdp-sds-list"></ul>
-    </div>
+    <ul class="pdp-sds-list"></ul>
   `);
-  block.append(fragment);
+  sdsBlock.append(fragment);
 
   sdsList.forEach((sds) => {
     const sdsFragment = docRange.createContextualFragment(`
@@ -207,8 +202,46 @@ function renderSDS(sdsList, block) {
         <a href="${sds.file}">${sds.title}</a>
       </li>
     `);
-    block.querySelector('.pdp-sds-list').append(sdsFragment);
+    sdsBlock.querySelector('.pdp-sds-list').append(sdsFragment);
   });
+  sdsContainer.classList.remove('hide');
+}
+
+// Check if product has catalog, product sheet , ecatalaogs section
+async function fetchManuals(category) {
+  try {
+    const route = '/manual-categories.json';
+    const response = await fetch(route);
+    const { data } = await response.json();
+
+    const manualList = data.filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
+    return manualList;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching manuals:', error);
+  }
+  return null;
+}
+
+function renderManuals(manualList) {
+  const manualContainer = document.querySelector('.pdp-manuals-container');
+  const manualBlock = document.querySelector('.pdp-manuals');
+  if (!manualBlock || !manualContainer || !manualList.length) return;
+
+  const fragment = docRange.createContextualFragment(`
+    <ul class="pdp-manuals-list"></ul>
+  `);
+  manualBlock.append(fragment);
+
+  manualList.forEach((manual) => {
+    const manualFragment = docRange.createContextualFragment(`
+      <li class="pdp-manuals-list-item">
+        <a href="${manual.file}">${manual.title}</a>
+      </li>
+    `);
+    manualBlock.querySelector('.pdp-manuals-list').append(manualFragment);
+  });
+  manualContainer.classList.remove('hide');
 }
 
 export default async function decorate(block) {
@@ -223,12 +256,18 @@ export default async function decorate(block) {
   // check if we have catalogs, PDS section
   const catalogs = await fetchCatalogPDS(pathSegments.category);
   if (catalogs) {
-    renderCatlaogsPDS(catalogs, block);
+    renderCatlaogsPDS(catalogs);
   }
 
   // check if we have SDS
   const sdsList = await fetchSDS(pathSegments.category);
   if (sdsList) {
-    renderSDS(sdsList, block);
+    renderSDS(sdsList);
+  }
+
+  // check if we have Manuals
+  const manualList = await fetchManuals(pathSegments.category);
+  if (manualList) {
+    renderManuals(manualList);
   }
 }

@@ -77,8 +77,8 @@
   border-bottom: 1px solid var(--primary-black);
 }
 
-.pdp-catalogs-title,
-.pdp-sds-title {
+.pdp-catalogs-container h3,
+.pdp-sds-container h3 {
   font-family: var(--headings-ff-black);
   font-size: 22px;
   color: var(--primary-red);
