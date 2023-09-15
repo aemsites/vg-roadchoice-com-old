@@ -11,12 +11,7 @@ function findPartBySKU(parts, sku) {
   return parts.find((part) => part['Base Part Number'].toLowerCase() === sku.toLowerCase());
 }
 
-/**
- * Loads JS and CSS for a block.
- * @param {Element} doc The document element
- * @param {Object} pathSegments Object with categroy name and id of the part
- */
-export async function getPDPData(pathSegments) {
+async function getPDPData(pathSegments) {
   const { category, sku } = pathSegments;
 
   try {
