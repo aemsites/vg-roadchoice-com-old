@@ -8,7 +8,7 @@ const blockName = 'catalogs';
 
 const tableInfo = [
   {
-    title: 'catalogs',
+    sectionTitle: 'catalogs',
     criteria: [
       { type: 'catalog' },
       { language: 'en' },
@@ -16,14 +16,14 @@ const tableInfo = [
     position: 1,
   },
   {
-    title: 'product-data-sheets',
+    sectionTitle: 'product-data-sheets',
     criteria: [
       { type: 'product-data-sheet' },
     ],
     position: 2,
   },
   {
-    title: 'spanish-catalogs',
+    sectionTitle: 'spanish-catalogs',
     criteria: [
       { type: 'catalog' },
       { language: 'es' },
@@ -31,7 +31,7 @@ const tableInfo = [
     position: 3,
   },
   {
-    title: 'french-catalogs',
+    sectionTitle: 'french-catalogs',
     criteria: [
       { type: 'catalog' },
       { language: 'fr' },
@@ -43,7 +43,7 @@ const tableInfo = [
 const buildTables = (catalogs) => {
   const catalogsSection = createElement('div', { classes: `${blockName}-section` });
   tableInfo.forEach((el) => {
-    const { title, criteria, position } = el;
+    const { sectionTitle, criteria, position } = el;
 
     const catalogsSubsection = createElement('div', {
       classes: [
@@ -53,8 +53,8 @@ const buildTables = (catalogs) => {
     });
     const heading = createElement('h2', {
       classes: `${blockName}-heading`,
-      props: { id: title },
-      textContent: (title.replaceAll('-', ' ')),
+      props: { id: sectionTitle },
+      textContent: (sectionTitle.replaceAll('-', ' ')),
     });
     const tableSection = createElement('ul', { classes: `${blockName}-table` });
 
@@ -63,22 +63,20 @@ const buildTables = (catalogs) => {
       criteria.forEach((cat) => {
         const [key] = Object.keys(cat);
         const [value] = Object.values(cat);
-        key.toLowerCase();
-        value.toLowerCase();
 
-        const condition = catalog[key] === value;
+        const condition = catalog[key].toLowerCase() === value.toLowerCase();
         conditions.push(condition);
       });
       const checker = conditions.every((e) => e === true);
       return checker && catalog;
     });
 
-    selectedCatalogs.forEach(({ notes, file, category }) => {
+    selectedCatalogs.forEach(({ notes, file, title }) => {
       const catalog = createElement('li', { classes: 'table-item' });
       const link = createElement('a', {
         classes: 'item-link',
         props: { href: file },
-        textContent: category,
+        textContent: title,
       });
       const note = createElement('span', { classes: 'item-note', textContent: `(${notes})` });
 
