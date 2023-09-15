@@ -149,7 +149,7 @@
     display: flex;
     flex-direction: row;
     margin: 0 auto;
-    padding: 8px;
+    padding: 16px;
 }
 
 .section.breadcrumbs a.breadcrumb-link {
@@ -157,7 +157,7 @@
   color: var(--secondary-gray-4);
   text-decoration: none;
   font-size: var(--body-font-size-s);
-  margin: 0 3px 15px 0;
+  margin: 0 3px;
   text-transform: capitalize;
 }
 
@@ -208,7 +208,7 @@
 
   .section.breadcrumbs .breadcrumb-list {
     max-width: 1270px;
-    padding: 8px 50px;
+    padding: 16px 50px 24px;
   }
 }
 
