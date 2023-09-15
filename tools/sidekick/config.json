@@ -1,0 +1,12 @@
+{
+  "project": "Roadchoice",
+  "plugins": [
+    {
+      "id": "library",
+      "title": "Library",
+      "environments": [ "edit" ],
+      "url": "https://main--vg-roadchoice-com--hlxsites.hlx.live/tools/sidekick/library.html",
+      "includePaths": [ "**.docx**" ]
+    }
+  ]
+}
