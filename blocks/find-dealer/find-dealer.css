@@ -4,7 +4,13 @@
 }
 
 .section.find-dealer-container {
+  max-width: unset;
   padding: 10px 16px;
+}
+
+.find-dealer-wrapper {
+  max-width: 1270px;
+  margin: 0 auto;
 }
 
 @media (min-width: 992px) {

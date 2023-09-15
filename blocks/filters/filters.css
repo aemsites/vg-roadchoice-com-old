@@ -12,6 +12,7 @@
   text-align: center;
   text-transform: uppercase;
   padding: 15px 30px;
+  margin: 0;
 }
 
 .filter-section ul li.item {
