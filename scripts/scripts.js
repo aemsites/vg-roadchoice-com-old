@@ -125,19 +125,6 @@ export function decorateButtons(element) {
           link.className = 'button secondary';
           twoup.className = 'button-container';
         }
-        if (up.tagName === 'STRONG' && twoup.childNodes.length === 1 && twoup.tagName === 'LI') {
-          const arrow = createElement('span', { classes: 'fa fa-arrow-right' });
-          link.className = 'button arrowed';
-          link.appendChild(arrow);
-          twoup.parentElement.className = 'button-container';
-        }
-        if (up.tagName === 'LI' && twoup.children.length === 1
-          && link.children.length > 0 && link.firstElementChild.tagName === 'STRONG') {
-          const arrow = createElement('span', { classes: 'fa fa-arrow-right' });
-          link.className = 'button arrowed';
-          link.appendChild(arrow);
-          twoup.className = 'button-container';
-        }
       }
     }
   });
@@ -703,8 +690,8 @@ const makeSpace = () => {
   const pElmts = document.querySelectorAll('p');
   pElmts.forEach((el) => {
     if (el.textContent === '[*space*]') {
-      el.classList.add('space');
-      el.textContent = '';
+      const spaceSpan = createElement('span', { classes: 'space' });
+      el.replaceWith(spaceSpan);
     }
   });
 };

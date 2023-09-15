@@ -63,6 +63,8 @@ const buildTables = (catalogs) => {
       criteria.forEach((cat) => {
         const [key] = Object.keys(cat);
         const [value] = Object.values(cat);
+        key.toLowerCase();
+        value.toLowerCase();
 
         const condition = catalog[key] === value;
         conditions.push(condition);
