@@ -93,7 +93,35 @@ function renderImages(images, imgWraper) {
   });
 }
 
-// TODO: fetch part image(s) based on part number and render them along with part info.
+async function renderBreadcrumbs(part) {
+  const breadcrumbSection = document.querySelector('.section.breadcrumbs');
+  if (!breadcrumbSection) return;
+
+  const breadcrumbs = docRange.createContextualFragment(`
+    <div class="breadcrumb-wrapper">
+      <div class="breadcrumb block">
+        <div class="breadcrumb-content">
+          <ul class="breadcrumb-list">
+            <li class="breadcrumb-item breadcrumb-item-0">
+              <a class="breadcrumb-link" href="/">Road Choice</a>
+            </li>
+            <li class="breadcrumb-item breadcrumb-item-0">
+              <a class="breadcrumb-link" href="/">Parts</a>
+            </li>
+            <li class="breadcrumb-item breadcrumb-item-1">
+              <a class="breadcrumb-link" href="/part-category/${part.Category.toLowerCase()}">${part.Category}</a>
+            </li>
+            <li class="breadcrumb-item breadcrumb-item-2">
+              <a class="breadcrumb-link" href="/part-category/${part.Subcategory.toLowerCase()}">${part.Subcategory}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  `);
+  breadcrumbSection.append(breadcrumbs);
+}
+
 async function renderPartDetails(part, block) {
   const images = await fetchPartImages(part['Base Part Number']);
   const fragment = `
@@ -249,11 +277,12 @@ function renderManuals(manualList) {
 }
 
 export default async function decorate(block) {
-  document.querySelector('main .search').classList.add('hide');
+  // document.querySelector('main .search').classList.add('hide');
   const pathSegments = getQueryParams();
   const part = await getPDPData(pathSegments);
 
   if (part) {
+    renderBreadcrumbs(part, block);
     await renderPartDetails(part, block);
   }
 
