@@ -43,6 +43,7 @@
   --primary-light-gray: #eaeaea;
 
   /* Secondary colors */
+  --secondary-black: #252525;
   --secondary-red: #8f1720;
   --secondary-dark-gray: #181818;
   --secondary-gray-1: #757378;
@@ -63,7 +64,7 @@
   --background-color: var(--primary-white);
   --overlay-background-color: var(--primary-light-gray);
   --highlight-background-color: var(--secondary-light-gray);
-  --text-color: var(--primary-black);
+  --text-color: var(--secondary-black);
   --button-active: var(--primary-red);
   --button-hover: var(--secondary-red);
 
@@ -94,8 +95,11 @@
   --body-font-size-s: 18px;
   --body-font-size-xs: 14px;
 
+  /* h1 properties */
+  --h1-font-size: 28px;
+  --h1-line-height: 30px;
+
   /* heading sizes */
-  --h1-font-size: 24px;
   --heading-font-size-xxl: 70px;
   --heading-font-size-xl: 52px;
   --heading-font-size-l: 40px;
@@ -115,27 +119,12 @@
   --nav-background: var(--primary-light-gray);
 }
 
-@media (min-width: 495px) {
-  :root {
-    --h1-font-size: 32px;
-  }
-}
-
-@media (min-width: 768px) {
-  :root {
-    --h1-font-size: 46px;
-  }
-}
 
 @media (min-width: 992px) {
   :root {
     --nav-height: calc(var(--nav-height-desktop-brand) + var(--nav-height-desktop-links));
-  }
-}
-
-@media (min-width: 1200px) {
-  :root {
-    --h1-font-size: 70px;
+    --h1-font-size: 50px;
+    --h1-line-height: 55px;
   }
 }
 
@@ -147,12 +136,13 @@
 
 html {
   font-size: 10px;
+  scroll-behavior: smooth;
 }
 
 body {
   display: none;
   background-color: var(--background-color);
-  color: var(--text-color);
+  color: var(--primary-black);
   font-size: var(--body-font-size-m);
   font-family: var(--body-ff);
   line-height: 1.6;
@@ -167,24 +157,66 @@ header {
   height: var(--nav-height);
 }
 
-h1 {
-  font-family: var(--headings-ff-black);
-  font-size: var(--h1-font-size);
-}
-
-h2, h3,
+h1, h2, h3,
 h4, h5, h6 {
-  font-family: var(--headings-ff-bold);
+  text-transform: uppercase;
+  font-family: var(--headings-ff-black);
 }
 
-h2 { font-size: var(--heading-font-size-l) }
-h3 { font-size: var(--heading-font-size-m) }
-h4 { font-size: var(--heading-font-size-s) }
-h5 { font-size: var(--heading-font-size-xs) }
-h6 { font-size: var(--heading-font-size-xxs) }
+h1 {
+  font-size: var(--h1-font-size);
+  line-height: var(--h1-line-height);
+  margin: 10px 0;
+}
+
+h2 {
+  font-size: var(--heading-font-size-l);
+  line-height: 50px;
+  margin: 10px 0;
+}
+
+h3 {
+  font-size: var(--heading-font-size-m);
+  line-height: 38px;
+  margin: 5px 0;
+}
+
+h4 {
+  font-size: var(--heading-font-size-s);
+  line-height: 22px;
+  margin: 10px 0 20px;
+}
+
+h5 {
+  font-size: var(--heading-font-size-s);
+  line-height: 22px;
+  margin: 10px 0;
+}
+
+h6 {
+  font-size: var(--heading-font-size-xs);
+}
 
 code, pre, samp {
   font-family: var(--fixed-ff);
+}
+
+p {
+  font-family: var(--body-ff);
+  font-size: var(--body-font-size-s);
+  color: var(--text-color);
+  line-height: 30px;
+  vertical-align: baseline;
+  margin: 5px 0;
+}
+
+p a {
+  font-family: var(--body-ff);
+  font-size: var(--body-font-size-s);
+  color: var(--link-color);
+  line-height: 30px;
+  vertical-align: baseline;
+  text-decoration: none;
 }
 
 p strong {
@@ -202,19 +234,16 @@ main img {
 }
 
 /* SECTION styling */
-main .section {
-  padding: 64px 16px;
-}
 
-@media (min-width: 768px) {
-  main .section {
-    padding: 64px 32px;
-  }
+main .section {
+  line-height: 30px;
+  padding: 50px 50px 0;
 }
 
 @media (min-width: 992px) {
-  .section > div {
+  main .section {
     max-width: 1270px;
+    padding: 60px 50px 0;
     margin: auto;
   }
 }
@@ -222,7 +251,61 @@ main .section {
 a.button {
   background-color: var(--button-active);
   color: var(--primary-white);
-  padding: 13px 30px;
+  padding: 13px 30px 10px;
   font-size: var(--body-font-size-m);
+  text-transform: uppercase;
   text-decoration: none;
+}
+
+.title-red h1,
+.title-red h2,
+.title-red h3,
+.title-red h4,
+.title-red h5,
+.title-red h6 {
+  color: var(--primary-red);
+}
+
+/* default content styling */
+
+div.default-content-wrapper {
+  padding: 0;
+}
+
+.default-content-wrapper p {
+  margin: 5px 0;
+  line-height: 30px;
+}
+
+/* spacing element */
+.default-content-wrapper span.space {
+  display: block;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+.default-content-wrapper ul {
+  list-style: circle;
+  padding: 5px 0 5px 10px;
+  margin: 0 0 20px 20px;
+}
+
+.default-content-wrapper ul > li {
+  font-size: var(--body-font-size-s);
+  color: var(--primary-red);
+  list-style-type: disc;
+}
+
+.default-content-wrapper ul > li::marker {
+  color: var(--primary-black);
+}
+
+.default-content-wrapper li a {
+  color: var(--primary-red);
+  text-decoration: none;
+}
+
+.default-content-wrapper li strong {
+  font-family: var(--body-ff-bold);
 }

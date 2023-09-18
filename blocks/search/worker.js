@@ -1,16 +1,19 @@
+/**
+ * @property {string} crData - Cross Reference Data URL
+ * @property {string} pnData - Part Number Data URL
+ * @property {string} imgData - Images Data URL
+ */
 const URLs = {
-  crossReference: '/cross-reference-data/cross-reference-data.json',
-  partNumber: '/product-data/road-choice-make-model-part-filter-options.json',
+  crData: '/cross-reference-data/cr-data.json',
+  pnData: '/product-data/road-choice-make-model-part-filter-options.json',
+  imgData: '/product-images/road-choice-website-images.json',
 };
 
 const limit = 100_000;
-// const limit = 60_000;
-// let isCrossRefActive = true;
-let crData;
-let pnData;
+const postMessageData = {};
 const tempData = [];
 
-async function getJSONData(props) {
+async function getInitialJSONData(props) {
   const { url, offset = 0, limit: newLimit = null } = props;
   const nextOffset = offset > 0 ? `?offset=${offset}` : '';
   const nextLimit = limit ? `${offset > 0 ? '&' : '?'}limit=${newLimit}` : '';
@@ -19,9 +22,9 @@ async function getJSONData(props) {
   return json;
 }
 
-async function getMoreData(url, total, offset = 0) {
+async function getMoreJSONData(url, total, offset = 0) {
   const newOffset = offset + limit;
-  const json = await getJSONData({ url, offset: newOffset, limit });
+  const json = await getInitialJSONData({ url, offset: newOffset, limit });
   const isLastCall = json.offset + limit >= json.total;
   if (isLastCall) {
     const lastData = [...tempData, ...json.data];
@@ -29,26 +32,24 @@ async function getMoreData(url, total, offset = 0) {
     return lastData;
   }
   tempData.push(...json.data);
-  return getMoreData(total, newOffset);
+  return getMoreJSONData(total, newOffset);
 }
 
-onmessage = async () => {
-  const crJson = await getJSONData({ url: URLs.crossReference, limit });
-  const pnJson = await getJSONData({ url: URLs.partNumber, limit });
-  const crInitialData = [...crJson.data];
-  const pnInitialData = [...pnJson.data];
-  let crRemainingData;
-  let pnRemainingData;
-  if (crJson.data.length < crJson.total) {
-    crRemainingData = await getMoreData(URLs.crossReference, crJson.total);
+async function getData(url) {
+  const jsonData = await getInitialJSONData({ url, limit });
+  const initialData = [...jsonData.data];
+  let moreData;
+  if (jsonData.data.length < jsonData.total) {
+    moreData = await getMoreJSONData(url, jsonData.total);
   }
-  if (pnJson.data.length < pnJson.total) {
-    pnRemainingData = await getMoreData(URLs.partNumber, pnJson.total);
-  }
+  return moreData ? [...initialData, ...moreData] : initialData;
+}
 
-  crData = [...crInitialData];
-  pnData = [...pnInitialData];
-  if (crRemainingData) crData = [...crData, ...crRemainingData];
-  if (pnRemainingData) pnData = [...pnRemainingData];
-  postMessage({ crData, pnData });
+onmessage = () => {
+  const postMessages = Object.keys(URLs);
+  postMessages.forEach(async (key) => {
+    const url = URLs[key];
+    postMessageData[key] = await getData(url);
+    postMessage(postMessageData);
+  });
 };

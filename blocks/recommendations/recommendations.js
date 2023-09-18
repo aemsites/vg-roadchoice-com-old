@@ -2,7 +2,7 @@ import {
   createElement,
   getTextLabel,
   convertDateExcel,
-  getAllArticles,
+  getJsonFromUrl,
 } from '../../scripts/scripts.js';
 
 const title = getTextLabel('recommendations title');
@@ -43,7 +43,7 @@ export default async function decorate(block) {
 
   // TODO change this route
   const route = '/drafts/shomps/blog-articles.json';
-  const allArticles = await getAllArticles(route);
+  const { data: allArticles } = await getJsonFromUrl(route);
 
   const sortedArticles = allArticles.sort((a, b) => {
     a.date = +(a.date);
@@ -53,7 +53,7 @@ export default async function decorate(block) {
   const filteredArticles = clearRepeatedArticles(sortedArticles);
   const selectedArticles = filteredArticles.slice(0, limit);
 
-  const recommmendationsContent = createElement('div', { classes: ['recommendations-content'] });
+  const recommendationsContent = createElement('div', { classes: ['recommendations-content'] });
   const titleSection = createElement('div', { classes: ['title-section'] });
 
   const titleElement = createElement('h3', { classes: ['title'] });
@@ -93,8 +93,8 @@ export default async function decorate(block) {
 
     recommendationsList.appendChild(article);
   });
-  recommmendationsContent.append(titleSection, recommendationsList);
+  recommendationsContent.append(titleSection, recommendationsList);
 
   block.textContent = '';
-  block.appendChild(recommmendationsContent);
+  block.appendChild(recommendationsContent);
 }

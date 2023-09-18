@@ -297,6 +297,7 @@ header span.icon {
     height: fit-content;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--primary-red);
   }
 
   header nav .nav-sections .icon,
@@ -338,6 +339,8 @@ header span.icon {
     height: var(--nav-height-desktop-links);
     align-items: center;
     justify-content: end;
+    max-width: 1270px;
+    margin: 0 auto;
     padding: 0 5rem;
     background-color: var(--primary-red);
     color: var(--primary-white);
