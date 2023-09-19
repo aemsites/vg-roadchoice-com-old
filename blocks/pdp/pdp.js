@@ -93,7 +93,7 @@ function renderImages(images, imgWraper) {
   });
 }
 
-async function renderPartDetails(part, block, images) {
+function renderPartDetails(part, block, images) {
   const fragment = `
     <div class="pdp-details-wrapper">
       <div class="pdp-image-column">
@@ -171,14 +171,14 @@ async function fetchCatalogDocs(category) {
 }
 
 function renderCatlaogs(catalogs) {
-  const catalogContainer = document.querySelector('.pdp-catalogs-container');
-  const catalogBlock = document.querySelector('.pdp-catalogs');
-  if (!catalogBlock || !catalogContainer || !Object.keys(catalogs).length) return;
+  const catalogContainer = document.querySelector('.pdp-catalogs');
+  const sectionWrapper = catalogContainer.querySelector('.default-content-wrapper');
+  if (!catalogContainer || !sectionWrapper || !Object.keys(catalogs).length) return;
 
   const fragment = docRange.createContextualFragment(`
       <ul class="pdp-catalogs-list"></ul>
   `);
-  catalogBlock.append(fragment);
+  sectionWrapper.append(fragment);
 
   Object.entries(catalogs).forEach(([language, catalog]) => {
     const catalogFragment = docRange.createContextualFragment(`
@@ -189,20 +189,20 @@ function renderCatlaogs(catalogs) {
         </div>
       </li>
     `);
-    catalogBlock.querySelector('.pdp-catalogs-list').append(catalogFragment);
+    sectionWrapper.querySelector('.pdp-catalogs-list').append(catalogFragment);
   });
   catalogContainer.classList.remove('hide');
 }
 
 function renderManuals(manualList) {
-  const manualContainer = document.querySelector('.pdp-manuals-container');
-  const manualBlock = document.querySelector('.pdp-manuals');
-  if (!manualBlock || !manualContainer || !Object.keys(manualList).length) return;
+  const manualContainer = document.querySelector('.pdp-manuals');
+  const sectionWrapper = manualContainer.querySelector('.default-content-wrapper');
+  if (!manualContainer || !sectionWrapper || !Object.keys(manualList).length) return;
 
   const fragment = docRange.createContextualFragment(`
     <ul class="pdp-manuals-list"></ul>
   `);
-  manualBlock.append(fragment);
+  sectionWrapper.append(fragment);
 
   Object.entries(manualList).forEach(([language, manuals]) => {
     const manualsFragment = docRange.createContextualFragment(`
@@ -213,7 +213,7 @@ function renderManuals(manualList) {
         </div>
       </li>
     `);
-    manualBlock.querySelector('.pdp-manuals-list').append(manualsFragment);
+    sectionWrapper.querySelector('.pdp-manuals-list').append(manualsFragment);
   });
   manualContainer.classList.remove('hide');
 }
@@ -235,14 +235,14 @@ async function fetchSDS(category) {
 }
 
 function renderSDS(sdsList) {
-  const sdsContainer = document.querySelector('.pdp-sds-container');
-  const sdsBlock = document.querySelector('.pdp-sds');
-  if (!sdsBlock || !sdsContainer || !sdsList.length) return;
+  const sdsContainer = document.querySelector('.pdp-sds');
+  const sectionWrapper = sdsContainer.querySelector('.default-content-wrapper');
+  if (!sdsContainer || !sectionWrapper || !sdsList.length) return;
 
   const fragment = docRange.createContextualFragment(`
     <ul class="pdp-sds-list"></ul>
   `);
-  sdsBlock.append(fragment);
+  sectionWrapper.append(fragment);
 
   sdsList.forEach((sds) => {
     const sdsFragment = docRange.createContextualFragment(`
@@ -250,7 +250,7 @@ function renderSDS(sdsList) {
         <a target="_blank" href="${sds.file}">${sds.title}</a>
       </li>
     `);
-    sdsBlock.querySelector('.pdp-sds-list').append(sdsFragment);
+    sectionWrapper.querySelector('.pdp-sds-list').append(sdsFragment);
   });
   sdsContainer.classList.remove('hide');
 }
@@ -315,26 +315,29 @@ export default async function decorate(block) {
   const part = await getPDPData(pathSegments);
 
   if (part) {
-    const images = await fetchPartImages(part['Base Part Number']);
-    renderBreadcrumbs(part, block);
-    updateMetadata(part, images);
-    await renderPartDetails(part, block, images);
+    fetchPartImages(part['Base Part Number']).then((images) => {
+      renderBreadcrumbs(part, block);
+      updateMetadata(part, images);
+      renderPartDetails(part, block, images);
+    });
   }
 
   // check if we have catalogs, PDS section
-  const { catalogs, manuals } = await fetchCatalogDocs(pathSegments.category);
-  if (catalogs) {
-    renderCatlaogs(catalogs);
-  }
-  if (manuals) {
-    renderManuals(manuals);
-  }
+  fetchCatalogDocs(pathSegments.category).then(({ catalogs, manuals }) => {
+    if (catalogs) {
+      renderCatlaogs(catalogs);
+    }
+    if (manuals) {
+      renderManuals(manuals);
+    }
+  });
 
   // check if we have SDS
-  const sdsList = await fetchSDS(pathSegments.category);
-  if (sdsList) {
-    renderSDS(sdsList);
-  }
+  fetchSDS(pathSegments.category).then((sdsList) => {
+    if (sdsList) {
+      renderSDS(sdsList);
+    }
+  });
 
   document.querySelector('main').addEventListener('click', (e) => {
     if (e.target.matches('.section.accordion h3')) {
