@@ -53,7 +53,7 @@ export default async function decorate(block) {
   const filteredArticles = clearRepeatedArticles(sortedArticles);
   const selectedArticles = filteredArticles.slice(0, limit);
 
-  const recommmendationsContent = createElement('div', { classes: ['recommendations-content'] });
+  const recommendationsContent = createElement('div', { classes: ['recommendations-content'] });
   const titleSection = createElement('div', { classes: ['title-section'] });
 
   const titleElement = createElement('h3', { classes: ['title'] });
@@ -93,8 +93,8 @@ export default async function decorate(block) {
 
     recommendationsList.appendChild(article);
   });
-  recommmendationsContent.append(titleSection, recommendationsList);
+  recommendationsContent.append(titleSection, recommendationsList);
 
   block.textContent = '';
-  block.appendChild(recommmendationsContent);
+  block.appendChild(recommendationsContent);
 }

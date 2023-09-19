@@ -1,5 +1,11 @@
 main .section.carousel-container {
+  max-width: unset;
   padding: 0;
+}
+
+.carousel-wrapper {
+  max-width: 1270px;
+  margin: 0 auto;
 }
 
 .section > .carousel-wrapper {

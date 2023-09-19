@@ -1,9 +1,11 @@
-import { createElement, getTextLabel } from '../../scripts/scripts.js';
+import { createElement, getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
 const modelsItems = [];
+const FILTERS_DATA = '/search/search-filters.json';
 let crData;
 let pnData;
+const amountOfProducts = 12;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
@@ -35,13 +37,13 @@ const TEMPLATES = {
     <div class="search__model-filter__wrapper">
       <label class="search__model-filter__label">Model</label>
       <select class="search__model-filter__select shadow" disabled>
-        <option value="null">model (All)</option>
+        <option value="null">Model (All)</option>
       </select>
     </div>
   </div>
   `,
   filtersResetOpt: `
-    <option value="null">model (All)</option>
+    <option value="null">Model (All)</option>
   `,
   inputCR: `
   <div class="search__input-cr__container">
@@ -72,13 +74,6 @@ const TEMPLATES = {
 function resetModelsFilter(models, disabled = true) {
   models.innerHTML = TEMPLATES.filtersResetOpt;
   models.disabled = disabled;
-}
-
-async function getFiltersData() {
-  const filtersUrl = '/search/search-filters.json';
-  const response = await fetch(filtersUrl);
-  const json = await response.json();
-  return json;
 }
 
 function addSearchByListeners(wrapper, form) {
@@ -117,7 +112,7 @@ async function getAndApplyFiltersData(form) {
   const makeSelect = form.querySelector('.search__make-filter__select');
   const modelsSelect = form.querySelector('.search__model-filter__select');
   const makeItems = [];
-  const filters = await getFiltersData();
+  const filters = await getFiltersData(FILTERS_DATA);
   const { data } = filters;
   if (!data) return;
   data.forEach((item) => {
@@ -133,7 +128,7 @@ async function getAndApplyFiltersData(form) {
       resetModelsFilter(modelsSelect);
       return;
     }
-    // if is not null the enable the select and then is filled by the maker value
+    // if is not null then enable the select and then is filled by the maker value
     const models = modelsItems.filter(
       (item) => item.Make.toLowerCase() === e.target.value,
     )[0].Models;
@@ -143,35 +138,38 @@ async function getAndApplyFiltersData(form) {
 }
 
 function searchCRPartNumValue(value) {
-  const partNumberBrands = ['OEM_num', 'Road Choice Part Number', 'Volvo Part Number', 'Mack Part Number'];
+  const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
   let results;
-  partNumberBrands.forEach((brand, i) => {
+  partNumberBrands.forEach((brand) => {
     if (results && results.length > 0) return;
-    const data = i < 2 ? crData : pnData;
-    const tempResults = data.filter(
-      (item) => item[brand].toUpperCase() === value.toUpperCase(),
+    const tempResults = crData.filter(
+      (item) => new RegExp(value, 'i').test(item[brand]),
     );
     results = tempResults.length > 0 ? tempResults : null;
   });
   return results;
 }
 
+function filterResults(results, filter, isMake = true) {
+  const itemFilter = isMake ? 'Make' : 'Model';
+  return results.filter((item) => item[itemFilter].toLowerCase() === filter.toLowerCase());
+}
+
 function searchPartNumValue(value, make, model) {
-  const isMakeNull = make === 'null';
-  const isModelNull = model === 'null';
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
   let results = [];
   partNumberBrands.forEach((brand) => {
     let tempResults = pnData.filter((item) => new RegExp(value, 'i').test(item[brand]));
-    if (!isMakeNull && tempResults.length > 0) {
-      tempResults = tempResults.filter((item) => item.Make.toLowerCase() === make.toLowerCase());
+    if (make !== 'null' && tempResults.length > 0) {
+      tempResults = filterResults(tempResults, make);
     }
-    if (!isModelNull && tempResults.length > 0) {
-      tempResults = tempResults.filter((item) => item.Model.toLowerCase() === model.toLowerCase());
+    if (model !== 'null' && tempResults.length > 0) {
+      tempResults = filterResults(tempResults, model, false);
     }
     if (results.length > 0) {
       const isEqualLength = results.length === tempResults.length;
-      results = isEqualLength && results.filter((item, i) => item !== tempResults[i]);
+      results = (isEqualLength && [...results])
+        || results.filter((item, i) => item !== tempResults[i]);
     }
     results = tempResults.length > 0 ? results.concat(tempResults) : [...results];
   });
@@ -184,8 +182,9 @@ function getFieldValue(selector, items) {
 
 function formListener(form) {
   form.onsubmit = async (e) => {
-    crData = window.allProducts.crData;
-    pnData = window.allProducts.pnData;
+    ({ crData, pnData } = window.allProducts);
+    const ssData = ['query', 'results', 'amount'];
+    ssData.forEach((item) => sessionStorage.removeItem(item));
 
     const items = [...form];
     const value = getFieldValue(`search__input-${isCrossRefActive ? 'cr' : 'pn'}__input`, items);
@@ -208,8 +207,8 @@ function formListener(form) {
       query.make = makeFilterValue;
       query.model = modelFilterValue;
     }
-    sessionStorage.setItem('query', JSON.stringify(query));
-    sessionStorage.setItem('results', JSON.stringify(results));
+    const ssDataItems = [query, results, amountOfProducts];
+    ssData.forEach((item, i) => sessionStorage.setItem(item, JSON.stringify(ssDataItems[i])));
 
     url = `${url}${isHomepage}?q=${value}&st=${searchType}`;
     window.location.href = url;

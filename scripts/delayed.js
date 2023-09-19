@@ -89,4 +89,5 @@ async function loadArtibot() {
   })(window,document);
 }
 // This Worker loads all the product information into de global object window
-loadWorker();
+const productsWorker = loadWorker();
+export default productsWorker;

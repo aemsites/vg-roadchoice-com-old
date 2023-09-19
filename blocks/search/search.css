@@ -1,12 +1,15 @@
 /* stylelint-disable selector-class-pattern */
-.search.section {
+.search-container.section {
   padding: 0;
   background-color: var(--primary-dark-gray);
   color: var(--primary-white);
+  max-width: unset;
 }
 
 .search .search-wrapper {
-  padding: 2rem;
+  max-width: 1270px;
+  padding: 2rem 5rem;
+  margin: 0 auto;
 }
 
 .search .search-form {
