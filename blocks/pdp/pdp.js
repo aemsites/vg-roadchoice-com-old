@@ -1,4 +1,4 @@
-import { createElement } from '../../scripts/scripts.js';
+import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
 const docRange = document.createRange();
 
@@ -122,11 +122,30 @@ async function renderPartDetails(part, block, images) {
 
 // filter the catalogs by category and group them by language
 function findCatalogsPDSByCategory(data, category) {
-  const catalogs = data.filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
+  const catalogs = data
+    .filter((catalog) => catalog.type.toLowerCase() !== 'manual')
+    .filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
 
   if (catalogs) {
     return catalogs.reduce((acc, cur) => {
-      (acc[cur.language] = acc[cur[catalogs]] || []).push(cur);
+      acc[cur.language] = acc[cur.language] || [];
+      acc[cur.language].push(cur);
+      return acc;
+    }, {});
+  }
+  return [];
+}
+
+// filter the manuals by category and group them by language
+function findManualsByCategory(data, category) {
+  const catalogs = data
+    .filter((catalog) => catalog.type.toLowerCase() === 'manual')
+    .filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
+
+  if (catalogs) {
+    return catalogs.reduce((acc, cur) => {
+      acc[cur.language] = acc[cur.language] || [];
+      acc[cur.language].push(cur);
       return acc;
     }, {});
   }
@@ -134,13 +153,16 @@ function findCatalogsPDSByCategory(data, category) {
 }
 
 // Check if product has catalog, product sheet , ecatalaogs section
-async function fetchCatalogPDS(category) {
+async function fetchCatalogDocs(category) {
   try {
     const route = '/catalogs-categories.json';
     const response = await fetch(route);
     const { data } = await response.json();
 
-    return findCatalogsPDSByCategory(data, category);
+    return {
+      catalogs: findCatalogsPDSByCategory(data, category),
+      manuals: findManualsByCategory(data, category),
+    };
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error fetching part catalogs:', error);
@@ -148,7 +170,7 @@ async function fetchCatalogPDS(category) {
   return null;
 }
 
-function renderCatlaogsPDS(catalogs) {
+function renderCatlaogs(catalogs) {
   const catalogContainer = document.querySelector('.pdp-catalogs-container');
   const catalogBlock = document.querySelector('.pdp-catalogs');
   if (!catalogBlock || !catalogContainer || !Object.keys(catalogs).length) return;
@@ -161,15 +183,39 @@ function renderCatlaogsPDS(catalogs) {
   Object.entries(catalogs).forEach(([language, catalog]) => {
     const catalogFragment = docRange.createContextualFragment(`
       <li class="pdp-catalogs-list-item">
-        <div class="pdp-catalogs-list-title">${language}</div>
+        <div class="pdp-catalogs-list-title">${getTextLabel(language)}</div>
         <div class="pdp-catalogs-list-link">
-          <a target="_blank" href="${catalog[0].file}">${catalog[0].title}</a>
+          ${catalog.map((catalogItem) => `<a target="_blank" href="${catalogItem.file}">${catalogItem.title}</a>`).join('')}
         </div>
       </li>
     `);
     catalogBlock.querySelector('.pdp-catalogs-list').append(catalogFragment);
   });
   catalogContainer.classList.remove('hide');
+}
+
+function renderManuals(manualList) {
+  const manualContainer = document.querySelector('.pdp-manuals-container');
+  const manualBlock = document.querySelector('.pdp-manuals');
+  if (!manualBlock || !manualContainer || !Object.keys(manualList).length) return;
+
+  const fragment = docRange.createContextualFragment(`
+    <ul class="pdp-manuals-list"></ul>
+  `);
+  manualBlock.append(fragment);
+
+  Object.entries(manualList).forEach(([language, manuals]) => {
+    const manualsFragment = docRange.createContextualFragment(`
+      <li class="pdp-manuals-list-item">
+        <div class="pdp-manuals-list-title">${getTextLabel(language)}</div>
+        <div class="pdp-manuals-list-link">
+          ${manuals.map((manualIitem) => `<a target="_blank" href="${manualIitem.file}">${manualIitem.title}</a>`).join('')}
+        </div>
+      </li>
+    `);
+    manualBlock.querySelector('.pdp-manuals-list').append(manualsFragment);
+  });
+  manualContainer.classList.remove('hide');
 }
 
 // Check if product has catalog, product sheet , ecatalaogs section
@@ -207,43 +253,6 @@ function renderSDS(sdsList) {
     sdsBlock.querySelector('.pdp-sds-list').append(sdsFragment);
   });
   sdsContainer.classList.remove('hide');
-}
-
-// Check if product has catalog, product sheet , ecatalaogs section
-async function fetchManuals(category) {
-  try {
-    const route = '/manual-categories.json';
-    const response = await fetch(route);
-    const { data } = await response.json();
-
-    const manualList = data.filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
-    return manualList;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching manuals:', error);
-  }
-  return null;
-}
-
-function renderManuals(manualList) {
-  const manualContainer = document.querySelector('.pdp-manuals-container');
-  const manualBlock = document.querySelector('.pdp-manuals');
-  if (!manualBlock || !manualContainer || !manualList.length) return;
-
-  const fragment = docRange.createContextualFragment(`
-    <ul class="pdp-manuals-list"></ul>
-  `);
-  manualBlock.append(fragment);
-
-  manualList.forEach((manual) => {
-    const manualFragment = docRange.createContextualFragment(`
-      <li class="pdp-manuals-list-item">
-        <a target="_blank" href="${manual.file}">${manual.title}</a>
-      </li>
-    `);
-    manualBlock.querySelector('.pdp-manuals-list').append(manualFragment);
-  });
-  manualContainer.classList.remove('hide');
 }
 
 function setOrCreateMetadata(propName, propVal) {
@@ -313,21 +322,18 @@ export default async function decorate(block) {
   }
 
   // check if we have catalogs, PDS section
-  const catalogs = await fetchCatalogPDS(pathSegments.category);
+  const { catalogs, manuals } = await fetchCatalogDocs(pathSegments.category);
   if (catalogs) {
-    renderCatlaogsPDS(catalogs);
+    renderCatlaogs(catalogs);
+  }
+  if (manuals) {
+    renderManuals(manuals);
   }
 
   // check if we have SDS
   const sdsList = await fetchSDS(pathSegments.category);
   if (sdsList) {
     renderSDS(sdsList);
-  }
-
-  // check if we have Manuals
-  const manualList = await fetchManuals(pathSegments.category);
-  if (manualList) {
-    renderManuals(manualList);
   }
 
   document.querySelector('main').addEventListener('click', (e) => {
