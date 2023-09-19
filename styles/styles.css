@@ -234,19 +234,16 @@ main img {
 }
 
 /* SECTION styling */
-main .section {
-  padding: 64px 16px;
-}
 
-@media (min-width: 768px) {
-  main .section {
-    padding: 64px 32px;
-  }
+main .section {
+  line-height: 30px;
+  padding: 50px 50px 0;
 }
 
 @media (min-width: 992px) {
-  .section > div {
+  main .section {
     max-width: 1270px;
+    padding: 60px 50px 0;
     margin: auto;
   }
 }
@@ -271,13 +268,18 @@ a.button {
 
 /* default content styling */
 
+div.default-content-wrapper {
+  padding: 0;
+}
+
 .default-content-wrapper p {
   margin: 5px 0;
   line-height: 30px;
 }
 
 /* spacing element */
-.default-content-wrapper p.space {
+.default-content-wrapper span.space {
+  display: block;
   height: 40px;
   margin: 0;
   padding: 0;
@@ -299,12 +301,12 @@ a.button {
   color: var(--primary-black);
 }
 
-.default-content-wrapper li > a {
+.default-content-wrapper li a {
   color: var(--primary-red);
   text-decoration: none;
 }
 
-.default-content-wrapper li > strong {
+.default-content-wrapper li strong {
   font-family: var(--body-ff-bold);
 }
 
