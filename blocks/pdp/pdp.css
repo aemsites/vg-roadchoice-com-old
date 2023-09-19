@@ -150,6 +150,7 @@
   background-color: var(--primary-light-gray);
   padding: 0;
   margin: 0;
+  max-width: unset;
 }
 
 .section.breadcrumbs .breadcrumbs-wrapper {
