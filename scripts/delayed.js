@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-cycle
-import { loadScript, sampleRUM, loadWorker } from './lib-franklin.js';
+import { loadScript, sampleRUM } from './lib-franklin.js';
+// eslint-disable-next-line import/no-cycle
+import { loadWorker } from './scripts.js';
 
 // Core Web Vitals RUM collection
 sampleRUM('cwv');
