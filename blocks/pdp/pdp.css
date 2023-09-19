@@ -5,6 +5,7 @@
 
 .pdp {
   padding: 15px;
+  min-height: 650px;
 }
 
 .pdp-title {
@@ -151,6 +152,7 @@
   padding: 0;
   margin: 0;
   max-width: unset;
+  min-height: 62px;
 }
 
 .section.breadcrumbs .breadcrumbs-wrapper {
@@ -219,6 +221,10 @@
   .section.accordion {
     max-width: 1270px;
     margin: auto;
+  }
+
+  .section.breadcrumbs {
+    min-height: 69px;
   }
 
   .section.breadcrumbs .breadcrumb-list {
