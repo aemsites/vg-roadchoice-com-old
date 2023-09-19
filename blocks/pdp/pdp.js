@@ -93,37 +93,7 @@ function renderImages(images, imgWraper) {
   });
 }
 
-async function renderBreadcrumbs(part) {
-  const breadcrumbSection = document.querySelector('.section.breadcrumbs');
-  if (!breadcrumbSection) return;
-
-  const breadcrumbs = docRange.createContextualFragment(`
-    <div class="breadcrumb-wrapper">
-      <div class="breadcrumb block">
-        <div class="breadcrumb-content">
-          <ul class="breadcrumb-list">
-            <li class="breadcrumb-item breadcrumb-item-0">
-              <a class="breadcrumb-link" href="/">Road Choice</a>
-            </li>
-            <li class="breadcrumb-item breadcrumb-item-0">
-              <a class="breadcrumb-link" href="/">Parts</a>
-            </li>
-            <li class="breadcrumb-item breadcrumb-item-1">
-              <a class="breadcrumb-link" href="/part-category/${part.Category.toLowerCase()}">${part.Category}</a>
-            </li>
-            <li class="breadcrumb-item breadcrumb-item-2">
-              <a class="breadcrumb-link" href="/part-category/${part.Subcategory.toLowerCase()}">${part.Subcategory}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  `);
-  breadcrumbSection.append(breadcrumbs);
-}
-
-async function renderPartDetails(part, block) {
-  const images = await fetchPartImages(part['Base Part Number']);
+async function renderPartDetails(part, block, images) {
   const fragment = `
     <div class="pdp-details-wrapper">
       <div class="pdp-image-column">
@@ -276,14 +246,70 @@ function renderManuals(manualList) {
   manualContainer.classList.remove('hide');
 }
 
+function setOrCreateMetadata(propName, propVal) {
+  const meta = document.head.querySelector(`meta[property="${propName}"]`);
+  if (meta) {
+    meta.setAttribute('content', propVal);
+  } else {
+    const newMeta = createElement('meta', {
+      props: {
+        property: propName,
+        content: propVal,
+      },
+    });
+    document.head.appendChild(newMeta);
+  }
+}
+
+function updateMetadata(part, images) {
+  setOrCreateMetadata('og:title', part['Base Part Number']);
+  setOrCreateMetadata('og:description', part['Part Name']);
+  setOrCreateMetadata('og:url', window.location.href);
+  setOrCreateMetadata('og:image', images[0]['Image URL']);
+  setOrCreateMetadata('twitter:title', part['Base Part Number']);
+  setOrCreateMetadata('twitter:description', part['Part Name']);
+  setOrCreateMetadata('twitter:image', images[0]['Image URL']);
+}
+
+function renderBreadcrumbs(part) {
+  const breadcrumbSection = document.querySelector('.section.breadcrumbs');
+  if (!breadcrumbSection) return;
+
+  const breadcrumbs = docRange.createContextualFragment(`
+    <div class="breadcrumb-wrapper">
+      <div class="breadcrumb block">
+        <div class="breadcrumb-content">
+          <ul class="breadcrumb-list">
+            <li class="breadcrumb-item breadcrumb-item-0">
+              <a class="breadcrumb-link" href="/">Road Choice</a>
+            </li>
+            <li class="breadcrumb-item breadcrumb-item-0">
+              <a class="breadcrumb-link" href="/">Parts</a>
+            </li>
+            <li class="breadcrumb-item breadcrumb-item-1">
+              <a class="breadcrumb-link" href="/part-category/${part.Category.toLowerCase()}">${part.Category}</a>
+            </li>
+            <li class="breadcrumb-item breadcrumb-item-2">
+              <a class="breadcrumb-link" href="/part-category/${part.Subcategory.toLowerCase()}">${part.Subcategory}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  `);
+  breadcrumbSection.append(breadcrumbs);
+}
+
 export default async function decorate(block) {
   // document.querySelector('main .search').classList.add('hide');
   const pathSegments = getQueryParams();
   const part = await getPDPData(pathSegments);
 
   if (part) {
+    const images = await fetchPartImages(part['Base Part Number']);
     renderBreadcrumbs(part, block);
-    await renderPartDetails(part, block);
+    updateMetadata(part, images);
+    await renderPartDetails(part, block, images);
   }
 
   // check if we have catalogs, PDS section
