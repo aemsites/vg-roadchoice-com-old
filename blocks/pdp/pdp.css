@@ -23,7 +23,7 @@
 .pdp-list-item {
   border: 1px solid var(--primary-black);
   padding: 8px 0 8px 15px;
-  color: #353535;
+  color: var(--primary-dark-gray);
   font-size: 16px;
   font-family: var(--headings-ff-black);
 }
@@ -39,6 +39,7 @@
 .pdp-selected-image {
   padding: 5px;
   border-radius: 4px;
+  aspect-ratio: 1;
   box-shadow: 0 1px 4px 0 rgba(0 0 0 / 10%);
   display: flex;
   justify-content: center;
@@ -79,16 +80,6 @@
   padding: 40px 0;
 }
 
-.pdp-catalogs h3,
-.pdp-manuals h3,
-.pdp-sds h3 {
-  font-family: var(--headings-ff-black);
-  font-size: 22px;
-  color: var(--primary-red);
-  text-transform: capitalize;
-  margin: 0 0 10px;
-}
-
 .pdp-catalogs .pdp-catalogs-list,
 .pdp-manuals .pdp-manuals-list,
 .pdp-sds .pdp-sds-list {
@@ -121,6 +112,20 @@
   text-decoration: none;
 }
 
+.pdp-blogs .pdp-blogs-list {
+  padding: 5px 0;
+}
+
+.pdp-blogs .pdp-blogs-list-item {
+  list-style: none;
+  margin: 20px 0;
+}
+
+.pdp-blogs-date {
+  color: var(--secondary-gray-4);
+  font-size: var(--heading-font-size-xxs);
+}
+
 .section.accordion {
   padding: 20px 32px;
   border-bottom: 1px solid var(--primary-black);
@@ -129,7 +134,11 @@
   transition: max-height 0.3s ease-in-out;
 }
 
-.section.accordion h3{
+.section.accordion h5 {
+  color: var(--primary-red);
+  text-transform: capitalize;
+  padding: 5px 0;
+  margin: 0 0 15px;
   cursor: pointer;
 }
 
@@ -137,13 +146,13 @@
   max-height: 2000px;
 }
 
-.section.accordion h3::before {
+.section.accordion h5::before {
   font-family: fontawesome, sans-serif;
   content: "";
   margin-right: 20px;
 }
 
-.section.accordion.accordion-open h3::before {
+.section.accordion.accordion-open h5::before {
   content: "";
 }
 
@@ -201,7 +210,8 @@
   }
 
   .pdp-image-column{
-    align-self: center;
+    align-self: flex-start;
+    margin-top: 70px;
   }
   
   .pdp-content-coulmn {

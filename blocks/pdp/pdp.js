@@ -1,4 +1,5 @@
-import { createElement, getTextLabel } from '../../scripts/scripts.js';
+import { createElement, getTextLabel, getJsonFromUrl } from '../../scripts/scripts.js';
+import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 const docRange = document.createRange();
 
@@ -15,9 +16,7 @@ async function getPDPData(pathSegments) {
   const { category, sku } = pathSegments;
 
   try {
-    const route = `/product-data/rc-${category}.json`;
-    const response = await fetch(route);
-    const { data } = await response.json();
+    const { data } = await getJsonFromUrl(`/product-data/rc-${category}.json`);
     return findPartBySKU(data, sku);
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -33,9 +32,7 @@ function findPartImagesBySKU(parts, sku) {
 async function fetchPartImages(sku) {
   const placeholderImage = '/product-images/rc-placeholder-image.png';
   try {
-    const route = '/product-images/road-choice-website-images.json';
-    const response = await fetch(route);
-    const { data } = await response.json();
+    const { data } = await getJsonFromUrl('/product-images/road-choice-website-images.json');
     const images = findPartImagesBySKU(data, sku);
 
     if (images.length !== 0) {
@@ -48,58 +45,59 @@ async function fetchPartImages(sku) {
   return [{ 'Image URL': placeholderImage }];
 }
 
-function renderColDetails(part, listEle) {
-  // use an array to exclude certain details from json
-  const colKeys = ['Base Part Number',
-    'Mack Part Number',
-    'Volvo Part Number',
-    'Subcategory',
-    'Subcategory2',
-    'Order Type',
-    'Part Name',
-    'Category',
-    'Parma',
-  ];
+function renderColDetails(part, block, categoryKeys) {
+  const list = block.querySelector('.pdp-list');
   const keys = Object.keys(part);
-
   keys.forEach((key) => {
-    if (!colKeys.includes(key) && part[key].length) {
+    if (!categoryKeys.includes(key) && part[key].length) {
       const liFragment = docRange.createContextualFragment(`<li class="pdp-list-item">
         <span class="pdp-list-item-title"> ${key}:</span>
         <span class="pdp-list-item-value"> ${part[key]}</span>
       </li>`);
-      listEle.append(liFragment);
+      list.append(liFragment);
     }
   });
 }
 
-function renderImages(images, imgWraper) {
+function renderImages(part, block, images) {
+  const imageWrapper = block.querySelector('.pdp-image-wrapper');
+  const selectedImage = block.querySelector('.pdp-selected-image');
+
+  // main image
+  const mainPicture = createOptimizedPicture(images[0]['Image URL'], part['Part Name']);
+  mainPicture.querySelector('img').classList.add('pdp-image');
+  selectedImage.append(mainPicture);
+
+  // aditional images
+  if (images.length <= 1) return;
+
   const imageList = createElement('ul', { classes: 'pdp-image-list' });
-  images.forEach((image, idx) => {
-    const liFragment = docRange.createContextualFragment(`<li class="pdp-image-item ${idx === 0 ? 'active' : ''}"> 
-      <img class="pdp-gallery-image" src=${image['Image URL']} />
-    </li>`);
+  images.forEach((image, id) => {
+    const liFragment = docRange.createContextualFragment(`<li class="pdp-image-item ${id === 0 ? 'active' : ''}"> </li>`);
+    const picture = createOptimizedPicture(image['Image URL'], part['Part Name']);
+    picture.querySelector('img').classList.add('pdp-gallery-image');
+    liFragment.querySelector('li').append(picture);
     imageList.append(liFragment);
   });
-  imgWraper.append(imageList);
-  imgWraper.addEventListener('click', (e) => {
+  imageWrapper.append(imageList);
+  imageWrapper.addEventListener('click', (e) => {
     const target = e.target.closest('.pdp-image-item');
     if (target) {
-      const activeImage = imgWraper.querySelector('.pdp-image-item.active');
+      const activeImage = imageWrapper.querySelector('.pdp-image-item.active');
       activeImage.classList.remove('active');
       target.classList.add('active');
-      imgWraper.querySelector('.pdp-selected-image img').src = target.querySelector('img').src;
+      const newMainImage = target.querySelector('picture').cloneNode(true);
+      selectedImage.replaceChildren(newMainImage);
     }
   });
 }
 
-function renderPartDetails(part, block, images) {
+function renderPartBlock(part, block) {
   const fragment = `
     <div class="pdp-details-wrapper">
       <div class="pdp-image-column">
         <div class="pdp-image-wrapper">
           <div class="pdp-selected-image">
-            <img class="pdp-image" src=${images[0]['Image URL']} />
           </div>
         </div>
       </div>
@@ -113,120 +111,80 @@ function renderPartDetails(part, block, images) {
 
   const pdpFragment = docRange.createContextualFragment(fragment);
   block.append(pdpFragment);
-  renderColDetails(part, block.querySelector('.pdp-list'));
-
-  if (images.length > 1) {
-    renderImages(images, block.querySelector('.pdp-image-wrapper'));
-  }
 }
 
-// filter the catalogs by category and group them by language
-function findCatalogsPDSByCategory(data, category) {
-  const catalogs = data
-    .filter((catalog) => catalog.type.toLowerCase() !== 'manual')
-    .filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
-
-  if (catalogs) {
-    return catalogs.reduce((acc, cur) => {
-      acc[cur.language] = acc[cur.language] || [];
-      acc[cur.language].push(cur);
-      return acc;
-    }, {});
-  }
-  return [];
+function filterByCategory(data, category, categoryKey = 'category') {
+  return data.filter((item) => item[categoryKey].replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
 }
 
-// filter the manuals by category and group them by language
-function findManualsByCategory(data, category) {
-  const catalogs = data
-    .filter((catalog) => catalog.type.toLowerCase() === 'manual')
-    .filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
-
-  if (catalogs) {
-    return catalogs.reduce((acc, cur) => {
-      acc[cur.language] = acc[cur.language] || [];
-      acc[cur.language].push(cur);
-      return acc;
-    }, {});
-  }
-  return [];
+function groupByLanguage(data) {
+  return data.reduce((acc, cur) => {
+    acc[cur.language] = acc[cur.language] || [];
+    acc[cur.language].push(cur);
+    return acc;
+  }, {});
 }
 
-// Check if product has catalog, product sheet , ecatalaogs section
-async function fetchCatalogDocs(category) {
+async function fetchCategoryKeys(category) {
   try {
-    const route = '/catalogs-categories.json';
-    const response = await fetch(route);
-    const { data } = await response.json();
+    const { data } = await getJsonFromUrl('/product-data/rc-attribute-master-file.json');
+    return filterByCategory(data, category, 'Subcategory');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching Category Keys:', error);
+  }
+  return [];
+}
 
+async function fetchDocs(category) {
+  try {
+    const { data } = await getJsonFromUrl('/catalogs-categories.json');
     return {
-      catalogs: findCatalogsPDSByCategory(data, category),
-      manuals: findManualsByCategory(data, category),
+      catalogs: groupByLanguage(filterByCategory(data.filter((catalog) => catalog.type.toLowerCase() !== 'manual'), category)),
+      manuals: groupByLanguage(filterByCategory(data.filter((catalog) => catalog.type.toLowerCase() === 'manual'), category)),
     };
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error fetching part catalogs:', error);
+    console.error('Error fetching Docs:', error);
   }
   return null;
 }
 
-function renderCatlaogs(catalogs) {
-  const catalogContainer = document.querySelector('.pdp-catalogs');
-  const sectionWrapper = catalogContainer.querySelector('.default-content-wrapper');
-  if (!catalogContainer || !sectionWrapper || !Object.keys(catalogs).length) return;
+function renderDocsSection(docsList, sectionType) {
+  const section = document.querySelector(`.pdp-${sectionType}`);
+  const sectionWrapper = section.querySelector('.default-content-wrapper');
+  if (!section || !sectionWrapper || !Object.keys(docsList).length) return;
 
   const fragment = docRange.createContextualFragment(`
-      <ul class="pdp-catalogs-list"></ul>
+    <ul class="pdp-${sectionType}-list"></ul>
   `);
   sectionWrapper.append(fragment);
 
-  Object.entries(catalogs).forEach(([language, catalog]) => {
-    const catalogFragment = docRange.createContextualFragment(`
-      <li class="pdp-catalogs-list-item">
-        <div class="pdp-catalogs-list-title">${getTextLabel(language)}</div>
-        <div class="pdp-catalogs-list-link">
-          ${catalog.map((catalogItem) => `<a target="_blank" href="${catalogItem.file}">${catalogItem.title}</a>`).join('')}
+  Object.entries(docsList).forEach(([language, docs]) => {
+    const docsFragment = docRange.createContextualFragment(`
+      <li class="pdp-${sectionType}-list-item">
+        <div class="pdp-${sectionType}-list-title">${getTextLabel(language)}</div>
+        <div class="pdp-${sectionType}-list-link">
+          ${docs.map((doc) => `<a target="_blank" href="${doc.file}">${doc.title}</a>`).join('')}
         </div>
       </li>
     `);
-    sectionWrapper.querySelector('.pdp-catalogs-list').append(catalogFragment);
+    sectionWrapper.querySelector(`.pdp-${sectionType}-list`).append(docsFragment);
   });
-  catalogContainer.classList.remove('hide');
+  section.classList.remove('hide');
 }
 
-function renderManuals(manualList) {
-  const manualContainer = document.querySelector('.pdp-manuals');
-  const sectionWrapper = manualContainer.querySelector('.default-content-wrapper');
-  if (!manualContainer || !sectionWrapper || !Object.keys(manualList).length) return;
-
-  const fragment = docRange.createContextualFragment(`
-    <ul class="pdp-manuals-list"></ul>
-  `);
-  sectionWrapper.append(fragment);
-
-  Object.entries(manualList).forEach(([language, manuals]) => {
-    const manualsFragment = docRange.createContextualFragment(`
-      <li class="pdp-manuals-list-item">
-        <div class="pdp-manuals-list-title">${getTextLabel(language)}</div>
-        <div class="pdp-manuals-list-link">
-          ${manuals.map((manualIitem) => `<a target="_blank" href="${manualIitem.file}">${manualIitem.title}</a>`).join('')}
-        </div>
-      </li>
-    `);
-    sectionWrapper.querySelector('.pdp-manuals-list').append(manualsFragment);
-  });
-  manualContainer.classList.remove('hide');
+function renderDocs(docs) {
+  renderDocsSection(docs.catalogs, 'catalogs');
+  renderDocsSection(docs.manuals, 'manuals');
 }
 
 // Check if product has catalog, product sheet , ecatalaogs section
 async function fetchSDS(category) {
   try {
-    const route = '/sds-categories.json';
-    const response = await fetch(route);
-    const { data } = await response.json();
+    const { data } = await getJsonFromUrl('/sds-categories.json');
 
-    const sdsList = data.filter((catalog) => catalog.category.replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
-    return sdsList;
+    return filterByCategory(data, category);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error fetching part SDS:', error);
@@ -253,6 +211,47 @@ function renderSDS(sdsList) {
     sectionWrapper.querySelector('.pdp-sds-list').append(sdsFragment);
   });
   sdsContainer.classList.remove('hide');
+}
+
+// Check if product has catalog, product sheet , ecatalaogs section
+async function fetchBlogs(category) {
+  try {
+    const { data } = await getJsonFromUrl('/blog/query-index.json');
+
+    return filterByCategory(data, category);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching Blogs:', error);
+  }
+  return null;
+}
+
+function renderBlogs(blogList) {
+  const blogsContainer = document.querySelector('.pdp-blogs');
+  const sectionWrapper = blogsContainer.querySelector('.default-content-wrapper');
+  if (!blogsContainer || !sectionWrapper || !blogList.length) return;
+
+  const fragment = docRange.createContextualFragment(`
+    <ul class="pdp-blogs-list"></ul>
+  `);
+  sectionWrapper.append(fragment);
+
+  blogList
+    .filter((blog) => Number.isInteger(parseInt(blog.date, 10)))
+    .sort((blog1, blog2) => blog1.date - blog2.date)
+    .slice(-3)
+    .forEach((sds) => {
+      const sdsFragment = docRange.createContextualFragment(`
+        <li class="pdp-blogs-list-item">
+          <a target="_blank" href="${sds.path}"><h6 class="pdp-blogs-title">${sds.title}</h6></a>
+          <p class="pdp-blogs-date">${new Date(parseInt(sds.date, 10) * 1000).toLocaleDateString()}</p>
+          <p class="pdp-blogs-description">${sds.description}</p>
+          <a class="pdp-blogs-cta" target="_blank" href="${sds.path}">Read More</a>
+        </li>
+      `);
+      sectionWrapper.querySelector('.pdp-blogs-list').append(sdsFragment);
+    });
+  blogsContainer.classList.remove('hide');
 }
 
 function setOrCreateMetadata(propName, propVal) {
@@ -310,37 +309,27 @@ function renderBreadcrumbs(part) {
 }
 
 export default async function decorate(block) {
-  // document.querySelector('main .search').classList.add('hide');
   const pathSegments = getQueryParams();
   const part = await getPDPData(pathSegments);
 
   if (part) {
+    renderPartBlock(part, block);
+    fetchCategoryKeys(pathSegments.category).then((categoryKeys) => {
+      renderColDetails(part, block, categoryKeys);
+    });
     fetchPartImages(part['Base Part Number']).then((images) => {
       renderBreadcrumbs(part, block);
       updateMetadata(part, images);
-      renderPartDetails(part, block, images);
+      renderImages(part, block, images);
     });
   }
 
-  // check if we have catalogs, PDS section
-  fetchCatalogDocs(pathSegments.category).then(({ catalogs, manuals }) => {
-    if (catalogs) {
-      renderCatlaogs(catalogs);
-    }
-    if (manuals) {
-      renderManuals(manuals);
-    }
-  });
-
-  // check if we have SDS
-  fetchSDS(pathSegments.category).then((sdsList) => {
-    if (sdsList) {
-      renderSDS(sdsList);
-    }
-  });
+  fetchDocs(pathSegments.category).then(renderDocs);
+  fetchSDS(pathSegments.category).then(renderSDS);
+  fetchBlogs(pathSegments.category).then(renderBlogs);
 
   document.querySelector('main').addEventListener('click', (e) => {
-    if (e.target.matches('.section.accordion h3')) {
+    if (e.target.matches('.section.accordion h5')) {
       e.target.closest('.section.accordion').classList.toggle('accordion-open');
     }
   });
