@@ -64,7 +64,7 @@ function renderImages(part, block, images) {
   const selectedImage = block.querySelector('.pdp-selected-image');
 
   // main image
-  const mainPicture = createOptimizedPicture(images[0]['Image URL'], part['Part Name']);
+  const mainPicture = createOptimizedPicture(images[0]['Image URL'], part['Part Name'], true);
   mainPicture.querySelector('img').classList.add('pdp-image');
   selectedImage.append(mainPicture);
 
