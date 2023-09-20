@@ -105,13 +105,6 @@
   font-family: var(--body-ff);
 }
 
-.pdp-catalogs-list-link a,
-.pdp-manuals-list-link a,
-.pdp-sds-list-item a {
-  color: var(--primary-red);
-  text-decoration: none;
-}
-
 .pdp-blogs .pdp-blogs-list {
   padding: 5px 0;
 }
