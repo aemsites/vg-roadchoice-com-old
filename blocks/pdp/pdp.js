@@ -59,12 +59,12 @@ function renderColDetails(part, block, categoryKeys) {
   });
 }
 
-function renderImages(part, block, images) {
+function renderImages(block, images) {
   const imageWrapper = block.querySelector('.pdp-image-wrapper');
   const selectedImage = block.querySelector('.pdp-selected-image');
 
   // main image
-  const mainPicture = createOptimizedPicture(images[0]['Image URL'], part['Part Name'], true);
+  const mainPicture = createOptimizedPicture(images[0]['Image URL'], 'Part image', true);
   mainPicture.querySelector('img').classList.add('pdp-image');
   selectedImage.append(mainPicture);
 
@@ -74,7 +74,7 @@ function renderImages(part, block, images) {
   const imageList = createElement('ul', { classes: 'pdp-image-list' });
   images.forEach((image, id) => {
     const liFragment = docRange.createContextualFragment(`<li class="pdp-image-item ${id === 0 ? 'active' : ''}"> </li>`);
-    const picture = createOptimizedPicture(image['Image URL'], part['Part Name']);
+    const picture = createOptimizedPicture(image['Image URL'], 'Additional part image');
     picture.querySelector('img').classList.add('pdp-gallery-image');
     liFragment.querySelector('li').append(picture);
     imageList.append(liFragment);
@@ -92,7 +92,7 @@ function renderImages(part, block, images) {
   });
 }
 
-function renderPartBlock(part, block) {
+function renderPartBlock(block) {
   const fragment = `
     <div class="pdp-details-wrapper">
       <div class="pdp-image-column">
@@ -102,8 +102,8 @@ function renderPartBlock(part, block) {
         </div>
       </div>
       <div class="pdp-content-coulmn">
-        <h1 class="pdp-title">${part['Base Part Number']}</h1>
-        <div class="pdp-description"> ${part['Part Name']}</div>
+        <h1 class="pdp-title"></h1>
+        <div class="pdp-description"></div>
         <ul class="pdp-list"></ul>
       </div>
     </div>
@@ -111,6 +111,11 @@ function renderPartBlock(part, block) {
 
   const pdpFragment = docRange.createContextualFragment(fragment);
   block.append(pdpFragment);
+}
+
+function setPartData(part, block) {
+  block.querySelector('.pdp-title').textContent = part['Base Part Number'];
+  block.querySelector('.pdp-description').textContent = part['Part Name'];
 }
 
 function filterByCategory(data, category, categoryKey = 'category') {
@@ -269,13 +274,16 @@ function setOrCreateMetadata(propName, propVal) {
   }
 }
 
-function updateMetadata(part, images) {
+function updateMetadata(part) {
   setOrCreateMetadata('og:title', part['Base Part Number']);
   setOrCreateMetadata('og:description', part['Part Name']);
   setOrCreateMetadata('og:url', window.location.href);
-  setOrCreateMetadata('og:image', images[0]['Image URL']);
   setOrCreateMetadata('twitter:title', part['Base Part Number']);
   setOrCreateMetadata('twitter:description', part['Part Name']);
+}
+
+function updateImageMetadata(images) {
+  setOrCreateMetadata('og:image', images[0]['Image URL']);
   setOrCreateMetadata('twitter:image', images[0]['Image URL']);
 }
 
@@ -310,19 +318,23 @@ function renderBreadcrumbs(part) {
 
 export default async function decorate(block) {
   const pathSegments = getQueryParams();
-  const part = await getPDPData(pathSegments);
+  renderPartBlock(block);
 
-  if (part) {
-    renderPartBlock(part, block);
-    fetchCategoryKeys(pathSegments.category).then((categoryKeys) => {
-      renderColDetails(part, block, categoryKeys);
-    });
-    fetchPartImages(part['Base Part Number']).then((images) => {
+  getPDPData(pathSegments).then((part) => {
+    if (part) {
       renderBreadcrumbs(part, block);
-      updateMetadata(part, images);
-      renderImages(part, block, images);
-    });
-  }
+      setPartData(part, block);
+      updateMetadata(part);
+      fetchCategoryKeys(pathSegments.category).then((categoryKeys) => {
+        renderColDetails(part, block, categoryKeys);
+      });
+    }
+  });
+
+  fetchPartImages(pathSegments.sku).then((images) => {
+    updateImageMetadata(images);
+    renderImages(block, images);
+  });
 
   fetchDocs(pathSegments.category).then(renderDocs);
   fetchSDS(pathSegments.category).then(renderSDS);
