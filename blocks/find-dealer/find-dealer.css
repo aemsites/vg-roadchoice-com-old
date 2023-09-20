@@ -37,6 +37,11 @@
 .find-dealer-form-container .find-dealer-col-1 {
   font-size: 17px;
   line-height: 20px;
+  color: var(--primary-white);
+}
+
+.find-dealer-form-container .find-dealer-col-1 .find-dealer-text {
+  color: var(--primary-white);
 }
 
 .find-dealer-form-container .find-dealer-col-2 {
