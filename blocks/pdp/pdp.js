@@ -64,7 +64,8 @@ function renderImages(block, images) {
   const selectedImage = block.querySelector('.pdp-selected-image');
 
   // main image
-  const mainPicture = createOptimizedPicture(images[0]['Image URL'], 'Part image', true);
+  const mainPictureUrl = images[0]['Image URL'];
+  const mainPicture = createOptimizedPicture(mainPictureUrl, 'Part image', true, undefined, !mainPictureUrl.startsWith('/'));
   mainPicture.querySelector('img').classList.add('pdp-image');
   selectedImage.append(mainPicture);
 
@@ -74,7 +75,7 @@ function renderImages(block, images) {
   const imageList = createElement('ul', { classes: 'pdp-image-list' });
   images.forEach((image, id) => {
     const liFragment = docRange.createContextualFragment(`<li class="pdp-image-item ${id === 0 ? 'active' : ''}"> </li>`);
-    const picture = createOptimizedPicture(image['Image URL'], 'Additional part image');
+    const picture = createOptimizedPicture(image['Image URL'], 'Additional part image', false, undefined, !image['Image URL'].startsWith('/'));
     picture.querySelector('img').classList.add('pdp-gallery-image');
     liFragment.querySelector('li').append(picture);
     imageList.append(liFragment);
