@@ -146,7 +146,7 @@ async function getPlaceholders() {
 }
 
 export function getTextLabel(key) {
-  return placeholders?.data.find((el) => el.Key === key).Text || key;
+  return placeholders?.data.find((el) => el.Key === key)?.Text || key;
 }
 
 export function findAndCreateImageLink(node) {
@@ -343,6 +343,7 @@ async function loadLazy(doc) {
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
+
   const header = doc.querySelector('header');
   const subnav = header.querySelector('.block.sub-nav');
 

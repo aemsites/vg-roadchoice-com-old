@@ -309,3 +309,7 @@ div.default-content-wrapper {
 .default-content-wrapper li strong {
   font-family: var(--body-ff-bold);
 }
+
+.hide {
+  display: none;
+}
