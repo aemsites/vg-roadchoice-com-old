@@ -16,7 +16,7 @@ async function getPDPData(pathSegments) {
   const { category, sku } = pathSegments;
 
   try {
-    const { data } = await getJsonFromUrl(`/product-data/rc-${category}.json`);
+    const { data } = await getJsonFromUrl(`/product-data/rc-${category.replace(/[^\w]/g, '-')}.json`);
     return findPartBySKU(data, sku);
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -49,11 +49,13 @@ function renderColDetails(part, block, categoryKeys) {
   const list = block.querySelector('.pdp-list');
   const keys = Object.keys(part);
   keys.forEach((key) => {
-    if (!categoryKeys.includes(key) && part[key].length) {
+    if (categoryKeys.map((item) => item.Attributes).includes(key) && part[key].length) {
       const liFragment = docRange.createContextualFragment(`<li class="pdp-list-item">
-        <span class="pdp-list-item-title"> ${key}:</span>
-        <span class="pdp-list-item-value"> ${part[key]}</span>
+        <span class="pdp-list-item-title"></span>:
+        <span class="pdp-list-item-value"></span>
       </li>`);
+      liFragment.querySelector('.pdp-list-item-title').textContent = key;
+      liFragment.querySelector('.pdp-list-item-value').textContent = part[key];
       list.append(liFragment);
     }
   });
@@ -170,11 +172,13 @@ function renderDocsSection(docsList, sectionType) {
     const docsFragment = docRange.createContextualFragment(`
       <li class="pdp-${sectionType}-list-item">
         <div class="pdp-${sectionType}-list-title">${getTextLabel(language)}</div>
-        <div class="pdp-${sectionType}-list-link">
-          ${docs.map((doc) => `<a target="_blank" href="${doc.file}">${doc.title}</a>`).join('')}
-        </div>
+        <div class="pdp-${sectionType}-list-link"></div>
       </li>
     `);
+    docs.forEach((doc) => {
+      const anchor = createElement('a', { props: { target: '_blank', href: doc.file }, textContent: doc.title });
+      docsFragment.querySelector(`.pdp-${sectionType}-list-link`).append(anchor);
+    });
     sectionWrapper.querySelector(`.pdp-${sectionType}-list`).append(docsFragment);
   });
   section.classList.remove('hide');
@@ -211,9 +215,11 @@ function renderSDS(sdsList) {
   sdsList.forEach((sds) => {
     const sdsFragment = docRange.createContextualFragment(`
       <li class="pdp-sds-list-item">
-        <a target="_blank" href="${sds.file}">${sds.title}</a>
+        <a target="_blank"></a>
       </li>
     `);
+    sdsFragment.querySelector('a').setAttribute('href', sds.file);
+    sdsFragment.querySelector('a').textContent = sds.title;
     sectionWrapper.querySelector('.pdp-sds-list').append(sdsFragment);
   });
   sdsContainer.classList.remove('hide');
@@ -247,15 +253,20 @@ function renderBlogs(blogList) {
     .sort((blog1, blog2) => blog1.date - blog2.date)
     .slice(-3)
     .forEach((sds) => {
-      const sdsFragment = docRange.createContextualFragment(`
+      const blogFragment = docRange.createContextualFragment(`
         <li class="pdp-blogs-list-item">
-          <a target="_blank" href="${sds.path}"><h6 class="pdp-blogs-title">${sds.title}</h6></a>
-          <p class="pdp-blogs-date">${new Date(parseInt(sds.date, 10) * 1000).toLocaleDateString()}</p>
-          <p class="pdp-blogs-description">${sds.description}</p>
-          <a class="pdp-blogs-cta" target="_blank" href="${sds.path}">Read More</a>
+          <a class="pdp-blogs-anchor" target="_blank"><h6 class="pdp-blogs-title"></h6></a>
+          <p class="pdp-blogs-date"></p>
+          <p class="pdp-blogs-description"></p>
+          <a class="pdp-blogs-cta" target="_blank">Read More</a>
         </li>
       `);
-      sectionWrapper.querySelector('.pdp-blogs-list').append(sdsFragment);
+      blogFragment.querySelector('a.pdp-blogs-cta').setAttribute('href', sds.path);
+      blogFragment.querySelector('a.pdp-blogs-anchor').setAttribute('href', sds.path);
+      blogFragment.querySelector('.pdp-blogs-title').textContent = sds.title;
+      blogFragment.querySelector('.pdp-blogs-date').textContent = new Date(parseInt(sds.date, 10) * 1000).toLocaleDateString();
+      blogFragment.querySelector('.pdp-blogs-description').textContent = sds.description;
+      sectionWrapper.querySelector('.pdp-blogs-list').append(blogFragment);
     });
   blogsContainer.classList.remove('hide');
 }
@@ -304,10 +315,10 @@ function renderBreadcrumbs(part) {
               <a class="breadcrumb-link" href="/">Parts</a>
             </li>
             <li class="breadcrumb-item breadcrumb-item-1">
-              <a class="breadcrumb-link" href="/part-category/${part.Category.toLowerCase()}">${part.Category}</a>
+              <a class="breadcrumb-link" href="/part-category/${part.Category.toLowerCase().replace(/[^\w]/g, '-')}">${part.Category}</a>
             </li>
             <li class="breadcrumb-item breadcrumb-item-2">
-              <a class="breadcrumb-link" href="/part-category/${part.Subcategory.toLowerCase()}">${part.Subcategory}</a>
+              <a class="breadcrumb-link" href="/part-category/${part.Subcategory.toLowerCase().replace(/[^\w]/g, '-')}">${part.Subcategory}</a>
             </li>
           </ul>
         </div>
