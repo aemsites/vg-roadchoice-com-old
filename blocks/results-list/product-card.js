@@ -15,7 +15,7 @@ const getProperties = (prod, st) => {
   };
 
   cardContent.name = cardName[st];
-  cardContent.category = prod['Part Category'];
+  cardContent.category = prod['Part Category'] || prod.Subcategory;
   cardContent.partNumber = prod['Base Part Number'];
   cardContent.hasImage = prod.hasImage;
   return cardContent;
@@ -45,7 +45,9 @@ const productCard = (product, searchType) => {
   const repository = 'https://adobe.sharepoint.com/:i:/r/sites/HelixProjects/Shared%20Documents/sites/VolvoGroup/vg-roadchoice-com';
 
   // TODO check how the link content should finally be
-  const linkUrl = `${window.location.href}/${category}/${partNumber}`;
+  const windowUrl = new URL(window.location.href);
+  const baseUrl = windowUrl.toString().replace(/\/$/, '');
+  const linkUrl = `${baseUrl}/${category}/${partNumber}`;
   const imageLink = createElement('a', { classes: 'image-link', props: { href: linkUrl } });
 
   const productImageUrl = `${repository}/media/images/${partNumber}--0.jpg`;
