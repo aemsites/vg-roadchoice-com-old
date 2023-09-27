@@ -84,6 +84,7 @@
 
   /* Fontawesome */
   --ff-fontawesome: "fontawesome", "fontawesome Fallback";
+  --ff-fontawesome-brands: "fontawesome-brands", "fontawesome Fallback";
 
   /* Fallback */
   --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
