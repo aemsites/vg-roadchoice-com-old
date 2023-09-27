@@ -5,6 +5,7 @@
 .cards-list {
   display: flex;
   flex-wrap: wrap;
+  margin: 0 0 50px;
 }
 
 .cards .cards-item {
@@ -13,7 +14,7 @@
   justify-content: space-between;
   width: fit-content;
   padding: 0 15px;
-  margin: 0 0 6px;
+  margin: 0 0 25px;
 }
 
 .cards .cards-image img {
@@ -41,13 +42,17 @@
   text-transform: uppercase;
   text-align: center;
   padding: 13px 30px 10px;
-  margin-top: auto;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
   .cards .cards-item {
     width: 50%;
     margin: 0 0 30px;
+  }
+
+  .cards .cards-button {
+    margin: 0;
   }
 }
 
