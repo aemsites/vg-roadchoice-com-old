@@ -1,6 +1,24 @@
 // eslint-disable-next-line import/no-unresolved
 import { PLUGIN_EVENTS } from 'https://www.hlx.live/tools/sidekick/library/events/events.js';
 
+async function getAuthorData() {
+  const resp = await fetch('/authors.json?limit=5000');
+  if (resp.ok) {
+    const json = await resp.json();
+    return json.data;
+  }
+  throw new Error('Error fetching authors.json');
+}
+
+function getFilteredAuthors(data, query) {
+  if (!query) {
+    return data;
+  }
+
+  return data.filter((item) => item.name.toLowerCase().includes(query.trim().toLowerCase())
+      || item['author-id'].toLowerCase().includes(query.trim().toLowerCase()));
+}
+
 export async function decorate(container, ignored, query) {
   const data = await getAuthorData();
 
@@ -35,24 +53,6 @@ export async function decorate(container, ignored, query) {
     .forEach((item) => {
       item.addEventListener('click', handleCopyButtonClick);
     });
-}
-
-async function getAuthorData() {
-  const resp = await fetch('/authors.json?limit=5000');
-  if (resp.ok) {
-    const json = await resp.json();
-    return json.data;
-  }
-  throw new Error('Error fetching authors.json');
-}
-
-function getFilteredAuthors(data, query) {
-  if (!query) {
-    return data;
-  }
-
-  return data.filter((item) => item.name.toLowerCase().includes(query.trim().toLowerCase())
-      || item['author-id'].toLowerCase().includes(query.trim().toLowerCase()));
 }
 
 export default {
