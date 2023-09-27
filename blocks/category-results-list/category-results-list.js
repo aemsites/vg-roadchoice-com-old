@@ -59,7 +59,11 @@ export default async function decorate(block) {
   });
   document.addEventListener('FilteredProducts', (e) => {
     products = [...e.detail.filteredProducts];
+    const bottomBtn = block.querySelector('.bottom-more-button');
     block.textContent = '';
     renderBlock(block);
+    if (products.length > amount) {
+      block.querySelector('.results-wrapper').appendChild(bottomBtn);
+    }
   });
 }

@@ -12,6 +12,7 @@
 
     &.bottom-more-button {
       font-size: calc(var(--body-font-size-s) - 2px);
+      margin-block-end: 3rem;
     }
   }
 }

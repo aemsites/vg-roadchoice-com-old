@@ -105,7 +105,6 @@ const renderBlock = async (block) => {
           filteredAttrib.push({ title, values: [value] });
         }
       });
-      // sessionStorage.setItem('filtered-by', JSON.stringify(filteredAttrib));
       const filteredProducts = new Set();
       products.forEach((product) => {
         const isFiltered = filteredAttrib.every((attrib) => attrib
@@ -120,6 +119,12 @@ const renderBlock = async (block) => {
       filterForm.querySelector('.apply-filter-btn').disabled = true;
       const event = new CustomEvent('FilteredProducts', { detail: { filteredProducts: products } });
       document.dispatchEvent(event);
+      // close active title filters
+      const activeTitles = [...filterList.querySelectorAll('.filter-title-wrapper.active')];
+      activeTitles.forEach((el) => {
+        el.classList.remove('active');
+        el.nextElementSibling.classList.add('hidden');
+      });
     }
   };
 
