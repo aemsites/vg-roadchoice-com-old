@@ -4,6 +4,7 @@ let amount;
 let products;
 const moreBtns = [];
 let hasMoreItems = false;
+let hasImagesData = false;
 let currentAmount = 0;
 let newText = '';
 const paginationText = getTextLabel('pagination text');
@@ -32,6 +33,20 @@ const addShowMoreHandler = (btn, resultsListBlock, amountText) => {
   });
 };
 
+const addShowMoreBtns = (props) => {
+  const { resultsListBlock, moreBtn, bottomMoreBtn } = props;
+  resultsListBlock.querySelector('.results-wrapper').appendChild(bottomMoreBtn);
+  moreBtn.classList.remove('hidden');
+  moreBtns.push(moreBtn, bottomMoreBtn);
+};
+
+const addImagesHandler = ({ resultsListBlock, moreBtn, bottomMoreBtn }) => {
+  document.addEventListener('ImagesLoaded', () => {
+    hasImagesData = true;
+    addShowMoreBtns({ resultsListBlock, moreBtn, bottomMoreBtn });
+  });
+};
+
 const renderBlock = async (block) => {
   const textWrapper = createElement('div', { classes: 'text-wrapper' });
   const text = createElement('p', { classes: 'text', textContent: newText });
@@ -48,11 +63,8 @@ const renderBlock = async (block) => {
     addShowMoreHandler(bottomMoreBtn, resultsListBlock, text);
     textWrapper.append(moreBtn);
 
-    document.addEventListener('ImagesLoaded', () => {
-      resultsListBlock.querySelector('.results-wrapper').appendChild(bottomMoreBtn);
-      moreBtn.classList.remove('hidden');
-      moreBtns.push(moreBtn, bottomMoreBtn);
-    });
+    if (!hasImagesData) addImagesHandler({ resultsListBlock, moreBtn, bottomMoreBtn });
+    else addShowMoreBtns({ resultsListBlock, moreBtn, bottomMoreBtn });
   }
 
   textWrapper.prepend(text);
@@ -66,6 +78,14 @@ export default async function decorate(block) {
     hasMoreItems = products && products.length > amount;
     currentAmount = hasMoreItems ? amount : products.length;
     newText = paginationText.replace('[$]', currentAmount);
+    renderBlock(block);
+  });
+  document.addEventListener('FilteredProducts', (e) => {
+    products = [...e.detail.filteredProducts];
+    hasMoreItems = products && products.length > amount;
+    currentAmount = hasMoreItems ? amount : products.length;
+    newText = paginationText.replace('[$]', currentAmount);
+    block.textContent = '';
     renderBlock(block);
   });
 }

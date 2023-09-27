@@ -94,8 +94,7 @@ const renderBlock = async (block) => {
       const checkedInputs = [...filterList.querySelectorAll('.filter-input:checked')];
       const filteredAttrib = [];
       filterForm.querySelector('.clear-filter-btn').disabled = false;
-      // loop through the checked inputs and push them to the array with the next format:
-      // [{ title, values: [value1, value2, ...] }] to be able to filter the data by title
+      // [{ title, values: [value1, value2, ...] }]
       checkedInputs.forEach((el) => {
         const title = el.dataset.filterTitle;
         const { value } = el;
@@ -106,22 +105,21 @@ const renderBlock = async (block) => {
           filteredAttrib.push({ title, values: [value] });
         }
       });
-      sessionStorage.setItem('filtered-by', JSON.stringify(filteredAttrib));
-      /* filter the products data by the filtered attributes
-       * and added them in a new Set to omit duplicates */
+      // sessionStorage.setItem('filtered-by', JSON.stringify(filteredAttrib));
       const filteredProducts = new Set();
       products.forEach((product) => {
         const isFiltered = filteredAttrib.every((attrib) => attrib
           .values.includes(product[attrib.title]));
         if (isFiltered) filteredProducts.add(product);
       });
-      // TODO: re render the products with the filtered data
-      console.log('filtered Products', { filteredProducts });
+      const event = new CustomEvent('FilteredProducts', { detail: { filteredProducts } });
+      document.dispatchEvent(event);
     } else {
       filterForm.reset();
       filterForm.querySelector('.clear-filter-btn').disabled = true;
       filterForm.querySelector('.apply-filter-btn').disabled = true;
-      sessionStorage.removeItem('filtered-by');
+      const event = new CustomEvent('FilteredProducts', { detail: { filteredProducts: products } });
+      document.dispatchEvent(event);
     }
   };
 
