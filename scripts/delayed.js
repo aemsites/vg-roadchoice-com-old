@@ -1,16 +1,56 @@
-/* eslint-disable import/no-cycle */
-import { sampleRUM } from './lib-franklin.js';
+// eslint-disable-next-line import/no-cycle
+import { loadScript, sampleRUM } from './lib-franklin.js';
+// eslint-disable-next-line import/no-cycle
 import { loadWorker } from './scripts.js';
 
 // Core Web Vitals RUM collection
 sampleRUM('cwv');
 
-const cookieSetting = decodeURIComponent(document.cookie.split(';').find((cookie) => cookie.trim().startsWith('OptanonConsent=')));
-const isGtmAllowed = cookieSetting.includes('C0002:1');
+// OneTrust Cookies Consent Notice start for roadchoice.com
+if (!window.location.host.includes('hlx.page') && !window.location.host.includes('localhost') && !window.location.pathname.includes('srcdoc')) {
+  // when running on localhost in the block library host is empty but the path is srcdoc
+  // on localhost/hlx.page/hlx.live the consent notice is displayed every time the page opens,
+  // because the cookie is not persistent. To avoid this annoyance, disable unless on the
+  // production page.
+  loadScript('https://cdn.cookielaw.org/scripttemplates/otSDKStub.js', {
+    type: 'text/javascript',
+    charset: 'UTF-8',
+    'data-domain-script': '73cee13a-d7db-4fb2-9508-a0b50738d660',
+  });
 
-if (isGtmAllowed) {
+  window.OptanonWrapper = () => {
+    const currentOnetrustActiveGroups = window.OnetrustActiveGroups;
+
+    function isSameGroups(groups1, groups2) {
+      const s1 = JSON.stringify(groups1.split(',').sort());
+      const s2 = JSON.stringify(groups2.split(',').sort());
+
+      return s1 === s2;
+    }
+
+    window.OneTrust.OnConsentChanged(() => {
+      // reloading the page only when the active group has changed
+      if (!isSameGroups(currentOnetrustActiveGroups, window.OnetrustActiveGroups)) {
+        window.location.reload();
+      }
+    });
+  };
+}
+
+const cookieSetting = decodeURIComponent(document.cookie.split(';').find((cookie) => cookie.trim().startsWith('OptanonConsent=')));
+const arePerfCookiesAllowed = cookieSetting.includes('C0002:1');
+const areTargetCookiesAllowed = cookieSetting.includes('C004:1');
+
+if (arePerfCookiesAllowed) {
   // eslint-disable-next-line no-use-before-define
   loadGoogleTagManager();
+  // eslint-disable-next-line no-use-before-define
+  loadHotjar();
+}
+
+if (areTargetCookiesAllowed) {
+  // eslint-disable-next-line no-use-before-define
+  loadArtibot();
 }
 
 // add more delayed functionality here
@@ -29,16 +69,27 @@ async function loadGoogleTagManager() {
   }(window, document, 'script', 'dataLayer', 'GTM-MJJCNZK'));
 }
 
-// Hotjar
-/* eslint-disable */
-(async function(h,o,t,j,a,r){
-  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-  h._hjSettings={hjid:714824,hjsv:6}; a=o.getElementsByTagName('head')[0];
-  r=o.createElement('script');r.async=1; r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-  a.appendChild(r);
-})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-/* eslint-enable */
+async function loadHotjar() {
+  // google tag manager
+  // eslint-disable-next-line func-names
+  // Hotjar
+  /* eslint-disable */
+  (async function(h,o,t,j,a,r){
+    h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+    h._hjSettings={hjid:714824,hjsv:6}; a=o.getElementsByTagName('head')[0];
+    r=o.createElement('script');r.async=1; r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+    a.appendChild(r);
+  })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+}
 
+async function loadArtibot() {
+  (async function(t,e){
+    t.artibotApi={l:[],t:[],on:function(){this.l.push(arguments)},trigger:function(){this.t.push(arguments)}};
+    var a=!1,i=e.createElement("script");
+    i.async=!0,i.type="text/javascript",i.src="https://app.artibot.ai/loader.js",e.getElementsByTagName("head").item(0).appendChild(i),i.onreadystatechange=i.onload=function(){if(!(a||this.readyState&&"loaded"!=this.readyState&&"complete"!=this.readyState)){new window.ArtiBot({i:"8b46bd2b-302c-418e-9d5a-b1c46088754f"});
+    a=!0}}
+  })(window,document);
+}
 // This Worker loads all the product information into de global object window
 const productsWorker = loadWorker();
 export default productsWorker;

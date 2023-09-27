@@ -19,7 +19,7 @@
         background-color: #ededed;
         height: 100%;
       }
-      
+
       helix-sidekick { display: none }
     </style>
     <title>Sidekick Library</title>
@@ -34,6 +34,7 @@
       const library = document.createElement('sidekick-library')
       library.config = {
         base: '/block-library/library.json',
+        authors: '/tools/sidekick/plugins/authors/authors.js',
       }
 
       document.body.prepend(library)

@@ -1,33 +1,79 @@
 .columns > div {
   display: flex;
   flex-direction: column;
+  padding: 0 0 50px;
 }
 
 .columns img {
   width: 100%;
+  margin: 0 auto;
 }
 
-.columns > div > div {
-  order: 1;
+.columns .button {
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
 }
 
-.columns > div > .columns-img-col {
-  order: 0;
+.columns .button ~ .button {
+  margin: 0 auto 10px;
+}
+
+.columns.columns-3-cols img {
+  width: 100%;
 }
 
 .columns > div > .columns-img-col img {
   display: block;
 }
 
+.columns.columns.width-70-30 img {
+  max-height: 380px;
+  width: fit-content;
+}
+
+.columns.columns-3-cols .button {
+  width: 100%;
+  text-align: center;
+}
+
+.columns > div > div {
+  order: 0;
+}
+
+.columns > div > .columns-img-col {
+  order: 1;
+}
+
 @media (min-width: 900px) {
   .columns > div {
-    align-items: center;
     flex-direction: unset;
     gap: 32px;
+    padding: 0 0 30px;
+  }
+  
+    .columns > div > div {
+      flex: 1;
+      order: unset;
+    }
+
+  .columns.columns-3-cols > div {
+    gap: 60px;
   }
 
-  .columns > div > div {
-    flex: 1;
-    order: unset;
+  .columns > div > .columns-img-col {
+    flex-grow: 0.8;
+  }
+
+  .columns.width-70-30 > div > .columns-img-col {
+    flex-grow: 0.3;
+  }
+
+  .columns .button {
+    margin: 10px 0;
+  }
+
+  .columns .button ~ .button {
+    margin: 10px 0;
   }
 }
