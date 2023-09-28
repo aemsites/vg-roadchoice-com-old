@@ -85,6 +85,7 @@
 
   /* Fontawesome */
   --ff-fontawesome: "fontawesome", "fontawesome Fallback";
+  --ff-fontawesome-brands: "fontawesome-brands", "fontawesome Fallback";
 
   /* Fallback */
   --fallback-ff: "Arial Regular Text Fallback", helvetica, sans-serif;
@@ -250,12 +251,18 @@ main .section {
 }
 
 a.button {
+  display: block;
+  width: fit-content;
   background-color: var(--button-active);
   color: var(--primary-white);
-  padding: 13px 30px 10px;
   font-size: var(--body-font-size-m);
   text-transform: uppercase;
   text-decoration: none;
+  padding: 13px 30px 10px;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .title-red h1,
@@ -265,6 +272,11 @@ a.button {
 .title-red h5,
 .title-red h6 {
   color: var(--primary-red);
+}
+
+.text-size-l p {
+  font-size: var(--body-font-size-l);
+  margin: 10px 0;
 }
 
 /* default content styling */
