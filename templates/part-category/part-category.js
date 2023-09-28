@@ -15,17 +15,10 @@ let category;
 */
 
 /**
- * Returns the category name from the URL query string, or null if it is not present.
- * @returns {string|null} The category name, or _null_ if it is not present.
+ * Returns the category name from the URL query string, or _null_ if it is not present.
+ * @returns {string|null} The category name or _null_.
  */
-const getCategory = async () => {
-  const hasCategory = urlParams.has('category');
-  if (hasCategory) {
-    if (urlParams.get('category') === '') return null;
-    return urlParams.get('category');
-  }
-  return null;
-};
+const getCategory = async () => urlParams.get('category') || null;
 
 /**
  * Updates the sessionStorage with the category data and the amount of products to show.
