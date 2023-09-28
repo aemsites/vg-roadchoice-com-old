@@ -57,6 +57,7 @@
   --c-medium-gray-1: #727376;
   --c-medium-gray-2: #808080;
   --c-light-red: #deaeb1;
+  --c-yellow: #F6CA45;
 
   /* Applied colors */
   --link-color: var(--primary-red);
