@@ -306,7 +306,7 @@ function renderPartFit(partFitData) {
           <input type="text" class="pdp-part-fit-search-input" placeholder="Search" />
         </div>
         <div class="pdp-part-fit-filter">
-          <div class="pdp-part-fit-filter-title"></div>
+          <div class="pdp-part-fit-filter-title">Make</div>
           <div class="pdp-part-fit-make-list"></div>
         </div>
         <div class="pdp-part-fit-count">0 Entries</div>
@@ -322,7 +322,7 @@ function renderPartFit(partFitData) {
   }, new Set());
 
   makes.forEach((make) => {
-    const makeFragment = docRange.createContextualFragment(` <div class="pdp-part-fit-make-list-item"></div>`);
+    const makeFragment = docRange.createContextualFragment('<div class="pdp-part-fit-make-list-item"></div>');
     makeFragment.querySelector('.pdp-part-fit-make-list-item').textContent = make;
     sectionWrapper.querySelector('.pdp-part-fit-make-list').append(makeFragment);
   });
