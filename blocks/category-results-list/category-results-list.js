@@ -2,8 +2,9 @@ import productsWorker from '../../scripts/delayed.js';
 import { createElement } from '../../scripts/scripts.js';
 import productCard from '../results-list/product-card.js';
 
-let amount;
-let products;
+let amount = JSON.parse(sessionStorage.getItem('amount'));
+let products = JSON.parse(sessionStorage.getItem('category-data'));
+let isRendered = false;
 let hasImagesData = false;
 let imgData;
 const searchType = 'parts';
@@ -51,12 +52,14 @@ const renderBlock = async (block) => {
   else getImagesData({ productList, loadingElement, detail: imgData });
 };
 
-export default async function decorate(block) {
-  document.addEventListener('CategoryDataLoaded', () => {
-    amount = JSON.parse(sessionStorage.getItem('amount'));
-    products = JSON.parse(sessionStorage.getItem('category-data'));
+const isRenderedCheck = (block) => {
+  if (products && amount && !isRendered) {
+    isRendered = true;
     renderBlock(block);
-  });
+  }
+};
+
+export default async function decorate(block) {
   document.addEventListener('FilteredProducts', (e) => {
     products = [...e.detail.filteredProducts];
     const bottomBtn = block.querySelector('.bottom-more-button');
@@ -65,5 +68,12 @@ export default async function decorate(block) {
     if (products.length > amount) {
       block.querySelector('.results-wrapper').appendChild(bottomBtn);
     }
+  });
+  isRenderedCheck(block);
+  if (isRendered) return;
+  document.addEventListener('CategoryDataLoaded', () => {
+    amount = JSON.parse(sessionStorage.getItem('amount'));
+    products = JSON.parse(sessionStorage.getItem('category-data'));
+    renderBlock(block);
   });
 }

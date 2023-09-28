@@ -1,7 +1,8 @@
 import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
-let amount;
-let products;
+let amount = JSON.parse(sessionStorage.getItem('amount'));
+let products = JSON.parse(sessionStorage.getItem('category-data'));
+let isRendered = false;
 const moreBtns = [];
 let hasMoreItems = false;
 let hasImagesData = false;
@@ -71,15 +72,17 @@ const renderBlock = async (block) => {
   block.append(textWrapper);
 };
 
-export default async function decorate(block) {
-  document.addEventListener('CategoryDataLoaded', () => {
-    amount = JSON.parse(sessionStorage.getItem('amount'));
-    products = JSON.parse(sessionStorage.getItem('category-data'));
+const isRenderedCheck = (block) => {
+  if (products && amount && !isRendered) {
+    isRendered = true;
     hasMoreItems = products && products.length > amount;
     currentAmount = hasMoreItems ? amount : products.length;
     newText = paginationText.replace('[$]', currentAmount);
     renderBlock(block);
-  });
+  }
+};
+
+export default async function decorate(block) {
   document.addEventListener('FilteredProducts', (e) => {
     products = [...e.detail.filteredProducts];
     hasMoreItems = products && products.length > amount;
@@ -87,5 +90,12 @@ export default async function decorate(block) {
     newText = paginationText.replace('[$]', currentAmount);
     block.textContent = '';
     renderBlock(block);
+  });
+  isRenderedCheck(block);
+  if (isRendered) return;
+  document.addEventListener('CategoryDataLoaded', () => {
+    amount = JSON.parse(sessionStorage.getItem('amount'));
+    products = JSON.parse(sessionStorage.getItem('category-data'));
+    isRenderedCheck(block);
   });
 }

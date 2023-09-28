@@ -133,19 +133,21 @@ const renderBlock = async (block) => {
   block.append(filterTitle, filterForm);
 };
 
+const isRenderedCheck = (block) => {
+  if (filters && products && !isDecorated) {
+    isDecorated = true;
+    renderBlock(block);
+  }
+};
+
 export default async function decorate(block) {
-  console.log('data is loaded?', {
-    category: sessionStorage.getItem('category-data'),
-    filters: sessionStorage.getItem('filter-attribs'),
-  });
+  isRenderedCheck(block);
+  if (isDecorated) return;
   ['FilterAttribsLoaded', 'CategoryDataLoaded'].forEach((eventName) => {
     document.addEventListener(eventName, () => {
       filters = JSON.parse(sessionStorage.getItem('filter-attribs'));
       products = JSON.parse(sessionStorage.getItem('category-data'));
-      if (filters && products && !isDecorated) {
-        isDecorated = true;
-        renderBlock(block);
-      }
+      isRenderedCheck(block);
     });
   });
 }
