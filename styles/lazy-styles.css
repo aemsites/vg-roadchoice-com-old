@@ -53,6 +53,14 @@
   font-display: swap
 }
 
+@font-face {
+  font-family: fontawesome-brands;
+  src: url('../fonts/fa-brands-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap
+}
+
 .fa {
   font: normal normal normal 14px/1 var(--ff-fontawesome);
   font-size: inherit;
@@ -60,6 +68,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transform: translate(0,0)
+}
+
+.fa-brands {
+  font: normal normal normal 14px/1 var(--ff-fontawesome-brands);
 }
 
 .fa-angle-right::before {
@@ -84,6 +96,10 @@
 
 .fa-facebook-f::before,.fa-facebook::before {
   content: "\f09a"
+}
+
+.fa-square-facebook::before {
+  content: "\f082"
 }
 
 .fa-bold::before {
@@ -116,6 +132,10 @@
 
 .fa-twitter::before {
   content: "\f099"
+}
+
+.fa-x-twitter::before {
+  content: "\e61b"
 }
 
 .fa-bolt::before,.fa-flash::before {
