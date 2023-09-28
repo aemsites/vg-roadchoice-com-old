@@ -12,6 +12,10 @@ function findPartBySKU(parts, sku) {
   return parts.find((part) => part['Base Part Number'].toLowerCase() === sku.toLowerCase());
 }
 
+function filterModelsBySKU(models, sku) {
+  return models.filter((model) => model['Base Part Number'].toLowerCase() === sku.toLowerCase());
+}
+
 async function getPDPData(pathSegments) {
   const { category, sku } = pathSegments;
 
@@ -225,7 +229,6 @@ function renderSDS(sdsList) {
   sdsContainer.classList.remove('hide');
 }
 
-// Check if product has catalog, product sheet , ecatalaogs section
 async function fetchBlogs(category) {
   try {
     const { data } = await getJsonFromUrl('/blog/query-index.json');
@@ -269,6 +272,134 @@ function renderBlogs(blogList) {
       sectionWrapper.querySelector('.pdp-blogs-list').append(blogFragment);
     });
   blogsContainer.classList.remove('hide');
+}
+
+async function fetchPartFit(pathSegments) {
+  const { category, sku } = pathSegments;
+
+  try {
+    const { data } = await getJsonFromUrl(`/product-fit-vehicles/${category.replace(/[^\w]/g, '-')}-application-data.json`);
+    return filterModelsBySKU(data, sku);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching part data:', error);
+  }
+  return null;
+}
+
+function renderPartFit(partFitData) {
+  const partFitContainer = document.querySelector('.pdp-part-fit');
+  let sectionWrapper = partFitContainer.querySelector('.default-content-wrapper');
+
+  if (!sectionWrapper) {
+    sectionWrapper = createElement('div', { classes: 'default-content-wrapper' });
+    partFitContainer.append(sectionWrapper);
+  }
+
+  if (!partFitContainer || !sectionWrapper || !partFitData.length) return;
+
+  const fragment = docRange.createContextualFragment(`
+    <div class="pdp-part-fit-expanded">
+      <div class="pdp-part-fit-header">
+        <h3 class="pdp-part-fit-title">Advanced Filter</h3>
+        <div class="pdp-part-fit-search">
+          <input type="text" class="pdp-part-fit-search-input" placeholder="Search" />
+        </div>
+        <div class="pdp-part-fit-filter">
+          <div class="pdp-part-fit-filter-title"></div>
+          <div class="pdp-part-fit-make-list"></div>
+        </div>
+        <div class="pdp-part-fit-count">0 Entries</div>
+      </div>
+      <div class="pdp-part-fit-list"></div>
+    </div>
+  `);
+  sectionWrapper.append(fragment);
+
+  const makes = partFitData.reduce((acc, cur) => {
+    acc.add(cur.Make);
+    return acc;
+  }, new Set());
+
+  makes.forEach((make) => {
+    const makeFragment = docRange.createContextualFragment(` <div class="pdp-part-fit-make-list-item"></div>`);
+    makeFragment.querySelector('.pdp-part-fit-make-list-item').textContent = make;
+    sectionWrapper.querySelector('.pdp-part-fit-make-list').append(makeFragment);
+  });
+
+  partFitData
+    .forEach((vehicle) => {
+      const partFitFragment = docRange.createContextualFragment(`
+        <div class="pdp-part-fit-list-item">
+          <h4 class="pdp-part-fit-make">Make</h6>
+          <h6 class="pdp-part-fit-model">Model: <span class="value"></span></h6>
+          <p class="pdp-part-fit-model-description">Description</p>
+          <div class="pdp-part-fit-year">Year: <span class="value"></span></div>
+          <div class="pdp-part-fit-engine-make">Engine Make: <span class="value"></span></div>
+          <div class="pdp-part-fit-engine-model">Engine Model: <span class="value"></span></div>
+        </div>
+      `);
+      partFitFragment.querySelector('.pdp-part-fit-list-item').dataset.make = vehicle.Make;
+      partFitFragment.querySelector('.pdp-part-fit-make').textContent = vehicle.Make;
+      partFitFragment.querySelector('.pdp-part-fit-model .value').textContent = vehicle.Model;
+      partFitFragment.querySelector('.pdp-part-fit-model-description').textContent = vehicle['Model Description'];
+      partFitFragment.querySelector('.pdp-part-fit-year .value').textContent = vehicle.Year;
+      partFitFragment.querySelector('.pdp-part-fit-engine-make .value').textContent = vehicle['Engine Make'];
+      partFitFragment.querySelector('.pdp-part-fit-engine-model .value').textContent = vehicle['Engine Model'];
+
+      sectionWrapper.querySelector('.pdp-part-fit-list').append(partFitFragment);
+    });
+
+  const countVisibleItems = () => {
+    const count = sectionWrapper
+      .querySelectorAll('.pdp-part-fit-list-item:not(.pdp-hide-by-filter):not(.pdp-hide-by-search)')
+      .length;
+    sectionWrapper.querySelector('.pdp-part-fit-count').textContent = `${count} Entries`;
+  };
+
+  countVisibleItems();
+
+  // filter
+  sectionWrapper.querySelector('.pdp-part-fit-make-list').addEventListener('click', (e) => {
+    const target = e.target.closest('.pdp-part-fit-make-list-item');
+    if (target) {
+      if (target.classList.contains('active')) {
+        target.classList.remove('active');
+        sectionWrapper.querySelectorAll('.pdp-part-fit-list-item.pdp-hide-by-filter').forEach((item) => {
+          item.classList.remove('pdp-hide-by-filter');
+        });
+      } else {
+        sectionWrapper.querySelectorAll('.pdp-part-fit-make-list-item.active').forEach((item) => {
+          item.classList.remove('active');
+        });
+        target.classList.add('active');
+        sectionWrapper.querySelectorAll('.pdp-part-fit-list-item').forEach((item) => {
+          if (item.dataset.make === target.textContent) {
+            item.classList.remove('pdp-hide-by-filter');
+          } else {
+            item.classList.add('pdp-hide-by-filter');
+          }
+        });
+      }
+      countVisibleItems();
+    }
+  });
+
+  // search
+  sectionWrapper.querySelector('input.pdp-part-fit-search-input').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    sectionWrapper.querySelectorAll('.pdp-part-fit-list-item').forEach((item) => {
+      const text = item.textContent.toLowerCase();
+      if (text.length === 0 || text.includes(query)) {
+        item.classList.remove('pdp-hide-by-search');
+      } else {
+        item.classList.add('pdp-hide-by-search');
+      }
+    });
+    countVisibleItems();
+  });
+
+  partFitContainer.classList.remove('hide');
 }
 
 function setOrCreateMetadata(propName, propVal) {
@@ -348,6 +479,7 @@ export default async function decorate(block) {
     renderImages(block, images);
   });
 
+  fetchPartFit(pathSegments).then(renderPartFit);
   fetchDocs(pathSegments.category).then(renderDocs);
   fetchSDS(pathSegments.category).then(renderSDS);
   fetchBlogs(pathSegments.category).then(renderBlogs);

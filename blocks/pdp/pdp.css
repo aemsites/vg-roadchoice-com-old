@@ -135,18 +135,190 @@
   cursor: pointer;
 }
 
-.section.accordion.accordion-open {
+.section.accordion.accordion-open,
+.section.accordion.pdp-part-fit.accordion-open {
   max-height: 2000px;
 }
 
 .section.accordion h5::before {
   font-family: fontawesome, sans-serif;
-  content: "";
+  content: "\f0d7";
   margin-right: 20px;
 }
 
+
+.section.accordion.pdp-part-fit {
+  max-height: 82px;
+  border: none;
+}
+
+.section.accordion.pdp-part-fit .default-content-wrapper {
+  border: 5px solid var(--c-yellow);
+}
+
+.section.accordion.pdp-part-fit h5{
+  font-size: 15px;
+  font-family: var(--body-ff);
+  /* line-height: 21px; */
+  background-color: var(--c-yellow);
+  color: var(--primary-black);
+  padding: 14px 24px 19px;
+  display: flex;
+  height: 57px;
+  align-items: baseline;
+}
+
 .section.accordion.accordion-open h5::before {
-  content: "";
+  content: "\f0d8";
+}
+
+.section.accordion.pdp-part-fit h5::before,
+.section.accordion.pdp-part-fit.accordion-open h5::before {
+  content: "\f06a";
+}
+
+.section.accordion.pdp-part-fit h5::after {
+  font-family: fontawesome, sans-serif;
+  content: "\f078";
+  margin-left: auto;
+}
+
+.section.accordion.pdp-part-fit.accordion-open h5::after {
+  content: "\f077";
+}
+
+.pdp-part-fit-expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 22px 20px 40px;
+}
+
+.pdp-part-fit-header {
+  display: grid; 
+  grid-template-columns: 1fr; 
+  grid-template-rows: auto auto auto auto [entries]; 
+  gap: 14px 20px; 
+  grid-template-areas: 
+    "title"
+    "search"
+    "filter"
+    "count"; 
+}
+
+.pdp-part-fit-filter { grid-area: filter; }
+.pdp-part-fit-count { grid-area: count; }
+.pdp-part-fit-search { 
+  grid-area: search;
+  position: relative;
+}
+.pdp-part-fit-title { 
+  grid-area: title;
+  font-size: 32px;
+  font-family: var(--headings-ff-bold);
+  text-transform: none;
+}
+
+.pdp-part-fit-search-input {
+  height: 56px;
+  width: 400px;
+  font-size: 16px;
+  padding: 17px 17px 17px 56px;
+  border-radius: 28px;
+  outline: none;
+  border: 2px solid var(--primary-medium-gray);
+}
+
+.pdp-part-fit-search::before {
+  position: absolute;
+  font-family: fontawesome, sans-serif;
+  content: "\f002";
+  top: 13px;
+  left: 24px;
+  bottom: 17px;
+  color: black;
+  font-size: 20px;
+  z-index: 1;
+}
+
+.pdp-part-fit-filter-title {
+  font-family: var(--headings-ff-bold);
+}
+
+.pdp-part-fit-make-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 5px 0 10px;
+}
+
+.pdp-part-fit-make-list-item {
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 1.25px;
+  padding: 12px 12px 8px;
+  border-radius: 99px;
+  border: 1px solid var(--secondary-light-gray);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pdp-part-fit-make-list-item.active {
+  background-color: var(--primary-red);
+  color: var(--primary-white);
+}
+
+.pdp-part-fit-count {
+  font-family: var(--headings-ff-bold);
+}
+
+.pdp-part-fit-list {
+  display: grid; 
+  grid-auto-rows: 200px; 
+  grid-template-columns: 1fr; 
+  gap: 50px 4%; 
+}
+
+.pdp-part-fit-list-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px;
+  border: 2px solid var(--primary-black);
+  border-radius: 5px;
+}
+
+.pdp-part-fit-list-item.pdp-hide-by-filter,
+.pdp-part-fit-list-item.pdp-hide-by-search {
+  display: none;
+}
+
+.pdp-part-fit-make {
+  font-size: 32px;
+  font-family: var(--headings-ff-black);
+  text-transform: none;
+  margin: 0;
+}
+
+.pdp-part-fit-model {
+  font-size: 24px;
+  font-family: var(--headings-ff-black);
+  color: var(--primary-red);
+  text-transform: none;
+  margin: 0;
+}
+
+.pdp-part-fit-list-item .pdp-part-fit-model-description {
+  margin: 0 0 auto;
+}
+
+.pdp-part-fit-model-description,
+.pdp-part-fit-year,
+.pdp-part-fit-engine-make,
+.pdp-part-fit-engine-model {
+  font-size: 16px;
+  line-height: 1.2;
+  margin: 0;
 }
 
 .section.breadcrumbs {
@@ -218,6 +390,23 @@
   .section.accordion {
     padding: 20px 16px;
   }
+
+  .pdp-part-fit-expanded {
+    padding: 22px 72px 40px;
+  }
+
+  .pdp-part-fit-header {
+    grid-template-columns: 1fr 400px; 
+    grid-template-rows: auto auto auto [entries]; 
+    grid-template-areas: 
+      "title search"
+      "filter filter"
+      "count count"; 
+  }
+
+  .pdp-part-fit-list {
+    grid-template-columns: 1fr 1fr; 
+  }
 }
 
 @media (min-width: 992px) {
@@ -233,6 +422,10 @@
   .section.breadcrumbs .breadcrumb-list {
     max-width: 1270px;
     padding: 16px 50px 24px;
+  }
+
+  .pdp-part-fit-list { 
+    grid-template-columns: 1fr 1fr 1fr; 
   }
 }
 
