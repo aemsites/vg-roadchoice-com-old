@@ -1,7 +1,7 @@
 import { createElement } from '../../scripts/scripts.js';
 
-let products;
-let filters;
+let products = JSON.parse(sessionStorage.getItem('category-data'));
+let filters = JSON.parse(sessionStorage.getItem('filter-attribs'));
 let isDecorated = false;
 
 const renderBlock = async (block) => {
@@ -134,6 +134,10 @@ const renderBlock = async (block) => {
 };
 
 export default async function decorate(block) {
+  console.log('data is loaded?', {
+    category: sessionStorage.getItem('category-data'),
+    filters: sessionStorage.getItem('filter-attribs'),
+  });
   ['FilterAttribsLoaded', 'CategoryDataLoaded'].forEach((eventName) => {
     document.addEventListener(eventName, () => {
       filters = JSON.parse(sessionStorage.getItem('filter-attribs'));
