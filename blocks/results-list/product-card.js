@@ -14,6 +14,7 @@ const getProperties = (prod, st) => {
     parts: prod['Part Name'],
   };
 
+  cardContent.imgUrl = prod.imgUrl;
   cardContent.name = cardName[st];
   cardContent.category = prod['Part Category'] || prod.Subcategory;
   cardContent.partNumber = prod['Base Part Number'];
@@ -37,21 +38,18 @@ const productCard = (product, searchType) => {
     name,
     partNumber,
     hasImage,
+    imgUrl,
   } = object;
 
   const item = createElement('li', { classes: 'product' });
 
-  // TODO check if this is the way to point to the repository
-  const repository = 'https://adobe.sharepoint.com/:i:/r/sites/HelixProjects/Shared%20Documents/sites/VolvoGroup/vg-roadchoice-com';
-
-  // TODO check how the link content should finally be
-  const windowUrl = new URL(window.location.href);
-  const baseUrl = windowUrl.toString().replace(/\/$/, '');
-  const linkUrl = `${baseUrl}/${category}/${partNumber}`;
+  const linkUrl = `/parts?category=${
+    category.replace(/[^\w]/g, '-').toLowerCase()
+  }&sku=${partNumber}`;
   const imageLink = createElement('a', { classes: 'image-link', props: { href: linkUrl } });
 
-  const productImageUrl = `${repository}/media/images/${partNumber}--0.jpg`;
-  const placeholderImageUrl = `${repository}/media/images/000-rc-placeholder-image.png`;
+  const productImageUrl = imgUrl;
+  const placeholderImageUrl = '/media/images/000-rc-placeholder-image.png';
   const imageUrl = hasImage ? productImageUrl : placeholderImageUrl;
   const placeholderPicture = optimizePicture(placeholderImageUrl);
   const picture = optimizePicture(imageUrl);
