@@ -25,7 +25,7 @@ const newText = displayedTextContent.replace('[$]', currentAmount);
 const loadMoreProducts = (props) => {
   const { hidden, amountText } = props;
   const { length } = hidden;
-  const isLessThanAmount = length < amount;
+  const isLessThanAmount = length <= amount;
   const nextAmount = isLessThanAmount ? length : amount;
   currentAmount += nextAmount;
 
