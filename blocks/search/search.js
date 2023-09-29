@@ -1,6 +1,7 @@
 import { createElement, getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
+let noOthersItems;
 const modelsItems = [];
 const FILTERS_DATA = '/search/search-filters.json';
 let crData;
@@ -101,7 +102,7 @@ function populateFilter(select, items) {
   let htmlFragment = '';
   items.forEach((item) => {
     htmlFragment += `
-      <option value="${item !== 'Others' ? item.toLowerCase() : 'null'}">${item}</option>
+      <option value="${item.toLowerCase()}">${item}</option>
     `;
   });
   const fragment = docRange.createContextualFragment(htmlFragment);
@@ -121,6 +122,7 @@ async function getAndApplyFiltersData(form) {
     makeItems.push(item.Make);
   });
   populateFilter(makeSelect, makeItems);
+  noOthersItems = makeItems.filter((item) => item !== 'Others');
   makeSelect.onchange = (e) => {
     const isNotNull = e.target.value !== 'null';
     // if is null then disable the models filter
@@ -139,15 +141,16 @@ async function getAndApplyFiltersData(form) {
 
 function searchCRPartNumValue(value) {
   const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
-  let results;
+  const results = new Set();
   partNumberBrands.forEach((brand) => {
-    if (results && results.length > 0) return;
     const tempResults = crData.filter(
-      (item) => new RegExp(value, 'i').test(item[brand]),
+      (item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]),
     );
-    results = tempResults.length > 0 ? tempResults : null;
+    if (tempResults.length > 0) {
+      tempResults.forEach((item) => results.add(item));
+    }
   });
-  return results;
+  return [...results];
 }
 
 function filterResults(results, filter, isMake = true) {
@@ -155,25 +158,26 @@ function filterResults(results, filter, isMake = true) {
   return results.filter((item) => item[itemFilter].toLowerCase() === filter.toLowerCase());
 }
 
+function filterByOthersMake(results) {
+  return results.filter((item) => !noOthersItems.includes(item.Make));
+}
+
 function searchPartNumValue(value, make, model) {
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
-  let results = [];
+  const results = new Set();
   partNumberBrands.forEach((brand) => {
-    let tempResults = pnData.filter((item) => new RegExp(value, 'i').test(item[brand]));
-    if (make !== 'null' && tempResults.length > 0) {
+    let tempResults = pnData.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]));
+    if (make === 'others' && tempResults.length > 0) {
+      tempResults = filterByOthersMake(tempResults, make);
+    } else if (make !== 'null' && tempResults.length > 0) {
       tempResults = filterResults(tempResults, make);
     }
     if (model !== 'null' && tempResults.length > 0) {
       tempResults = filterResults(tempResults, model, false);
     }
-    if (results.length > 0) {
-      const isEqualLength = results.length === tempResults.length;
-      results = (isEqualLength && [...results])
-        || results.filter((item, i) => item !== tempResults[i]);
-    }
-    results = tempResults.length > 0 ? results.concat(tempResults) : [...results];
+    tempResults.forEach((item) => results.add(item));
   });
-  return results;
+  return [...results];
 }
 
 function getFieldValue(selector, items) {
