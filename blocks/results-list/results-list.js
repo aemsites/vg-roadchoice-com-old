@@ -42,16 +42,19 @@ export default async function decorate(block) {
   const loadingElement = createElement('div', { classes: 'loading', textContent: 'Loading...' });
   resultsSection.append(loadingElement);
 
+  const isTruckLibrary = (text) => text.includes('trucklibrary.com');
+
   document.addEventListener('ImagesLoaded', ({ detail }) => {
     loadingElement.remove();
     products.forEach((prod, idx) => {
       prod.hasImage = false;
-      detail.find((e) => {
-        if (e['Part Number'] === prod['Base Part Number']) {
-          prod.hasImage = true;
-        }
-        return null;
-      });
+      const filterLoop = detail.filter((e) => e['Part Number'] === prod['Base Part Number']
+      && ((isTruckLibrary(e['Image URL']) && e['Image URL'].includes('.0?$'))
+      || (!isTruckLibrary(e['Image URL']) && e['Image URL'].includes('-0.jpg'))));
+      if (filterLoop.length >= 1) {
+        prod.hasImage = true;
+        prod.imgUrl = filterLoop[0]['Image URL'];
+      }
       const productItem = productCard(prod, searchType);
       if (idx >= amountOfProducts) productItem.classList.add('hidden');
       productList.appendChild(productItem);

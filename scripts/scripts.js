@@ -145,10 +145,19 @@ async function getPlaceholders() {
   placeholders = await fetch('/placeholder.json').then((resp) => resp.json());
 }
 
+/**
+ * Returns the text label for the given key from the placeholder data.
+ * @param {string} key The key
+ * @returns {string} The text label from data or the key if not found
+ */
 export function getTextLabel(key) {
   return placeholders?.data.find((el) => el.Key === key)?.Text || key;
 }
 
+/**
+* add a link to the previous image
+* @param {Element} node the image container element
+*/
 export function findAndCreateImageLink(node) {
   const links = node.querySelectorAll('picture ~ a');
 
@@ -182,7 +191,6 @@ function buildHeroBlock(main) {
     return;
   }
 
-  // eslint-disable-next-line no-bitwise
   if (header && picture
     // eslint-disable-next-line no-bitwise
     && (header.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
@@ -382,10 +390,21 @@ loadPage();
 
 /** Helper functions */
 // video helpers
+
+/**
+ * Checks if the url is a low resolution video url
+  * @param {string} url the url to check
+ * @returns {boolean} true if the url is a low resolution video url
+ */
 export function isLowResolutionVideoUrl(url) {
   return url.split('?')[0].endsWith('.mp4');
 }
 
+/**
+ * Checks if the link is a high or low resolution video link, and it's not inside an embed block
+ * @param {Element} link the link to check
+ * @returns {boolean} true if the link is a video link
+ */
 export function isVideoLink(link) {
   const linkString = link.getAttribute('href');
   return (linkString.includes('youtube.com/embed/')
@@ -393,6 +412,12 @@ export function isVideoLink(link) {
     && link.closest('.block.embed') === null;
 }
 
+/**
+ * Selects the video link to use based on the preferred type and the cookie settings
+ * @param {NodeList} links the list of links to check
+ * @param {string} preferredType the preferred type of video
+ * @returns {Element} the link to use
+ */
 export function selectVideoLink(links, preferredType) {
   const linksList = [...links];
   const shouldUseYouTubeLinks = document.cookie.split(';').some((cookie) => cookie.trim().startsWith('OptanonConsent=1')) && preferredType !== 'local';
@@ -405,6 +430,10 @@ export function selectVideoLink(links, preferredType) {
   return localMediaLink;
 }
 
+/**
+ * Creates a banner that will be shown when the user clicks on a low resolution video link
+ * @returns {Element} the banner HTML element
+ */
 export function createLowResolutionBanner() {
   const lowResolutionMessage = getTextLabel('Low resolution video message');
   const changeCookieSettings = getTextLabel('Change cookie settings');
@@ -418,6 +447,10 @@ export function createLowResolutionBanner() {
   return banner;
 }
 
+/**
+ * Shows the video modal
+ * @param {string} linkUrl the url of the video to show in the modal based on the cookie settings
+ */
 export function showVideoModal(linkUrl) {
   // eslint-disable-next-line import/no-cycle
 
@@ -437,6 +470,10 @@ export function showVideoModal(linkUrl) {
   }
 }
 
+/**
+ * Adds the video click handler to the link to show the video modal
+ * @param {Element} link the link to add the handler to
+*/
 export function addVideoShowHandler(link) {
   link.classList.add('text-link-with-video');
 
@@ -447,6 +484,10 @@ export function addVideoShowHandler(link) {
   });
 }
 
+/**
+ * Adds the play icon to the link
+ * @param {Element} parent the link to add the icon to as a child
+*/
 export function addPlayIcon(parent) {
   const iconWrapper = createElement('div', { classes: ['video-icon-wrapper'] });
   const icon = createElement('i', { classes: ['fa', 'fa-play', 'video-icon'] });
@@ -454,6 +495,11 @@ export function addPlayIcon(parent) {
   parent.appendChild(iconWrapper);
 }
 
+/**
+ * Wraps the image with the link and adds the play icon
+ * @param {Element} videoLink the link to wrap the image with
+ * @param {Element} image the image to wrap
+*/
 export function wrapImageWithVideoLink(videoLink, image) {
   videoLink.innerText = '';
   videoLink.appendChild(image);
@@ -463,6 +509,14 @@ export function wrapImageWithVideoLink(videoLink, image) {
   addPlayIcon(videoLink);
 }
 
+/**
+ * Creates an iframe element with the specified URL and appends it to the specified parent element.
+ * @param {string} url - The URL to load in the iframe.
+ * @param {Object} options - An object containing optional parameters.
+ * @param {HTMLElement} options.parentEl - The parent element to append the iframe to.
+ * @param {string[]} options.classes - An array of CSS class names to apply to the iframe.
+ * @returns {HTMLIFrameElement} The created iframe element.
+*/
 export function createIframe(url, { parentEl, classes = [] }) {
   // iframe must be recreated every time otherwise the new history record would be created
   const iframe = createElement('iframe', {
@@ -484,6 +538,12 @@ export function createIframe(url, { parentEl, classes = [] }) {
 /* this function load script only when it wasn't loaded yet */
 const scriptMap = new Map();
 
+/**
+ * Loads script and returns a promise that resolves when the script is loaded.
+ * @param {string} url - The URL of the script to load.
+ * @param {Object} attrs - An object containing optional parameters.
+ * @returns {Promise} A promise that resolves when the script is loaded.
+ */
 export function loadScriptIfNotLoadedYet(url, attrs) {
   if (scriptMap.has(url)) {
     return scriptMap.get(url).promise;
@@ -495,11 +555,12 @@ export function loadScriptIfNotLoadedYet(url, attrs) {
 }
 
 /**
- *
+ * Creates a new block element with the specified name and content, and loads it into the page.
  * @param {string} blockName - block name with '-' instead of spaces
  * @param {string} blockContent - the content that will be set as block inner HTML
  * @param {object} options - other options like variantsClasses
- * @returns
+ * @param {string[]} options.variantsClasses - An array of CSS class names to apply to the block.
+ * @returns {HTMLElement} The created block element.
  */
 export function loadAsBlock(blockName, blockContent, options = {}) {
   const { variantsClasses = [] } = options;
@@ -593,9 +654,12 @@ export function input(...items) { return domEl('input', ...items); }
 export function form(...items) { return domEl('form', ...items); }
 export function button(...items) { return domEl('button', ...items); }
 
-/* Helper for delaying something like
-takes function as argument, default timout = 200
-*/
+/**
+ * A helper function that delays the execution of a function
+ * @param {function} func the function to execute
+ * @param {number} timeout the timeout in milliseconds, 200 by default
+ * @returns {function} the function that will be executed after the timeout
+ */
 export function debounce(func, timeout = 200) {
   let timer;
   return (...args) => {
@@ -606,16 +670,17 @@ export function debounce(func, timeout = 200) {
 }
 
 /**
+ * Returns the children of an element
  * @param {NodeList} elements list of tested elements
- * @param {String} childrenCheck check that will be runned for every element list
+ * @param {String} childrenCheck check that will be ran for every element list
  * @returns list of elements that pass the children check
  */
 export function getAllElWithChildren(elements, childrenCheck) {
   return [...elements].filter((el) => el.querySelector(childrenCheck));
 }
 
-/* Adds attributes to all anchors and buttons that start with properties between [ brackets ] */
 /**
+ * Adds attributes to all anchors and buttons that start with properties between [ brackets ]
  * @param {NodeList} links list of links to check if have properties to add as attributes
  */
 export function checkLinkProps(links) {
@@ -643,10 +708,11 @@ export function checkLinkProps(links) {
 const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
 checkLinkProps(allLinks);
 
-/* Turns the date number that comes from an excel sheet into a JS date string */
 /**
- * @param {number} excelTimestamp Date recieved as a number from excel sheet
- * */
+ * Turns the date number that comes from an excel sheet into a JS date string
+ * @param {number} excelTimestamp Date received as a number from excel sheet
+ * @returns {Date} JS date string
+*/
 export function convertDateExcel(excelTimestamp) {
   // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (leap year bug)
   // 2. Convert to milliseconds.
@@ -664,11 +730,18 @@ export function convertDateExcel(excelTimestamp) {
  * Returns a list of properties listed in the block
  * @param {string} route get the Json data from the route
  * @returns {Object} the json data object
- * */
+*/
 export const getJsonFromUrl = async (route) => {
-  const response = await fetch(route);
-  const json = await response.json();
-  return json;
+  try {
+    const response = await fetch(route);
+    if (!response.ok) return null;
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('getJsonFromUrl:', { error });
+  }
+  return null;
 };
 
 /**
@@ -687,14 +760,12 @@ export function loadWorker() {
 /**
  * checks for white spacing required in document
  */
-const makeSpace = () => {
-  const pElmts = document.querySelectorAll('p');
-  pElmts.forEach((el) => {
+(() => {
+  const pElements = document.querySelectorAll('p');
+  pElements.forEach((el) => {
     if (el.textContent === '[*space*]') {
       const spaceSpan = createElement('span', { classes: 'space' });
       el.replaceWith(spaceSpan);
     }
   });
-};
-
-makeSpace();
+})();

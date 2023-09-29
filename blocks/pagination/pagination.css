@@ -27,7 +27,7 @@
 }
 
 .results-list .more-button {
-  font-size: calc(var(--body-font-size-s) - 2px);;
+  font-size: calc(var(--body-font-size-s) - 2px);
 }
 
 .results-list .more-button,

@@ -1,0 +1,33 @@
+.part-category {
+  & .title-wrapper h1 {
+    color: var(--primary-red);
+  }
+}
+
+@media (min-width: 1200px) {
+  .part-category {
+    display: grid;
+    grid-template:
+      "title title"
+      "filters pagination"
+      "filters results" / 30% 69%;
+    column-gap: 6rem;
+    grid-template-rows: auto 4rem auto;
+
+    & .title-wrapper {
+      grid-area: title;
+    }
+
+    & .category-filters-wrapper {
+      grid-area: filters;
+    }
+
+    & .category-pagination-wrapper {
+      grid-area: pagination;
+    }
+
+    & .category-results-list-wrapper {
+      grid-area: results;
+    }
+  }
+}
