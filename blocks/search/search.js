@@ -139,15 +139,16 @@ async function getAndApplyFiltersData(form) {
 
 function searchCRPartNumValue(value) {
   const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
-  let results;
+  const results = new Set();
   partNumberBrands.forEach((brand) => {
-    if (results && results.length > 0) return;
     const tempResults = crData.filter(
-      (item) => new RegExp(value, 'i').test(item[brand]),
+      (item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]),
     );
-    results = tempResults.length > 0 ? tempResults : null;
+    if (tempResults.length > 0) {
+      tempResults.forEach((item) => results.add(item));
+    }
   });
-  return results;
+  return [...results];
 }
 
 function filterResults(results, filter, isMake = true) {
@@ -157,23 +158,18 @@ function filterResults(results, filter, isMake = true) {
 
 function searchPartNumValue(value, make, model) {
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
-  let results = [];
+  const results = new Set();
   partNumberBrands.forEach((brand) => {
-    let tempResults = pnData.filter((item) => new RegExp(value, 'i').test(item[brand]));
+    let tempResults = pnData.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]));
     if (make !== 'null' && tempResults.length > 0) {
       tempResults = filterResults(tempResults, make);
     }
     if (model !== 'null' && tempResults.length > 0) {
       tempResults = filterResults(tempResults, model, false);
     }
-    if (results.length > 0) {
-      const isEqualLength = results.length === tempResults.length;
-      results = (isEqualLength && [...results])
-        || results.filter((item, i) => item !== tempResults[i]);
-    }
-    results = tempResults.length > 0 ? results.concat(tempResults) : [...results];
+    tempResults.forEach((item) => results.add(item));
   });
-  return results;
+  return [...results];
 }
 
 function getFieldValue(selector, items) {
