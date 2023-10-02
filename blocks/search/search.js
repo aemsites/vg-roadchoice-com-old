@@ -6,7 +6,7 @@ const modelsItems = [];
 const FILTERS_DATA = '/search/search-filters.json';
 let crData;
 let pnData;
-const amountOfProducts = 12;
+export const amountOfProducts = 12;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
@@ -139,11 +139,11 @@ async function getAndApplyFiltersData(form) {
   };
 }
 
-function searchCRPartNumValue(value) {
+export function searchCRPartNumValue(value, data = crData) {
   const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
   const results = new Set();
   partNumberBrands.forEach((brand) => {
-    const tempResults = crData.filter(
+    const tempResults = data.filter(
       (item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]),
     );
     if (tempResults.length > 0) {
@@ -162,11 +162,11 @@ function filterByOthersMake(results) {
   return results.filter((item) => !noOthersItems.includes(item.Make));
 }
 
-function searchPartNumValue(value, make, model) {
+export function searchPartNumValue(value, make, model, data = pnData) {
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
   const results = new Set();
   partNumberBrands.forEach((brand) => {
-    let tempResults = pnData.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]));
+    let tempResults = data.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]));
     if (make === 'others' && tempResults.length > 0) {
       tempResults = filterByOthersMake(tempResults, make);
     } else if (make !== 'null' && tempResults.length > 0) {
