@@ -4,7 +4,7 @@ import {
 import { createElement } from '../../scripts/scripts.js';
 
 const title = getMetadata('og:title');
-const date = getMetadata('date');
+const date = getMetadata('publication-date');
 
 async function buildSection(container, sectionName = '') {
   const selectedContent = container.querySelector(`.${sectionName}-container .${sectionName}-wrapper`);

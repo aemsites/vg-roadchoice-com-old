@@ -1,5 +1,13 @@
 .blog-article main .section {
+  max-width: unset;
   padding: 0;
+}
+
+.blog-article .recommendations-wrapper,
+.blog-article .current-article-container {
+  max-width: 1270px;
+  padding: 60px 50px 0;
+  margin: auto;
 }
 
 .blog-article .default-content-wrapper {
@@ -29,6 +37,10 @@
   font-size: var(--body-font-size-s);
   color: var(--secondary-dark-gray);
   margin: 5px 0 30px;
+}
+
+.blog-article .default-content-wrapper li {
+  color: var(--primary-black);
 }
 
 @media (min-width: 992px) {
