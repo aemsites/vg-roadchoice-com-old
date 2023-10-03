@@ -32,7 +32,7 @@
   font-family: var(--body-ff-bold);
 }
 
-.pdp-content-coulmn {
+.pdp-content-column {
   margin-top: 20px;
 }
 
@@ -370,7 +370,7 @@
   }
 
   .pdp-image-column,
-  .pdp-content-coulmn {
+  .pdp-content-column {
     flex: 1;
     padding: 20px;
   }
@@ -380,7 +380,7 @@
     margin-top: 70px;
   }
   
-  .pdp-content-coulmn {
+  .pdp-content-column {
     margin-top: 0;
   }
 
