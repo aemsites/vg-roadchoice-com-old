@@ -710,24 +710,6 @@ const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAl
 checkLinkProps(allLinks);
 
 /**
- * Turns the date number that comes from an excel sheet into a JS date string
- * @param {number} excelTimestamp Date received as a number from excel sheet
- * @returns {Date} JS date string
-*/
-export function convertDateExcel(excelTimestamp) {
-  // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (leap year bug)
-  // 2. Convert to milliseconds.
-  const secondsInDay = 24 * 60 * 60;
-  const excelEpoch = new Date(1899, 11, 31);
-  const excelEpochAsUnixTimestamp = excelEpoch.getTime();
-  const missingLeapYearDay = secondsInDay * 1000;
-  const delta = excelEpochAsUnixTimestamp - missingLeapYearDay;
-  const excelTimestampAsUnixTimestamp = excelTimestamp * secondsInDay * 1000;
-  const parsed = excelTimestampAsUnixTimestamp + delta;
-  return Number.isNaN(parsed) ? null : new Date(parsed);
-}
-
-/**
  * Returns a list of properties listed in the block
  * @param {string} route get the Json data from the route
  * @returns {Object} the json data object
