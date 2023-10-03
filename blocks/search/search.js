@@ -153,7 +153,16 @@ function searchCRPartNumValue(value) {
 
 function filterResults(results, filter, isMake = true) {
   const itemFilter = isMake ? 'Make' : 'Model';
-  return results.filter((item) => item[itemFilter].toLowerCase() === filter.toLowerCase());
+  return results.filter((item) => {
+    const itemValue = item[itemFilter].toLowerCase();
+    const filterValue = filter.toLowerCase();
+    // if is Model, can have a list of models
+    if (!isMake && itemValue.includes(',')) {
+      const modelArray = itemValue.split(',').map((s) => s.trim());
+      return modelArray.includes(filterValue);
+    }
+    return itemValue === filterValue;
+  });
 }
 
 function searchPartNumValue(value, make, model) {
