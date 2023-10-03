@@ -17,7 +17,7 @@ const reduceArrays = (array) => {
 };
 
 const reduceCategories = (cats) => {
-  const categoryList = cats.map((x) => x['Part Category']);
+  const categoryList = cats.map((x) => x['Part Category'].toLowerCase());
   const catToReduce = urlCategory
     ? categoryList.filter((item) => item.toLowerCase() === urlCategory) : categoryList;
   const reducedCategories = reduceArrays(catToReduce);
