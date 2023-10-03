@@ -1,11 +1,12 @@
 import { createElement, getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
+let noOthersItems;
 const modelsItems = [];
 const FILTERS_DATA = '/search/search-filters.json';
 let crData;
 let pnData;
-const amountOfProducts = 12;
+export const amountOfProducts = 12;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
@@ -101,7 +102,7 @@ function populateFilter(select, items) {
   let htmlFragment = '';
   items.forEach((item) => {
     htmlFragment += `
-      <option value="${item !== 'Others' ? item.toLowerCase() : 'null'}">${item}</option>
+      <option value="${item.toLowerCase()}">${item}</option>
     `;
   });
   const fragment = docRange.createContextualFragment(htmlFragment);
@@ -121,6 +122,7 @@ async function getAndApplyFiltersData(form) {
     makeItems.push(item.Make);
   });
   populateFilter(makeSelect, makeItems);
+  noOthersItems = makeItems.filter((item) => item !== 'Others');
   makeSelect.onchange = (e) => {
     const isNotNull = e.target.value !== 'null';
     // if is null then disable the models filter
@@ -137,11 +139,11 @@ async function getAndApplyFiltersData(form) {
   };
 }
 
-function searchCRPartNumValue(value) {
+export function searchCRPartNumValue(value, data = crData) {
   const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
   const results = new Set();
   partNumberBrands.forEach((brand) => {
-    const tempResults = crData.filter(
+    const tempResults = data.filter(
       (item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]),
     );
     if (tempResults.length > 0) {
@@ -156,12 +158,18 @@ function filterResults(results, filter, isMake = true) {
   return results.filter((item) => item[itemFilter].toLowerCase() === filter.toLowerCase());
 }
 
-function searchPartNumValue(value, make, model) {
+function filterByOthersMake(results) {
+  return results.filter((item) => !noOthersItems.includes(item.Make));
+}
+
+export function searchPartNumValue(value, make, model, data = pnData) {
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
   const results = new Set();
   partNumberBrands.forEach((brand) => {
-    let tempResults = pnData.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]));
-    if (make !== 'null' && tempResults.length > 0) {
+    let tempResults = data.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]));
+    if (make === 'others' && tempResults.length > 0) {
+      tempResults = filterByOthersMake(tempResults, make);
+    } else if (make !== 'null' && tempResults.length > 0) {
       tempResults = filterResults(tempResults, make);
     }
     if (model !== 'null' && tempResults.length > 0) {

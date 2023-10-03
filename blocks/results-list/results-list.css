@@ -1,4 +1,8 @@
 
+.results-list-wrapper {
+  padding: 0 0 3rem;
+}
+
 ul.results-list {
   display: flex;
   flex-wrap: wrap;
