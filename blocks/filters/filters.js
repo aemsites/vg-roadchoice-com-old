@@ -5,7 +5,7 @@ const titleContent = getTextLabel('Categories');
 const isSearchResult = document.querySelector('.search-results') !== null;
 const urlCategory = new URLSearchParams(window.location.search).get('cat');
 
-if (isSearchResult) products = JSON.parse(sessionStorage.getItem('results'));
+if (isSearchResult) products = JSON.parse(sessionStorage.getItem('results')) || [];
 
 const reduceArrays = (array) => {
   const initialValue = {};
@@ -58,7 +58,7 @@ const buildFilter = (cats) => {
   return section;
 };
 
-export default async function decorate(block) {
+const decorateFilter = (block) => {
   const filtersSection = createElement('div', { classes: 'filters-wrapper' });
 
   const categories = reduceCategories(products);
@@ -69,4 +69,16 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(filtersSection);
+};
+
+export default async function decorate(block) {
+  document.addEventListener('DataLoaded', ({ detail }) => {
+    products = detail.results;
+    if (!sessionStorage.getItem('results')) {
+      sessionStorage.setItem('results', JSON.stringify(products));
+    }
+    decorateFilter(block);
+  });
+
+  if (products.length > 0) decorateFilter(block);
 }
