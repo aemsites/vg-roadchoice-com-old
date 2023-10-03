@@ -275,21 +275,21 @@ export function decorateMain(main, head) {
 }
 
 async function loadTemplate(doc, templateName) {
-  templateName.toLowerCase()
+  const template = templateName.toLowerCase()
   try {
     const cssLoaded = new Promise((resolve) => {
-      loadCSS(`${window.hlx.codeBasePath}/templates/${templateName}/${templateName}.css`, resolve);
+      loadCSS(`${window.hlx.codeBasePath}/templates/${template}/${template}.css`, resolve);
     });
     const decorationComplete = new Promise((resolve) => {
       (async () => {
         try {
-          const mod = await import(`../templates/${templateName}/${templateName}.js`);
+          const mod = await import(`../templates/${template}/${template}.js`);
           if (mod.default) {
             await mod.default(doc);
           }
         } catch (error) {
           // eslint-disable-next-line no-console
-          console.log(`failed to load module for ${templateName}`, error);
+          console.log(`failed to load module for ${template}`, error);
         }
         resolve();
       })();
@@ -297,7 +297,7 @@ async function loadTemplate(doc, templateName) {
     await Promise.all([cssLoaded, decorationComplete]);
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(`failed to load block ${templateName}`, error);
+    console.log(`failed to load block ${template}`, error);
   }
 }
 
