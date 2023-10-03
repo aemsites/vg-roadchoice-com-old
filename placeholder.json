@@ -1,7 +1,7 @@
 {
-  "total": 18,
+  "total": 21,
   "offset": 0,
-  "limit": 18,
+  "limit": 21,
   "data": [
     {
       "Key": "brand name",
@@ -74,6 +74,18 @@
     {
       "Key": "no results contact us",
       "Text": "contact us at"
+    },
+    {
+      "Key": "en",
+      "Text": "English"
+    },
+    {
+      "Key": "fr",
+      "Text": "French"
+    },
+    {
+      "Key": "es",
+      "Text": "Spanish"
     }
   ],
   ":type": "sheet"
