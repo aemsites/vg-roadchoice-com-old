@@ -75,7 +75,7 @@ function renderImages(block, images) {
   mainPicture.querySelector('img').classList.add('pdp-image');
   selectedImage.append(mainPicture);
 
-  // aditional images
+  // additional images
   if (images.length <= 1) return;
 
   const imageList = createElement('ul', { classes: 'pdp-image-list' });
@@ -108,7 +108,7 @@ function renderPartBlock(block) {
           </div>
         </div>
       </div>
-      <div class="pdp-content-coulmn">
+      <div class="pdp-content-column">
         <h1 class="pdp-title"></h1>
         <div class="pdp-description"></div>
         <ul class="pdp-list"></ul>
