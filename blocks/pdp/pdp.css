@@ -90,6 +90,7 @@
 .pdp-manuals-list-item {
   display: flex;
   text-transform: uppercase;
+  font-weight: bold;
 }
 
 .pdp-catalogs-list-title,
@@ -103,6 +104,11 @@
   padding: 8px 15px;
   font-size: 16px;
   font-family: var(--body-ff);
+}
+
+.pdp-catalogs-list-title {
+  color: var(--primary-black);
+  font-weight: bold;
 }
 
 .pdp-blogs .pdp-blogs-list {
