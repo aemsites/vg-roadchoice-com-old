@@ -275,20 +275,21 @@ export function decorateMain(main, head) {
 }
 
 async function loadTemplate(doc, templateName) {
+  const lowercaseTemplateName = templateName.toLowerCase();
   try {
     const cssLoaded = new Promise((resolve) => {
-      loadCSS(`${window.hlx.codeBasePath}/templates/${templateName}/${templateName}.css`, resolve);
+      loadCSS(`${window.hlx.codeBasePath}/templates/${lowercaseTemplateName}/${lowercaseTemplateName}.css`, resolve);
     });
     const decorationComplete = new Promise((resolve) => {
       (async () => {
         try {
-          const mod = await import(`../templates/${templateName}/${templateName}.js`);
+          const mod = await import(`../templates/${lowercaseTemplateName}/${lowercaseTemplateName}.js`);
           if (mod.default) {
             await mod.default(doc);
           }
         } catch (error) {
           // eslint-disable-next-line no-console
-          console.log(`failed to load module for ${templateName}`, error);
+          console.log(`failed to load module for ${lowercaseTemplateName}`, error);
         }
         resolve();
       })();
@@ -296,7 +297,7 @@ async function loadTemplate(doc, templateName) {
     await Promise.all([cssLoaded, decorationComplete]);
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(`failed to load block ${templateName}`, error);
+    console.log(`failed to load block ${lowercaseTemplateName}`, error);
   }
 }
 
@@ -707,24 +708,6 @@ export function checkLinkProps(links) {
 
 const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
 checkLinkProps(allLinks);
-
-/**
- * Turns the date number that comes from an excel sheet into a JS date string
- * @param {number} excelTimestamp Date received as a number from excel sheet
- * @returns {Date} JS date string
-*/
-export function convertDateExcel(excelTimestamp) {
-  // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (leap year bug)
-  // 2. Convert to milliseconds.
-  const secondsInDay = 24 * 60 * 60;
-  const excelEpoch = new Date(1899, 11, 31);
-  const excelEpochAsUnixTimestamp = excelEpoch.getTime();
-  const missingLeapYearDay = secondsInDay * 1000;
-  const delta = excelEpochAsUnixTimestamp - missingLeapYearDay;
-  const excelTimestampAsUnixTimestamp = excelTimestamp * secondsInDay * 1000;
-  const parsed = excelTimestampAsUnixTimestamp + delta;
-  return Number.isNaN(parsed) ? null : new Date(parsed);
-}
 
 /**
  * Returns a list of properties listed in the block
