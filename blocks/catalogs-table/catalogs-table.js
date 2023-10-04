@@ -72,12 +72,17 @@ const buildTables = (catalogs) => {
     });
 
     selectedCatalogs.forEach(({ notes, file, title }) => {
+      const isPdf = file.slice(-4) === '.pdf';
       const catalog = createElement('li', { classes: 'table-item' });
       const link = createElement('a', {
         classes: 'item-link',
         props: { href: file },
         textContent: title,
       });
+      if (isPdf) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
       const note = createElement('span', { classes: 'item-note', textContent: `(${notes})` });
 
       catalog.append(link);
