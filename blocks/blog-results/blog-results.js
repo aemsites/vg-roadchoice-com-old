@@ -2,7 +2,6 @@ import {
   createElement,
   getTextLabel,
   getJsonFromUrl,
-  convertDateExcel,
 } from '../../scripts/scripts.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
@@ -48,7 +47,7 @@ const filterCats = () => {
     const getArticlesWithCat = (categories, articles) => {
       const selectedArticles = [];
       categories.forEach((category) => {
-        const selectedArticle = articles.filter((article) => article.categories === category);
+        const selectedArticle = articles.filter((article) => article.category === category);
         selectedArticles.push(selectedArticle);
       });
       const groupedArticles = selectedArticles.flat();
@@ -88,7 +87,7 @@ const selectCats = (e) => {
 };
 
 const reduceCategories = (arts) => {
-  const categoryList = arts.map((x) => x.categories);
+  const categoryList = arts.map((x) => x.category);
   const reducedCategories = reduceArrays(categoryList);
   const orderedCategories = Object.keys(reducedCategories).sort().reduce(
     (obj, key) => {
@@ -103,7 +102,7 @@ const reduceCategories = (arts) => {
 };
 
 const formatDate = (date) => {
-  const convertedDate = new Date(convertDateExcel(date));
+  const convertedDate = new Date(parseInt(date, 10) * 1000);
 
   const day = convertedDate.getDate();
   const month = convertedDate.getMonth() + 1;
