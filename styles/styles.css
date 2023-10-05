@@ -279,6 +279,12 @@ a.button {
   margin: 10px 0;
 }
 
+.list-red ul > li {
+  font-size: var(--body-font-size-s);
+  color: var(--primary-red);
+  list-style-type: disc;
+}
+
 /* default content styling */
 
 div.default-content-wrapper {
@@ -291,7 +297,7 @@ div.default-content-wrapper {
 }
 
 /* spacing element */
-.default-content-wrapper span.space {
+.section span.space {
   display: block;
   height: 40px;
   margin: 0;
@@ -306,7 +312,7 @@ div.default-content-wrapper {
 
 .default-content-wrapper ul > li {
   font-size: var(--body-font-size-s);
-  color: var(--primary-red);
+  color: var(--primary-black);
   list-style-type: disc;
 }
 
