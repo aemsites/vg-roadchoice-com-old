@@ -80,11 +80,13 @@ export default async function decorate(doc) {
 
   productsWorker.onmessage = ({ data }) => {
     if (data.crData && data.pnData && data.imgData) {
-      if (searchType === 'cross') {
-        results = searchCRPartNumValue(value, data.crData);
-      } else {
-        const { make, model } = query;
-        results = searchPartNumValue(value, make, model, data.pnData);
+      if (isResultsEmpty) {
+        if (searchType === 'cross') {
+          results = searchCRPartNumValue(value, data.crData);
+        } else {
+          const { make, model } = query;
+          results = searchPartNumValue(value, make, model, data.pnData);
+        }
       }
       const event = new CustomEvent('DataLoaded', { detail: { results, data } });
       document.dispatchEvent(event);
