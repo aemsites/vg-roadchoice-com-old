@@ -28,7 +28,9 @@
   margin: 5px 0 30px;
 }
 
-.cards .cards-text {
+.cards .cards-card {
+  color: var(--primary-white);
+  text-decoration: none;
   width: 100%;
   font-size: var(--body-font-size-s);
   line-height: 27px;

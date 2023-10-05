@@ -1,13 +1,14 @@
 import {
   createElement,
   getTextLabel,
-  convertDateExcel,
   getJsonFromUrl,
 } from '../../scripts/scripts.js';
+import { getMetadata } from '../../scripts/lib-franklin.js';
 
 const title = getTextLabel('recommendations title');
 const linkText = getTextLabel('read more');
 const [homeTitle, recommendationsTitle] = title.split('[/]');
+const category = getMetadata('category');
 
 const isBlogArticle = document.querySelector('.blog-article');
 
@@ -29,20 +30,18 @@ export const clearRepeatedArticles = (articles) => articles.filter((e) => {
 });
 
 const formatDate = (date) => {
-  const convertedDate = new Date(convertDateExcel(date));
+  const convertedDate = new Date(parseInt(date, 10) * 1000);
 
   const day = convertedDate.getDate();
   const month = convertedDate.getMonth() + 1;
   const year = convertedDate.getFullYear();
 
-  return `${day}/${month}/${year}`;
+  return `${month}/${day}/${year}`;
 };
 
 export default async function decorate(block) {
   const limit = Number(getLimit(block));
-
-  // TODO change this route
-  const route = '/drafts/shomps/blog-articles.json';
+  const route = '/blog/query-index.json';
   const { data: allArticles } = await getJsonFromUrl(route);
 
   const sortedArticles = allArticles.sort((a, b) => {
@@ -51,7 +50,12 @@ export default async function decorate(block) {
     return b.date - a.date;
   });
   const filteredArticles = clearRepeatedArticles(sortedArticles);
-  const selectedArticles = filteredArticles.slice(0, limit);
+  const artByCategory = category ? filteredArticles
+    .filter((e) => e.category.toLowerCase() === category.toLowerCase())
+    : filteredArticles;
+  const selectedArticles = artByCategory.slice(0, limit);
+
+  const noArticles = selectedArticles.length === 0;
 
   const recommendationsContent = createElement('div', { classes: ['recommendations-content'] });
   const titleSection = createElement('div', { classes: ['title-section'] });
@@ -82,7 +86,7 @@ export default async function decorate(block) {
     articleDate.innerText = formatDate(art.date);
 
     const articleText = createElement('p', { classes: ['article-text'] });
-    articleText.innerText = art.extract;
+    articleText.innerText = art.description;
 
     const strongLink = createElement('strong');
     const articleLink = createElement('a', { classes: ['article-link'], props: { href: art.path } });
@@ -96,5 +100,5 @@ export default async function decorate(block) {
   recommendationsContent.append(titleSection, recommendationsList);
 
   block.textContent = '';
-  block.appendChild(recommendationsContent);
+  if (!noArticles) block.appendChild(recommendationsContent);
 }

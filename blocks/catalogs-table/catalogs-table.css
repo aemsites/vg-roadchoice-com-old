@@ -6,6 +6,7 @@
   font-family: var(--headings-ff-black);
   font-size: var(--heading-font-size-s);
   text-transform: uppercase;
+  scroll-margin: 80px;
   margin: 10px 0;
 }
 
@@ -46,6 +47,10 @@
 
   .catalogs-table .catalogs-subsection {
     margin: 0 0 60px;
+  }
+
+  .catalogs-table .catalogs-heading {
+    scroll-margin: 170px;
   }
 
   .catalogs-table .catalogs-table .table-item {

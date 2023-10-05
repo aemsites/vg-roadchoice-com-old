@@ -49,15 +49,14 @@ const buildResourcesCards = (block) => {
   [...block.children].forEach((row) => {
     const image = row.querySelector('picture');
     const aElmt = row.querySelector('a');
+    aElmt.classList = (`${blockName}-card`);
 
     const item = createElement('li', { classes: `${blockName}-item` });
-    const card = createElement('a', { classes: `${blockName}-card`, props: { href: aElmt.href } });
-    const text = createElement('p', { classes: `${blockName}-text`, textContent: aElmt.textContent });
 
     image.classList.add(`${blockName}-image`);
-    card.append(image, text);
+    aElmt.prepend(image);
 
-    item.appendChild(card);
+    item.appendChild(aElmt);
     ul.append(item);
   });
 
