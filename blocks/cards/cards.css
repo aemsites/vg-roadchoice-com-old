@@ -71,8 +71,7 @@
 .cards.resources .cards-item {
   align-items: space-between;
   background-color: var(--primary-red);
-  width: calc((100% - 10px) / 2);
-  max-width: 45%;
+  width: 100%;
   padding: 0 15px 5px;
   margin: 0;
 }
@@ -97,6 +96,12 @@
 
 .cards.resources .cards-image img {
   max-height: 150px;
+}
+
+@media (min-width: 523px) {
+  .cards.resources .cards-item {
+    width: calc((100% - 10px) / 2);
+  }
 }
 
 @media (min-width: 768px) {
