@@ -1,0 +1,24 @@
+.manuals-table > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--primary-black);
+}
+
+.manuals-table > div:not(:last-child) {
+  border-block-end: unset;
+}
+
+.manuals-table .manuals-table-column {
+  padding: 1rem;
+}
+
+.manuals-table .manuals-table-column:not(:last-child) {
+  border-inline-end: 1px solid var(--primary-black);
+}
+
+.manuals-table .manuals-table-column a {
+  text-decoration: none;
+  color: var(--primary-red);
+  font-family: var(--headings-ff-black);
+  font-size: var(--body-font-size-m);
+}
