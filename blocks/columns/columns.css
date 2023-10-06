@@ -51,11 +51,11 @@
     gap: 32px;
     padding: 0 0 30px;
   }
-  
-    .columns > div > div {
-      flex: 1;
-      order: unset;
-    }
+
+  .columns > div > div {
+    flex: 1;
+    order: unset;
+  }
 
   .columns.columns-3-cols > div {
     gap: 60px;
