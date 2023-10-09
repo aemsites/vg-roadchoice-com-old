@@ -3,11 +3,7 @@ import { createElement } from '../../scripts/scripts.js';
 const toggleAnswer = (e) => {
   const btn = e.target;
   const answer = btn.nextElementSibling;
-  if (answer.classList.contains('hide')) {
-    answer.classList.remove('hide');
-  } else {
-    answer.classList.add('hide');
-  }
+  answer.classList.toggle('hide');
 };
 
 export default async function decorate(block) {
