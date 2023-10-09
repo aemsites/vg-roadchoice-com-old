@@ -4,20 +4,18 @@
 }
 
 .pdp {
-  padding: 15px;
+  padding: 15px 0;
   min-height: 650px;
 }
 
 .pdp-title {
  color: var(--primary-red);
- font-size: 50px;
  font-weight: 500;
 }
 
 .pdp-details-wrapper {
   display: flex;
   flex-direction: column;
-  padding: 0 30px;
 }
 
 .pdp-list-item {
@@ -39,7 +37,6 @@
 .pdp-selected-image {
   padding: 5px;
   border-radius: 4px;
-  aspect-ratio: 1;
   box-shadow: 0 1px 4px 0 rgba(0 0 0 / 10%);
   display: flex;
   justify-content: center;
@@ -162,8 +159,8 @@
   border: 5px solid var(--c-yellow);
 }
 
-.section.accordion.pdp-part-fit h5{
-  font-size: 15px;
+.section.accordion.pdp-part-fit h5 {
+  font-size: 12px;
   font-family: var(--body-ff);
   background-color: var(--c-yellow);
   color: var(--primary-black);
@@ -171,6 +168,11 @@
   display: flex;
   height: 57px;
   align-items: baseline;
+}
+
+.section.accordion.pdp-part-fit h5::before,
+.section.accordion.pdp-part-fit h5::after {
+  font-size: 15px;
 }
 
 .section.accordion.accordion-open h5::before {
@@ -232,7 +234,7 @@
 
 .pdp-part-fit-search-input {
   height: 56px;
-  width: 400px;
+  width: 100%;
   font-size: 16px;
   padding: 17px 17px 17px 56px;
   border-radius: 28px;
@@ -280,9 +282,8 @@
 }
 
 .pdp-part-fit-list {
-  display: grid;
-  grid-auto-rows: 200px;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 50px 4%;
 }
 
@@ -301,25 +302,23 @@
 }
 
 .pdp-part-fit-make {
-  font-size: 32px;
   font-family: var(--headings-ff-black);
   text-transform: none;
   margin: 0;
 }
 
 .pdp-part-fit-model {
-  font-size: 24px;
   font-family: var(--headings-ff-black);
   color: var(--primary-red);
   text-transform: none;
-  margin: 0;
+  margin: 0 0 25px;
 }
 
 .pdp-part-fit-model-description,
 .pdp-part-fit-year,
 .pdp-part-fit-engine-make,
 .pdp-part-fit-engine-model {
-  font-size: 16px;
+  font-size: var(--body-font-size-xs);
   line-height: 1.2;
   margin: 0;
 }
@@ -366,10 +365,44 @@
 }
 
 .section.breadcrumbs + .section.pdp-container {
-  padding-top: 0;
+  padding: 0 32px;
 }
 
-@media screen and (min-width: 767px) {
+@media (min-width: 400px) {
+  .section.accordion.pdp-part-fit h5 {
+    font-size: 15px;
+  }
+
+  .pdp-part-fit-list {
+    display: grid;
+    grid-auto-rows: 200px;
+    grid-template-columns: 1fr;
+  }
+
+  .pdp-part-fit-make {
+    font-size: 32px;
+  }
+
+  .pdp-part-fit-model {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .pdp-part-fit-model-description,
+  .pdp-part-fit-year,
+  .pdp-part-fit-engine-make,
+  .pdp-part-fit-engine-model {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 595px) {
+  .pdp-part-fit-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 767px) {
   .pdp-details-wrapper {
     flex-direction: row-reverse;
     padding: 0;
@@ -392,10 +425,6 @@
 
   .pdp-selected-image {
     display: block;
-  }
-
-  .section.accordion {
-    padding: 20px 16px;
   }
 
   .pdp-part-fit-expanded {
@@ -434,7 +463,7 @@
   }
 }
 
-@media screen and (min-width: 1025px) {
+@media (min-width: 1025px) {
   .pdp-image-wrapper {
     max-width: calc(100% - 150px);
     margin: auto;

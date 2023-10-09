@@ -1,4 +1,10 @@
-import { createElement, getTextLabel, getJsonFromUrl } from '../../scripts/scripts.js';
+import {
+  createElement,
+  getTextLabel,
+  getJsonFromUrl,
+  getLongJSONData,
+  defaultLimit,
+} from '../../scripts/scripts.js';
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 const docRange = document.createRange();
@@ -20,7 +26,7 @@ async function getPDPData(pathSegments) {
   const { category, sku } = pathSegments;
 
   try {
-    const { data } = await getJsonFromUrl(`/product-data/rc-${category.replace(/[^\w]/g, '-')}.json`);
+    const { data } = await getJsonFromUrl(`/product-data/rc-${category.replaceAll(' ', '-')}.json`);
     return findPartBySKU(data, sku);
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -36,7 +42,10 @@ function findPartImagesBySKU(parts, sku) {
 async function fetchPartImages(sku) {
   const placeholderImage = '/product-images/rc-placeholder-image.png';
   try {
-    const { data } = await getJsonFromUrl('/product-images/road-choice-website-images.json');
+    const data = await getLongJSONData({
+      url: '/product-images/road-choice-website-images.json',
+      limit: defaultLimit,
+    });
     const images = findPartImagesBySKU(data, sku);
 
     if (images.length !== 0) {
