@@ -54,6 +54,7 @@
 
   /* Other colors */
   --c-light-gray: #f5f5f5;
+  --c-light-gray-2: #e1dfdd;
   --c-medium-gray-1: #727376;
   --c-medium-gray-2: #808080;
   --c-light-red: #deaeb1;
@@ -331,4 +332,17 @@ div.default-content-wrapper {
 
 .hide {
   display: none;
+}
+
+.hero-banner {
+  position: relative;
+}
+
+.hero-banner h1 {
+  color: var(--primary-white);
+  text-shadow: 3px 2px var(--primary-black);
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  width: 30%;
 }
