@@ -1,0 +1,29 @@
+:root {
+  --embed-video-width: 100%;
+  --embed-video-height: 56.25%;
+  --default-width: var(--embed-video-width);
+  --default-height: var(--embed-video-height);
+}
+
+.embed-video-container {
+  position: relative;
+  width: var(--default-width);
+  padding-bottom: var(--default-height);
+  height: 0;
+  margin-block-end: 3rem;
+}
+
+.embed-video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .embed-video-container {
+    width: var(--embed-video-width);
+    padding-bottom: var(--embed-video-height);
+  }
+}
