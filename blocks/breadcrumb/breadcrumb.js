@@ -30,7 +30,7 @@ export default async function decorate(block) {
     link.href = partialUrl;
 
     if (idx === amountOfLevels && isBlogArticle) {
-      link.innerHTML = pageName;
+      link.innerHTML = pageName.toLowerCase();
       link.classList.add('active-link');
     } else {
       link.innerHTML = idx === 0 ? homeText : path;
