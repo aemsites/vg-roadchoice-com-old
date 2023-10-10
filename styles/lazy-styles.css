@@ -123,6 +123,10 @@
 }
 
 .fa-linkedin::before {
+  content: "\f08c"
+}
+
+.fa-linkedin-in::before {
   content: "\f0e1"
 }
 

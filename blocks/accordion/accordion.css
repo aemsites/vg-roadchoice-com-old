@@ -1,0 +1,38 @@
+.accordion {
+ padding: 0 0 100px;
+}
+
+.accordion .accordion-item {
+  margin: 20px 0 0;
+}
+
+.accordion .accordion-button {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--body-ff-bold);
+  font-size: 16px;
+  line-height: 20px;
+  background-color: var(--c-light-gray-2);
+  border-radius: 3px;
+  text-align: left;
+  vertical-align: middle;
+  width: 100%;
+  padding: 10px 22px 6px;
+}
+
+.accordion .accordion-button:hover {
+  cursor: pointer;
+}
+
+.accordion .accordion-button::after {
+  content: '+';
+  font-size: 28px;
+}
+
+.accordion .accordion-answer {
+  margin: 20px 0 0;
+}
+
+.accordion .accordion-answer p {
+  margin: 5px 0 5px 30px;
+}

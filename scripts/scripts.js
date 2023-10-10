@@ -229,12 +229,6 @@ export function decorateLinks(block) {
   [...block.querySelectorAll('a')]
     .filter(({ href }) => !!href)
     .forEach((link) => {
-      /* eslint-disable no-use-before-define */
-      if (isVideoLink(link)) {
-        addVideoShowHandler(link);
-        return;
-      }
-
       // handling modal links
       if (link.getAttribute('href').startsWith('/#id-modal')) {
         link.addEventListener('click', (event) => {
@@ -252,8 +246,8 @@ export function decorateLinks(block) {
       }
 
       const url = new URL(link.href);
-      const external = !url.host.match('macktrucks.com') && !url.host.match('.hlx.(page|live)') && !url.host.match('localhost');
-      if (url.host.match('build.macktrucks.com') || url.pathname.endsWith('.pdf') || external) {
+      const external = !url.host.match('roadchoice.com') && !url.host.match('.hlx.(page|live)') && !url.host.match('localhost');
+      if (url.pathname.endsWith('.pdf') || external) {
         link.target = '_blank';
       }
     });
@@ -393,121 +387,13 @@ loadPage();
 // video helpers
 
 /**
- * Checks if the url is a low resolution video url
-  * @param {string} url the url to check
- * @returns {boolean} true if the url is a low resolution video url
- */
-export function isLowResolutionVideoUrl(url) {
-  return url.split('?')[0].endsWith('.mp4');
-}
-
-/**
- * Checks if the link is a high or low resolution video link, and it's not inside an embed block
+ * Checks if the link is an embedded video link from YouTube
  * @param {Element} link the link to check
- * @returns {boolean} true if the link is a video link
+ * @returns {boolean} true if the link is a YouTube video link
  */
 export function isVideoLink(link) {
   const linkString = link.getAttribute('href');
-  return (linkString.includes('youtube.com/embed/')
-    || isLowResolutionVideoUrl(linkString))
-    && link.closest('.block.embed') === null;
-}
-
-/**
- * Selects the video link to use based on the preferred type and the cookie settings
- * @param {NodeList} links the list of links to check
- * @param {string} preferredType the preferred type of video
- * @returns {Element} the link to use
- */
-export function selectVideoLink(links, preferredType) {
-  const linksList = [...links];
-  const shouldUseYouTubeLinks = document.cookie.split(';').some((cookie) => cookie.trim().startsWith('OptanonConsent=1')) && preferredType !== 'local';
-  const youTubeLink = linksList.find((link) => link.getAttribute('href').includes('youtube.com/embed/'));
-  const localMediaLink = linksList.find((link) => link.getAttribute('href').split('?')[0].endsWith('.mp4'));
-
-  if (shouldUseYouTubeLinks && youTubeLink) {
-    return youTubeLink;
-  }
-  return localMediaLink;
-}
-
-/**
- * Creates a banner that will be shown when the user clicks on a low resolution video link
- * @returns {Element} the banner HTML element
- */
-export function createLowResolutionBanner() {
-  const lowResolutionMessage = getTextLabel('Low resolution video message');
-  const changeCookieSettings = getTextLabel('Change cookie settings');
-
-  const banner = createElement('div', { classes: ['low-resolution-banner'] });
-  banner.innerHTML = `${lowResolutionMessage} <button class="low-resolution-banner-cookie-settings">${changeCookieSettings}</button>`;
-  banner.querySelector('button').addEventListener('click', () => {
-    window.OneTrust.ToggleInfoDisplay();
-  });
-
-  return banner;
-}
-
-/**
- * Shows the video modal
- * @param {string} linkUrl the url of the video to show in the modal based on the cookie settings
- */
-export function showVideoModal(linkUrl) {
-  // eslint-disable-next-line import/no-cycle
-
-  // Added a false gate until modal is created
-  // const route = '../common/modal/modal-component.js'
-  const route = false;
-  if (route) {
-    import(route).then((modal) => {
-      let beforeBanner = null;
-
-      if (isLowResolutionVideoUrl(linkUrl)) {
-        beforeBanner = createLowResolutionBanner();
-      }
-
-      modal.showModal(linkUrl, { beforeBanner });
-    });
-  }
-}
-
-/**
- * Adds the video click handler to the link to show the video modal
- * @param {Element} link the link to add the handler to
-*/
-export function addVideoShowHandler(link) {
-  link.classList.add('text-link-with-video');
-
-  link.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    showVideoModal(link.getAttribute('href'));
-  });
-}
-
-/**
- * Adds the play icon to the link
- * @param {Element} parent the link to add the icon to as a child
-*/
-export function addPlayIcon(parent) {
-  const iconWrapper = createElement('div', { classes: ['video-icon-wrapper'] });
-  const icon = createElement('i', { classes: ['fa', 'fa-play', 'video-icon'] });
-  iconWrapper.appendChild(icon);
-  parent.appendChild(iconWrapper);
-}
-
-/**
- * Wraps the image with the link and adds the play icon
- * @param {Element} videoLink the link to wrap the image with
- * @param {Element} image the image to wrap
-*/
-export function wrapImageWithVideoLink(videoLink, image) {
-  videoLink.innerText = '';
-  videoLink.appendChild(image);
-  videoLink.classList.add('link-with-video');
-  videoLink.classList.remove('button', 'primary', 'text-link-with-video');
-
-  addPlayIcon(videoLink);
+  return (linkString.includes('youtube.com/embed/'));
 }
 
 /**
