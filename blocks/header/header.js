@@ -36,7 +36,7 @@ function focusNavSection() {
 
 function HideOtherNavItems(parent, element) {
   const { children } = parent;
-  if (['level-2', 'level-3'].some((item) => parent.classList.contains(item))) {
+  if (parent.classList.contains('level-2')) {
     parent.closest('.has-sublevel').classList.add('next-level');
   }
   const otherItems = [...children].filter((item) => item !== element);
@@ -45,7 +45,7 @@ function HideOtherNavItems(parent, element) {
 
 function ShowOtherNavItems(parent) {
   const { children } = parent;
-  if (['level-2', 'level-3'].some((item) => parent.classList.contains(item))) {
+  if (parent.classList.contains('level-2')) {
     parent.closest('.has-sublevel').classList.remove('next-level');
   }
   [...children].forEach((item) => item.classList.remove('hide'));
@@ -176,7 +176,7 @@ export default async function decorate(block) {
 
     const navSections = nav.querySelector('.nav-sections');
     if (navSections) {
-      const navLevels = 4;
+      const navLevels = 3;
       let selector = ':scope';
       for (let i = 2; i <= navLevels; i += 1) {
         selector += ' > ul > li';
@@ -216,8 +216,6 @@ export default async function decorate(block) {
     const navTools = nav.querySelector('.nav-tools');
     navWrapper.appendChild(navTools);
     if (categoriesClone) {
-      const level4 = categoriesClone.querySelectorAll('.level-2 > li > ul > li > ul');
-      [...level4].forEach((ul) => { ul.className = 'level-4'; });
       navTools.prepend(categoriesClone);
     }
 

@@ -41,8 +41,7 @@ header nav .nav-drop.show > a {
 }
 
 .show .level-2,
-.show .show .level-3,
-.show .show .show .level-4 {
+.show .show .level-3 {
   display: flex;
   flex-direction: column;
   grid-area: sub-section;
@@ -456,9 +455,5 @@ header .nav-tools .categories a {
     row-gap: 1rem;
     line-height: 1.2;
     width: 15rem;
-  }
-
-  .nav-tools .categories .level-4 a {
-    opacity: 0.6;
   }
 }
