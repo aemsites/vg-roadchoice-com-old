@@ -55,7 +55,7 @@ const getFilterAttrib = async (cat) => {
     const json = await getJsonFromUrl(categoryMaster);
     if (!json) throw new Error('No data found in category master file');
     const filterAttribs = json.data.filter((el) => (
-      el.Subcategory.toLowerCase() === cat.toLowerCase()
+      el.Subcategory.toLowerCase() === cat.toLowerCase().replaceAll('-', ' ')
       && el.Filter === ''
     )).map((el) => el.Attributes);
     const event = new Event('FilterAttribsLoaded');

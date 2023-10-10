@@ -595,6 +595,8 @@ export function checkLinkProps(links) {
 const allLinks = [...document.querySelectorAll('a'), ...document.querySelectorAll('button')];
 checkLinkProps(allLinks);
 
+// fetch data helpers
+
 /**
  * Returns a list of properties listed in the block
  * @param {string} route get the Json data from the route
@@ -611,6 +613,87 @@ export const getJsonFromUrl = async (route) => {
     console.error('getJsonFromUrl:', { error });
   }
   return null;
+};
+
+/**
+ * Save the fetched data in a temporary array
+*/
+const tempData = [];
+/**
+ * The default limit of the fetched data
+ */
+export const defaultLimit = 100_000;
+
+/**
+ * Returns a list of properties listed in the block
+ * @param {Object} props the block props
+ * @param {string} props.url get the Json data from the route
+ * @param {number} props.offset the offset of the data
+ * @param {number} props.limit the limit of the data
+ * @returns {Object} the json data object
+*/
+const getInitialJSONData = async (props) => {
+  try {
+    const { url, offset = 0, limit = null } = props;
+    const nextOffset = offset > 0 ? `?offset=${offset}` : '';
+    const nextLimit = limit ? `${offset > 0 ? '&' : '?'}limit=${limit}` : '';
+    const results = await fetch(`${url}${nextOffset}${nextLimit}`);
+    const json = await results.json();
+    return json;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('getInitialJSONData:', { error });
+    return null;
+  }
+};
+
+/**
+ * Returns a more data if the limit is reached
+ * @param {string} url get the Json data from the route
+ * @param {number} total the total of the data
+ * @param {number} offset the offset of the data
+ * @param {number} limit the limit of the data
+ * @returns {Object} the json data object
+ * @example getMoreJSONData('https://roadchoice.com/api/news', 1000, 0, 100_000)
+*/
+async function getMoreJSONData(url, total, offset = 0, limit = defaultLimit) {
+  try {
+    const newOffset = offset + limit;
+    const json = await getInitialJSONData({ url, offset: newOffset, limit });
+    const isLastCall = json.offset + limit >= json.total;
+    if (isLastCall) {
+      const lastData = [...tempData, ...json.data];
+      tempData.length = 0;
+      return lastData;
+    }
+    tempData.push(...json.data);
+    return getMoreJSONData(total, newOffset);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('getMoreJSONData:', { error });
+    return null;
+  }
+}
+
+/**
+ * Return the data from the url if it has more than the default limit
+ * @param {Object} props the block props
+ * @param {string} props.url get the Json data from the route
+ * @param {number} props.offset the offset of the data
+ * @param {number} props.limit the limit of the data
+ * @returns {Object} the json data object
+ * @example getLongJSONData({ url:'https://roadchoice.com/api/news', limit: 100_000, offset: 1000})
+ */
+export const getLongJSONData = async (props) => {
+  const { url } = props;
+  const json = await getInitialJSONData(props);
+  if (!json) return null;
+  const initialData = [...json.data];
+  let moreData;
+  if (json.total > json.limit) {
+    moreData = await getMoreJSONData(url, json.total);
+  }
+  return moreData ? [...initialData, ...moreData] : initialData;
 };
 
 /**
