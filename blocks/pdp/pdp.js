@@ -1,6 +1,16 @@
-import { createElement, getTextLabel, getJsonFromUrl } from '../../scripts/scripts.js';
+import {
+  createElement,
+  getTextLabel,
+  getJsonFromUrl,
+  getLongJSONData,
+  defaultLimit,
+} from '../../scripts/scripts.js';
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
+const docTypes = {
+  catalog: 'catalog',
+  manual: 'manual',
+};
 const docRange = document.createRange();
 
 function getQueryParams() {
@@ -20,13 +30,12 @@ async function getPDPData(pathSegments) {
   const { category, sku } = pathSegments;
 
   try {
-    const { data } = await getJsonFromUrl(`/product-data/rc-${category.replace(/[^\w]/g, '-')}.json`);
-    return findPartBySKU(data, sku);
+    const json = await getJsonFromUrl(`/product-data/rc-${category.replaceAll(' ', '-')}.json`);
+    if (!json) return null;
+    return findPartBySKU(json?.data, sku);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching part data:', error);
+    return null;
   }
-  return null;
 }
 
 function findPartImagesBySKU(parts, sku) {
@@ -36,15 +45,17 @@ function findPartImagesBySKU(parts, sku) {
 async function fetchPartImages(sku) {
   const placeholderImage = '/product-images/rc-placeholder-image.png';
   try {
-    const { data } = await getJsonFromUrl('/product-images/road-choice-website-images.json');
+    const data = await getLongJSONData({
+      url: '/product-images/road-choice-website-images.json',
+      limit: defaultLimit,
+    });
     const images = findPartImagesBySKU(data, sku);
 
     if (images.length !== 0) {
       return images;
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching part image(s):', error);
+    return [{ 'Image URL': placeholderImage }];
   }
   return [{ 'Image URL': placeholderImage }];
 }
@@ -55,11 +66,9 @@ function renderColDetails(part, block, categoryKeys) {
   keys.forEach((key) => {
     if (categoryKeys.map((item) => item.Attributes).includes(key) && part[key].length) {
       const liFragment = docRange.createContextualFragment(`<li class="pdp-list-item">
-        <span class="pdp-list-item-title"></span>:
-        <span class="pdp-list-item-value"></span>
+        <span class="pdp-list-item-title">${key}</span>:
+        <span class="pdp-list-item-value">${part[key]}</span>
       </li>`);
-      liFragment.querySelector('.pdp-list-item-title').textContent = key;
-      liFragment.querySelector('.pdp-list-item-value').textContent = part[key];
       list.append(liFragment);
     }
   });
@@ -71,7 +80,13 @@ function renderImages(block, images) {
 
   // main image
   const mainPictureUrl = images[0]['Image URL'];
-  const mainPicture = createOptimizedPicture(mainPictureUrl, 'Part image', true, undefined, !mainPictureUrl.startsWith('/'));
+  const mainPicture = createOptimizedPicture(
+    mainPictureUrl,
+    'Part image',
+    true,
+    undefined,
+    !mainPictureUrl.startsWith('/'),
+  );
   mainPicture.querySelector('img').classList.add('pdp-image');
   selectedImage.append(mainPicture);
 
@@ -80,8 +95,15 @@ function renderImages(block, images) {
 
   const imageList = createElement('ul', { classes: 'pdp-image-list' });
   images.forEach((image, id) => {
-    const liFragment = docRange.createContextualFragment(`<li class="pdp-image-item ${id === 0 ? 'active' : ''}"> </li>`);
-    const picture = createOptimizedPicture(image['Image URL'], 'Additional part image', false, undefined, !image['Image URL'].startsWith('/'));
+    const liFragment = docRange.createContextualFragment(`
+      <li class="pdp-image-item ${id === 0 ? 'active' : ''}"> </li>`);
+    const picture = createOptimizedPicture(
+      image['Image URL'],
+      'Additional part image',
+      false,
+      undefined,
+      !image['Image URL'].startsWith('/'),
+    );
     picture.querySelector('img').classList.add('pdp-gallery-image');
     liFragment.querySelector('li').append(picture);
     imageList.append(liFragment);
@@ -126,7 +148,8 @@ function setPartData(part, block) {
 }
 
 function filterByCategory(data, category, categoryKey = 'category') {
-  return data.filter((item) => item[categoryKey].replace(/[^\w]/g, '').toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
+  return data.filter((item) => item[categoryKey].replace(/[^\w]/g, '')
+    .toLowerCase() === category.replace(/[^\w]/g, '').toLowerCase());
 }
 
 function groupByLanguage(data) {
@@ -139,33 +162,37 @@ function groupByLanguage(data) {
 
 async function fetchCategoryKeys(category) {
   try {
-    const { data } = await getJsonFromUrl('/product-data/rc-attribute-master-file.json');
-    return filterByCategory(data, category, 'Subcategory');
+    const json = await getJsonFromUrl('/product-data/rc-attribute-master-file.json');
+    if (!json) return [];
+    return filterByCategory(json?.data, category, 'Subcategory');
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching Category Keys:', error);
+    return [];
   }
-  return [];
+}
+
+function filterByDocType(data, type, category) {
+  return groupByLanguage(filterByCategory(data
+    .filter((doc) => doc.type.toLowerCase() === type), category));
 }
 
 async function fetchDocs(category) {
   try {
-    const { data } = await getJsonFromUrl('/catalogs-categories.json');
+    const json = await getJsonFromUrl('/catalogs-categories.json');
+    if (!json) return null;
+    const data = json?.data;
     return {
-      catalogs: groupByLanguage(filterByCategory(data.filter((catalog) => catalog.type.toLowerCase() !== 'manual'), category)),
-      manuals: groupByLanguage(filterByCategory(data.filter((catalog) => catalog.type.toLowerCase() === 'manual'), category)),
+      catalogs: filterByDocType(data, docTypes.catalog, category),
+      manuals: filterByDocType(data, docTypes.manual, category),
     };
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching Docs:', error);
+    return null;
   }
-  return null;
 }
 
 function renderDocsSection(docsList, sectionType) {
   const section = document.querySelector(`.pdp-${sectionType}`);
   const sectionWrapper = section.querySelector('.default-content-wrapper');
-  if (!section || !sectionWrapper || !Object.keys(docsList).length) return;
+  if (!section || !sectionWrapper || !Object.keys(docsList)?.length) return;
 
   const fragment = docRange.createContextualFragment(`
     <ul class="pdp-${sectionType}-list"></ul>
@@ -180,7 +207,10 @@ function renderDocsSection(docsList, sectionType) {
       </li>
     `);
     docs.forEach((doc) => {
-      const anchor = createElement('a', { props: { target: '_blank', href: doc.file }, textContent: doc.title });
+      const anchor = createElement('a', {
+        props: { target: '_blank', href: doc.file },
+        textContent: doc.title,
+      });
       docsFragment.querySelector(`.pdp-${sectionType}-list-link`).append(anchor);
     });
     sectionWrapper.querySelector(`.pdp-${sectionType}-list`).append(docsFragment);
@@ -189,27 +219,27 @@ function renderDocsSection(docsList, sectionType) {
 }
 
 function renderDocs(docs) {
+  if (!docs) return;
   renderDocsSection(docs.catalogs, 'catalogs');
   renderDocsSection(docs.manuals, 'manuals');
 }
 
-// Check if product has catalog, product sheet , ecatalaogs section
+// Check if product has catalog, product sheet or e-catalogs section
 async function fetchSDS(category) {
   try {
-    const { data } = await getJsonFromUrl('/sds-categories.json');
-
-    return filterByCategory(data, category);
+    const json = await getJsonFromUrl('/sds-categories.json');
+    if (!json) return null;
+    return filterByCategory(json?.data, category);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching part SDS:', error);
+    return null;
   }
-  return null;
 }
 
 function renderSDS(sdsList) {
+  if (!sdsList) return;
   const sdsContainer = document.querySelector('.pdp-sds');
   const sectionWrapper = sdsContainer.querySelector('.default-content-wrapper');
-  if (!sdsContainer || !sectionWrapper || !sdsList.length) return;
+  if (!sdsContainer || !sectionWrapper || !sdsList?.length) return;
 
   const fragment = docRange.createContextualFragment(`
     <ul class="pdp-sds-list"></ul>
@@ -219,11 +249,9 @@ function renderSDS(sdsList) {
   sdsList.forEach((sds) => {
     const sdsFragment = docRange.createContextualFragment(`
       <li class="pdp-sds-list-item">
-        <a target="_blank"></a>
+        <a target="_blank" href="${sds.file}">${sds.title}</a>
       </li>
     `);
-    sdsFragment.querySelector('a').setAttribute('href', sds.file);
-    sdsFragment.querySelector('a').textContent = sds.title;
     sectionWrapper.querySelector('.pdp-sds-list').append(sdsFragment);
   });
   sdsContainer.classList.remove('hide');
@@ -231,20 +259,19 @@ function renderSDS(sdsList) {
 
 async function fetchBlogs(category) {
   try {
-    const { data } = await getJsonFromUrl('/blog/query-index.json');
-
-    return filterByCategory(data, category);
+    const json = await getJsonFromUrl('/blog/query-index.json');
+    if (!json) return null;
+    return filterByCategory(json?.data, category);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching Blogs:', error);
+    return null;
   }
-  return null;
 }
 
 function renderBlogs(blogList) {
+  if (!blogList) return;
   const blogsContainer = document.querySelector('.pdp-blogs');
   const sectionWrapper = blogsContainer.querySelector('.default-content-wrapper');
-  if (!blogsContainer || !sectionWrapper || !blogList.length) return;
+  if (!blogsContainer || !sectionWrapper || !blogList?.length) return;
 
   const fragment = docRange.createContextualFragment(`
     <ul class="pdp-blogs-list"></ul>
@@ -258,36 +285,48 @@ function renderBlogs(blogList) {
     .forEach((sds) => {
       const blogFragment = docRange.createContextualFragment(`
         <li class="pdp-blogs-list-item">
-          <a class="pdp-blogs-anchor" target="_blank"><h6 class="pdp-blogs-title"></h6></a>
-          <p class="pdp-blogs-date"></p>
-          <p class="pdp-blogs-description"></p>
-          <a class="pdp-blogs-cta" target="_blank">Read More</a>
+          <a class="pdp-blogs-anchor" target="_blank" href="${sds.path}">
+            <h6 class="pdp-blogs-title">${sds.title}</h6>
+          </a>
+          <p class="pdp-blogs-date">
+            ${new Date(parseInt(sds.date, 10) * 1000).toLocaleDateString()}
+          </p>
+          <p class="pdp-blogs-description">${sds.description}</p>
+          <a class="pdp-blogs-cta" target="_blank" href="${sds.path}">Read More</a>
         </li>
       `);
-      blogFragment.querySelector('a.pdp-blogs-cta').setAttribute('href', sds.path);
-      blogFragment.querySelector('a.pdp-blogs-anchor').setAttribute('href', sds.path);
-      blogFragment.querySelector('.pdp-blogs-title').textContent = sds.title;
-      blogFragment.querySelector('.pdp-blogs-date').textContent = new Date(parseInt(sds.date, 10) * 1000).toLocaleDateString();
-      blogFragment.querySelector('.pdp-blogs-description').textContent = sds.description;
       sectionWrapper.querySelector('.pdp-blogs-list').append(blogFragment);
     });
   blogsContainer.classList.remove('hide');
 }
 
+async function getPartFitConfig(category) {
+  try {
+    const json = await getJsonFromUrl('/product-fit-vehicles/product-fit-vehicles-config.json');
+    if (!json) return null;
+    return filterByCategory(json?.data, category);
+  } catch (error) {
+    return null;
+  }
+}
+
 async function fetchPartFit(pathSegments) {
   const { category, sku } = pathSegments;
 
+  const hasPartFit = await getPartFitConfig(category);
+  if (hasPartFit?.length === 0) return null;
   try {
-    const { data } = await getJsonFromUrl(`/product-fit-vehicles/${category.replace(/[^\w]/g, '-')}-application-data.json`);
-    return filterModelsBySKU(data, sku);
+    const json = await getJsonFromUrl(`/product-fit-vehicles/${
+      category.replace(/[^\w]/g, '-')}-application-data.json`);
+    if (!json) return null;
+    return filterModelsBySKU(json?.data, sku);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching part data:', error);
+    return null;
   }
-  return null;
 }
 
 function renderPartFit(partFitData) {
+  if (!partFitData) return;
   const partFitContainer = document.querySelector('.pdp-part-fit');
   let sectionWrapper = partFitContainer.querySelector('.default-content-wrapper');
 
@@ -296,7 +335,7 @@ function renderPartFit(partFitData) {
     partFitContainer.append(sectionWrapper);
   }
 
-  if (!partFitContainer || !sectionWrapper || !partFitData.length) return;
+  if (!partFitContainer || !sectionWrapper || !partFitData?.length) return;
 
   const fragment = docRange.createContextualFragment(`
     <div class="pdp-part-fit-expanded">
@@ -322,30 +361,26 @@ function renderPartFit(partFitData) {
   }, new Set());
 
   makes.forEach((make) => {
-    const makeFragment = docRange.createContextualFragment('<div class="pdp-part-fit-make-list-item"></div>');
-    makeFragment.querySelector('.pdp-part-fit-make-list-item').textContent = make;
+    const makeFragment = docRange.createContextualFragment(`
+      <div class="pdp-part-fit-make-list-item">${make}</div>
+    `);
     sectionWrapper.querySelector('.pdp-part-fit-make-list').append(makeFragment);
   });
 
   partFitData
     .forEach((vehicle) => {
       const partFitFragment = docRange.createContextualFragment(`
-        <div class="pdp-part-fit-list-item">
-          <h4 class="pdp-part-fit-make">Make</h6>
-          <h6 class="pdp-part-fit-model">Model: <span class="value"></span></h6>
-          <p class="pdp-part-fit-model-description">Description</p>
-          <div class="pdp-part-fit-year">Year: <span class="value"></span></div>
-          <div class="pdp-part-fit-engine-make">Engine Make: <span class="value"></span></div>
-          <div class="pdp-part-fit-engine-model">Engine Model: <span class="value"></span></div>
+        <div class="pdp-part-fit-list-item" data-make="${vehicle.Make}">
+          <h4 class="pdp-part-fit-make">${vehicle.Make}</h4>
+          <h6 class="pdp-part-fit-model">Model: <span class="value">${vehicle.Model}</span></h6>
+          <p class="pdp-part-fit-model-description">${vehicle['Model Description']}</p>
+          <div class="pdp-part-fit-year">Year: <span class="value">${vehicle.Year}</span></div>
+          <div class="pdp-part-fit-engine-make">Engine Make: <span class="value">
+          ${vehicle['Engine Make']}</span></div>
+          <div class="pdp-part-fit-engine-model">Engine Model: <span class="value">
+          ${vehicle['Engine Model']}</span></div>
         </div>
       `);
-      partFitFragment.querySelector('.pdp-part-fit-list-item').dataset.make = vehicle.Make;
-      partFitFragment.querySelector('.pdp-part-fit-make').textContent = vehicle.Make;
-      partFitFragment.querySelector('.pdp-part-fit-model .value').textContent = vehicle.Model;
-      partFitFragment.querySelector('.pdp-part-fit-model-description').textContent = vehicle['Model Description'];
-      partFitFragment.querySelector('.pdp-part-fit-year .value').textContent = vehicle.Year;
-      partFitFragment.querySelector('.pdp-part-fit-engine-make .value').textContent = vehicle['Engine Make'];
-      partFitFragment.querySelector('.pdp-part-fit-engine-model .value').textContent = vehicle['Engine Model'];
 
       sectionWrapper.querySelector('.pdp-part-fit-list').append(partFitFragment);
     });
@@ -390,11 +425,8 @@ function renderPartFit(partFitData) {
     const query = e.target.value.toLowerCase().trim();
     sectionWrapper.querySelectorAll('.pdp-part-fit-list-item').forEach((item) => {
       const text = item.textContent.toLowerCase();
-      if (text.length === 0 || text.includes(query)) {
-        item.classList.remove('pdp-hide-by-search');
-      } else {
-        item.classList.add('pdp-hide-by-search');
-      }
+      const shouldHide = text.length > 0 && !text.includes(query);
+      item.classList.toggle('pdp-hide-by-search', shouldHide);
     });
     countVisibleItems();
   });
@@ -446,10 +478,16 @@ function renderBreadcrumbs(part) {
               <a class="breadcrumb-link" href="/">Parts</a>
             </li>
             <li class="breadcrumb-item breadcrumb-item-1">
-              <a class="breadcrumb-link" href="/part-category/${part.Category.toLowerCase().replace(/[^\w]/g, '-')}">${part.Category}</a>
+              <a class="breadcrumb-link"
+                href="/part-category/${part.Category.toLowerCase().replace(/[^\w]/g, '-')}">
+                ${part.Category}
+              </a>
             </li>
             <li class="breadcrumb-item breadcrumb-item-2">
-              <a class="breadcrumb-link" href="/part-category/${part.Subcategory.toLowerCase().replace(/[^\w]/g, '-')}">${part.Subcategory}</a>
+              <a class="breadcrumb-link"
+                href="/part-category/${part.Subcategory.toLowerCase().replace(/[^\w]/g, '-')}">
+                ${part.Subcategory}
+              </a>
             </li>
           </ul>
         </div>
