@@ -194,24 +194,25 @@ function getFieldValue(selector, items) {
 }
 
 function formListener(form) {
-  form.onsubmit = async (e) => {
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    if (!window.allProducts) return;
     ({ crData, pnData } = window.allProducts);
     const ssData = ['query', 'results', 'amount'];
-    ssData.forEach((item) => sessionStorage.removeItem(item));
-
+    const ssDataItems = [];
     const items = [...form];
     const value = getFieldValue(`search__input-${isCrossRefActive ? 'cr' : 'pn'}__input`, items);
     const makeFilterValue = getFieldValue('search__make-filter__select', items);
     const modelFilterValue = getFieldValue('search__model-filter__select', items);
-    e.preventDefault();
+
     if (!crData || !pnData) return;
+    ssData.forEach((item) => sessionStorage.removeItem(item));
     const results = isCrossRefActive
       ? searchCRPartNumValue(value)
       : searchPartNumValue(value, makeFilterValue, modelFilterValue);
 
-    let url = window.location.pathname;
+    const url = new URL(window.location.href);
     const searchType = isCrossRefActive ? 'cross' : `parts&make=${makeFilterValue}&model=${modelFilterValue}`;
-    const isHomepage = url === '/' ? 'search/' : '';
     const query = {
       searchType,
       value,
@@ -220,10 +221,10 @@ function formListener(form) {
       query.make = makeFilterValue;
       query.model = modelFilterValue;
     }
-    const ssDataItems = [query, results, amountOfProducts];
+    ssDataItems.push(query, results, amountOfProducts);
     ssData.forEach((item, i) => sessionStorage.setItem(item, JSON.stringify(ssDataItems[i])));
-
-    url = `${url}${isHomepage}?q=${value}&st=${searchType}`;
+    url.pathname = '/search/';
+    url.search = `?q=${value}&st=${searchType}`;
     window.location.href = url;
   };
 }

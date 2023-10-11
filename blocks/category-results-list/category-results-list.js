@@ -16,6 +16,10 @@ productsWorker.onmessage = ({ data }) => {
     const event = new CustomEvent('ImagesLoaded', { detail: data.imgData });
     document.dispatchEvent(event);
   }
+  // allProducts properties needs to be set again
+  if (data.crData && data.pnData && data.imgData) {
+    window.allProducts = data;
+  }
 };
 
 const isTruckLibrary = (text) => text.includes('trucklibrary.com');
