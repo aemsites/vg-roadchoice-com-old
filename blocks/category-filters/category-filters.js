@@ -40,7 +40,7 @@ const renderBlock = async (block) => {
     if (set.size <= 0) return;
     [...set].sort().forEach((el) => {
       const filterOption = createElement('li', { classes: 'filter-option' });
-      const inputId = `${attribute.replace(' ', '_')}<&>${el.replace(' ', '_')}`;
+      const inputId = `${attribute ? attribute.replace(' ', '_') : null}<&>${el ? el.replace(' ', '_') : null}`;
       const filterInput = createElement('input', {
         classes: 'filter-input',
         props: {
