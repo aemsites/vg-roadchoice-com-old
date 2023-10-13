@@ -116,8 +116,9 @@ export default async function decorate(doc) {
       if (!mainCategory) {
         lastElLink.href = new URL(window.location.href).origin;
       } else {
+        mainCategory = mainCategory.toLowerCase();
         lastElLink.href += mainCategory.replace(/\s/g, '-');
-        lastElLink.textContent = mainCategory.toLowerCase();
+        lastElLink.textContent = mainCategory;
       }
 
       breadcrumbItem.appendChild(link);

@@ -1,15 +1,11 @@
 {
-  "total": 21,
+  "total": 20,
   "offset": 0,
-  "limit": 21,
+  "limit": 20,
   "data": [
     {
       "Key": "brand name",
       "Text": "Road Choice"
-    },
-    {
-      "Key": "home url",
-      "Text": "https://main--vg-roadchoice-com--hlxsites.hlx.page/"
     },
     {
       "Key": "recommendations title",
