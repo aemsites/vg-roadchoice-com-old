@@ -5,6 +5,7 @@ const amount = 12;
 const url = new URL(window.location.href);
 const urlParams = new URLSearchParams(url.search);
 let category;
+let mainCategory;
 
 /* Cases that throw an error if the category is wrong or missing that goes to 404 page:
  * 1. "/part-category/" => 404 if is index path
@@ -33,6 +34,7 @@ const getCategoryData = async (cat) => {
     const json = await getJsonFromUrl(url);
     if (!json) throw new Error(`No data found in "${cat}" category file`);
     const event = new Event('CategoryDataLoaded');
+    mainCategory = json.data[0].Category;
     sessionStorage.setItem('category-data', (json ? JSON.stringify(json.data) : null));
     sessionStorage.setItem('amount', amount);
     document.dispatchEvent(event);
@@ -91,7 +93,7 @@ export default async function decorate(doc) {
   titleWrapper.appendChild(title);
   section.prepend(titleWrapper);
   resetCategoryData();
-  getCategoryData(category);
+  await getCategoryData(category);
   getFilterAttrib(category);
 
   // update breadcrumb adding the category dynamically
@@ -110,6 +112,14 @@ export default async function decorate(doc) {
       const breadcrumbItem = createElement('li', {
         classes: ['breadcrumb-item', `breadcrumb-item-${length}`],
       });
+
+      if (!mainCategory) {
+        lastElLink.href = new URL(window.location.href).origin;
+      } else {
+        lastElLink.href += mainCategory.replace(/\s/g, '-');
+        lastElLink.textContent = mainCategory.toLowerCase();
+      }
+
       breadcrumbItem.appendChild(link);
       breadcrumbList.appendChild(breadcrumbItem);
       observer.disconnect();
