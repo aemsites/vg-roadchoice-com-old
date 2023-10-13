@@ -187,6 +187,8 @@ export default async function decorate(block) {
       const sectionClasses = ['main', 'mobile'];
       const sectionNavs = navSections.querySelectorAll(':scope > ul');
       if (sectionNavs.length === sectionClasses.length) {
+        const sectionPDFs = navSections.querySelectorAll('a[href$=".pdf"]');
+        [...sectionPDFs].forEach((pdf) => { pdf.target = '_blank'; });
         sectionNavs[0].className = 'level-1';
         sectionClasses.forEach((c, i) => sectionNavs[i].classList.add(`nav-sections-${c}`));
       }
