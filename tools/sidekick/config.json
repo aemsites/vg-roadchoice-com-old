@@ -1,6 +1,6 @@
 {
   "project": "Roadchoice",
-  "host": "main--vg-roadchoice-com--hlxsites.hlx.live/",
+  "host": "main--vg-roadchoice-com--hlxsites.hlx.live",
   "plugins": [
     {
       "id": "library",
