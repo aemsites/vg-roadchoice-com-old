@@ -485,7 +485,7 @@ function renderBreadcrumbs(part) {
             </li>
             <li class="breadcrumb-item breadcrumb-item-2">
               <a class="breadcrumb-link"
-                href="/part-category/${part.Subcategory.toLowerCase().replace(/[^\w]/g, '-')}">
+                href="/part-category/?category=${part.Subcategory.toLowerCase().replace(/[^\w]/g, '-')}">
                 ${part.Subcategory}
               </a>
             </li>
