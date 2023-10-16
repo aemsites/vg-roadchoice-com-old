@@ -1,24 +1,20 @@
-import {
-  getMetadata,
-} from '../../scripts/lib-franklin.js';
+import { getMetadata } from '../../scripts/lib-franklin.js';
 import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
 const homeText = getTextLabel('brand name');
-const homeUrl = getTextLabel('home url');
+const url = new URL(window.location.href);
 
 const pageName = getMetadata('og:title');
 
 export default async function decorate(block) {
   const breadcrumbContent = createElement('div', { classes: ['breadcrumb-content'] });
   const breadcrumbList = createElement('ul', { classes: ['breadcrumb-list'] });
-  const currentUrl = window.location.pathname;
+  const currentUrl = url.pathname;
 
   const routes = currentUrl.split('/');
   if (routes[0].length === 0) routes[0] = '/';
 
   const amountOfLevels = routes.length - 1;
-  let partialUrl = homeUrl;
-
   const isBlogArticle = document.querySelector('.blog-article');
 
   routes.forEach((path, idx) => {
@@ -26,11 +22,11 @@ export default async function decorate(block) {
     const item = createElement('li', { classes: ['breadcrumb-item', `breadcrumb-item-${idx}`] });
     const link = createElement('a', { classes: ['breadcrumb-link'] });
 
-    partialUrl = idx === 0 ? homeUrl : `${partialUrl}${path}/`;
-    link.href = partialUrl;
+    link.href = idx === 0 ? url.origin : `${url.origin}/${path}/`;
 
     if (idx === amountOfLevels && isBlogArticle) {
-      link.innerHTML = pageName.toLowerCase();
+      link.href = `${url.origin}/blog/${path}`;
+      link.innerHTML = `${pageName.toLowerCase()} /`;
       link.classList.add('active-link');
     } else {
       link.innerHTML = idx === 0 ? homeText : path;
