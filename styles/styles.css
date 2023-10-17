@@ -135,6 +135,11 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  font-feature-settings: "ss02" 1;
+  /* stylelint-disable-next-line property-no-unknown */
+  font-smooth: antialiased;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {

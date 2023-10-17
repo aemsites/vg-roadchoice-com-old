@@ -79,7 +79,9 @@
   .breadcrumb-list li a {
     display: block;
   }
+}
 
+@media (min-width: 1200px) {
   .breadcrumb-list li:last-of-type a {
     width: unset;
   }
