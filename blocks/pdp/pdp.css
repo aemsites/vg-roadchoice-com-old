@@ -343,11 +343,11 @@
 }
 
 .section.breadcrumbs .breadcrumb-list {
-    display: flex;
-    flex-direction: row;
-    margin: 0 auto;
-    padding: 16px;
-    overflow: scroll;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  padding: 16px;
+  overflow: scroll;
 }
 
 .section.breadcrumbs a.breadcrumb-link {
