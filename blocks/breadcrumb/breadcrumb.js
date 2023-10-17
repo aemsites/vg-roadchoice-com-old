@@ -17,12 +17,14 @@ export default async function decorate(block) {
   const amountOfLevels = routes.length - 1;
   const isBlogArticle = document.querySelector('.blog-article');
 
+  let tempUrl = '';
   routes.forEach((path, idx) => {
     if (path.length === 0) return;
     const item = createElement('li', { classes: ['breadcrumb-item', `breadcrumb-item-${idx}`] });
     const link = createElement('a', { classes: ['breadcrumb-link'] });
+    tempUrl += idx === 0 ? path : `${path}/`;
 
-    link.href = idx === 0 ? url.origin : `${url.origin}/${path}/`;
+    link.href = idx === 0 ? url.origin : `${url.origin}${tempUrl}`;
 
     if (idx === amountOfLevels && isBlogArticle) {
       link.href = `${url.origin}/blog/${path}`;

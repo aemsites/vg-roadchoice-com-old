@@ -136,6 +136,12 @@
   padding: 5px 0;
   margin: 0 0 15px;
   cursor: pointer;
+  font-size: 70%;
+  transition: font-size 0.3s ease-in-out;
+}
+
+.section.accordion.accordion-open h5 {
+  font-size: var(--heading-font-size-s);
 }
 
 .section.accordion.accordion-open,
@@ -376,6 +382,10 @@
 }
 
 @media (min-width: 400px) {
+  .section.accordion h5 {
+    font-size: 90%;
+  }
+
   .section.accordion.pdp-part-fit h5 {
     font-size: 15px;
   }
@@ -406,6 +416,11 @@
 @media (min-width: 595px) {
   .pdp-part-fit-list {
     grid-template-columns: 1fr 1fr;
+  }
+
+
+  .section.accordion h5 {
+    font-size: var(--heading-font-size-s);
   }
 
   .section.breadcrumbs .breadcrumb-item:nth-child(3) {
