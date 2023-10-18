@@ -30,6 +30,11 @@
   background-color: var(--table-bg);
 }
 
+.category-filters-wrapper .filters-buttons-wrapper .clear-filter-btn,
+.category-filters-wrapper .filters-buttons-wrapper .apply-filter-btn {
+  font-feature-settings: "ss03" 1;
+}
+
 .category-filters-wrapper .filter-form .filters-buttons-wrapper {
   display: flex;
   flex-wrap: wrap;
