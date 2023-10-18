@@ -94,8 +94,8 @@ function setupNextLevelList(navSections, selector, level) {
         e.preventDefault();
         const li = e.target.localName === 'a' ? e.target.closest('li') : e.target;
         const expanded = li.getAttribute('aria-expanded') === 'true';
-        li.ariaExpanded = !expanded;
-        categoriesClone.ariaExpanded = !expanded;
+        li.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        categoriesClone.setAttribute('aria-expanded', expanded ? 'false' : 'true');
       };
     }
   }
