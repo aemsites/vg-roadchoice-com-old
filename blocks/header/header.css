@@ -427,11 +427,11 @@ header .nav-tools .categories a {
   }
 
   header .nav-tools .categories[aria-expanded="true"] .level-2 {
-    padding: 6rem 6rem 11rem;
+    padding: 6rem 6rem 20rem;
     display: flex;
     flex-flow: column wrap;
     gap: 8rem 3rem;
-    height: 1650px;
+    height: 1450px;
     font-size: var(--nav-font-size);
   }
 

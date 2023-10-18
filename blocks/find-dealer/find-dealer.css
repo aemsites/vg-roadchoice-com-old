@@ -1,11 +1,9 @@
-.find-dealer-container {
-  background-size: cover;
-  background-color: var(--primary-black);
-}
-
 .section.find-dealer-container {
   max-width: unset;
   padding: 10px 16px;
+  background-size: cover;
+  background-color: var(--primary-black);
+  background-position-x: 50%;
 }
 
 .find-dealer-wrapper {
@@ -25,7 +23,7 @@
   align-items: center;
   color: var(--primary-white);
   text-align: center;
-  padding: 5rem;
+  padding: 5rem 1rem;
   gap: 3rem;
   font-family: var(--body-ff);
   width: 90%;
@@ -42,6 +40,7 @@
 
 .find-dealer-form-container .find-dealer-col-1 .find-dealer-text {
   color: var(--primary-white);
+  margin: 0 -2.5rem;
 }
 
 .find-dealer-form-container .find-dealer-col-2 {
@@ -84,14 +83,21 @@
   }
 }
 
+@media (min-width: 375px) {
+  .find-dealer-form-container .find-dealer-col-1 .find-dealer-text {
+    margin: 0;
+  }
+}
+
 @media (min-width: 768px) {
   .find-dealer-form-container {
     flex-direction: initial;
     padding: 7rem 0;
+    gap: 6rem;
   }
 
   .find-dealer-form-container .find-dealer-col-1 {
-    font-size: inherit;
+    font-size: 22px;
     width: 55%;
     text-align: initial;
   }
@@ -120,5 +126,9 @@
 
   .find-dealer-form-container .find-dealer-col-1 {
     width: 50%;
+  }
+
+  .find-dealer-form-container .find-dealer-col-1 .find-dealer-text {
+    font-size: var(--body-font-size-m);
   }
 }
