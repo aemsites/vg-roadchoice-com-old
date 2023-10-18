@@ -4,31 +4,36 @@
 /* NEXA FONTS */
 @font-face {
   font-family: 'Nexa Regular';
-  src: url('../fonts/NexaRegular.otf') format('opentype');
+  src: url('../fonts/NexaRegular.woff2') format('woff2'),
+  url('../fonts/NexaRegular.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Bold';
-  src: url('../fonts/NexaBold.otf') format('opentype');
+  src: url('../fonts/NexaBold.woff2') format('woff2'),
+  url('../fonts/NexaBold.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa XBold';
-  src: url('../fonts/NexaXBold.otf') format('opentype');
+  src: url('../fonts/NexaXBold.woff2') format('woff2'),
+  url('../fonts/NexaXBold.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Heavy';
-  src: url('../fonts/NexaHeavy.otf') format('opentype');
+  src: url('../fonts/NexaHeavy.woff2') format('woff2'),
+  url('../fonts/NexaHeavy.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Black';
-  src: url('../fonts/NexaBlack.otf') format('opentype');
+  src: url('../fonts/NexaBlack.woff2') format('woff2'),
+  url('../fonts/NexaBlack.otf') format('opentype');
   font-display: swap;
 }
 
