@@ -102,6 +102,7 @@
 .search .search__filters__container select {
   padding: 1.5rem;
   border-radius: 5px;
+  font-feature-settings: "ss03" 1;
 }
 
 .search .search__buttons__wrapper,
