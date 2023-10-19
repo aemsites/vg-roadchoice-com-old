@@ -29,8 +29,9 @@ export default async function decorate(block) {
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');
 
   document.addEventListener('DataLoaded', ({ detail }) => {
-    if (products.length === 0) products = detail.results;
     loadingElement.remove();
+    products = detail?.results;
+    if (products.length === 0) return;
     products.forEach((prod, idx) => {
       prod.hasImage = false;
       const filterLoop = detail.data.imgData.filter((e) => e['Part Number'] === prod['Base Part Number']

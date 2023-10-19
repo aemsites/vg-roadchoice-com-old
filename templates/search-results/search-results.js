@@ -16,10 +16,19 @@ const urlParams = new URLSearchParams(window.location.search);
 let query = {};
 let results = [];
 let isResultsEmpty = true;
+let isDifferentQuery = false;
 
 if (sessionStorage.getItem('query')) {
   query = JSON.parse(sessionStorage.getItem('query'));
-} else {
+  isDifferentQuery = query.value !== urlParams.get('q') || query.searchType !== urlParams.get('st');
+  if (isDifferentQuery) {
+    sessionStorage.removeItem('results');
+    sessionStorage.removeItem('amount');
+    sessionStorage.removeItem('query');
+  }
+}
+
+if (!sessionStorage.getItem('query') || isDifferentQuery) {
   const isCrossRef = urlParams.get('st') === 'cross';
   if (!isCrossRef) {
     query.make = urlParams.get('make');
@@ -96,6 +105,18 @@ export default async function decorate(doc) {
       }
     }
   };
+
+  document.addEventListener('DataLoaded', ({ detail }) => {
+    if (detail.results.length === 0) {
+      isResultsEmpty = true;
+      title.textContent = noResultsContent.replace('[$]', value);
+      if (!searchResultsSection.classList.contains('no-results')) {
+        const fragment = document.createRange().createContextualFragment(noResultsTemplate);
+        searchResultsSection.classList.add('no-results');
+        searchResultsSection.insertBefore(fragment, filters);
+      }
+    }
+  });
 
   const noResults = !isResultsEmpty && results.length === 0;
   const noResultsText = noResultsContent.replace('[$]', value);
