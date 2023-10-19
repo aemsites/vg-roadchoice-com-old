@@ -4,39 +4,53 @@
 /* NEXA FONTS */
 @font-face {
   font-family: 'Nexa Regular';
+  src: url('../fonts/NexaRegular.eot') format('eot');
   src: url('../fonts/NexaRegular.woff2') format('woff2'),
+  url('../fonts/NexaRegular.woff') format('woff'),
+  url('../fonts/NexaRegular.ttf') format('truetype'),
   url('../fonts/NexaRegular.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Bold';
+  src: url('../fonts/NexaBold.eot') format('eot');
   src: url('../fonts/NexaBold.woff2') format('woff2'),
+  url('../fonts/NexaBold.woff') format('woff'),
+  url('../fonts/NexaBold.ttf') format('truetype'),
   url('../fonts/NexaBold.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa XBold';
+  src: url('../fonts/NexaXBold.eot') format('eot');
   src: url('../fonts/NexaXBold.woff2') format('woff2'),
+  url('../fonts/NexaXBold.woff') format('woff'),
+  url('../fonts/NexaXBold.ttf') format('truetype'),
   url('../fonts/NexaXBold.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Heavy';
+  src: url('../fonts/NexaHeavy.eot') format('eot');
   src: url('../fonts/NexaHeavy.woff2') format('woff2'),
+  url('../fonts/NexaHeavy.woff') format('woff'),
+  url('../fonts/NexaHeavy.ttf') format('truetype'),
   url('../fonts/NexaHeavy.otf') format('opentype');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Nexa Black';
+  src: url('../fonts/NexaBlack.eot') format('eot');
   src: url('../fonts/NexaBlack.woff2') format('woff2'),
+  url('../fonts/NexaBlack.woff') format('woff'),
+  url('../fonts/NexaBlack.ttf') format('truetype'),
   url('../fonts/NexaBlack.otf') format('opentype');
   font-display: swap;
 }
-
 
 /* Fallback Fonts */
 @font-face {
