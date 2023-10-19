@@ -77,7 +77,7 @@ export default async function decorate(block) {
     if (!sessionStorage.getItem('results')) {
       sessionStorage.setItem('results', JSON.stringify(products));
     }
-    decorateFilter(block);
+    if (products.length > 0) decorateFilter(block);
   });
 
   if (products.length > 0) decorateFilter(block);

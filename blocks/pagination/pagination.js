@@ -93,12 +93,12 @@ export default async function decorate(block) {
     }
     if (!isDecorated) {
       isDecorated = true;
-      decoratePagination(block);
+      if (products.length > 0) decoratePagination(block);
     }
   });
 
   if (sessionStorage.getItem('results') && !isDecorated) {
     isDecorated = true;
-    decoratePagination(block);
+    if (products.length > 0) decoratePagination(block);
   }
 }
