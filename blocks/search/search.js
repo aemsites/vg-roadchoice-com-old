@@ -146,6 +146,7 @@ async function getAndApplyFiltersData(form) {
 export function searchCRPartNumValue(value, data = crData) {
   const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
   const results = new Set();
+  if (value === ''.trim()) return [];
   partNumberBrands.forEach((brand) => {
     const tempResults = data.filter(
       (item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]),
@@ -192,6 +193,7 @@ export function searchPartNumValue(value, make, model, data = pnData) {
   // search by part number
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
   const results = new Set();
+  if (value === ''.trim() && make === 'null' && model === 'null') return [];
   partNumberBrands.forEach((brand) => {
     filterPNByColumn({ column: brand, data, value, make, model, results });
   });
