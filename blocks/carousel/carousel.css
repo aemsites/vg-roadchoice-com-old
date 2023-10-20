@@ -61,7 +61,6 @@ main .section.carousel-container {
 .carousel .carousel-slide a.button {
   background-color: inherit;
   padding: 0;
-  width: 800px;
 }
 
 .carousel .carousel-slide-background {
@@ -186,5 +185,9 @@ main .section.carousel-container {
   .carousel .carousel-slide,
   .carousel .carousel-slide a {
     font-size: 52px;
+  }
+
+  .carousel .carousel-slide a.button {
+    width: 800px;
   }
 }
