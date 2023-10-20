@@ -106,13 +106,11 @@ export default async function decorate(doc) {
         window.allProducts = data;
       }
       const event = new CustomEvent('DataLoaded', { detail: { results, data } });
-      console.log('%cDataLoaded event dispatched', 'color: gold');
       document.dispatchEvent(event);
     }
   };
 
   document.addEventListener('DataLoaded', ({ detail }) => {
-    console.log('%cDataLoaded search-results listener', 'color: coral');
     if (detail.results.length === 0) {
       isResultsEmpty = true;
       title.textContent = noResultsContent.replace('[$]', value);

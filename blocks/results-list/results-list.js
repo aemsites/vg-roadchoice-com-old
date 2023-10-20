@@ -7,6 +7,7 @@ let amount = amountOfProducts;
 let products;
 let query;
 let category;
+let isRendered = false;
 const isSearchResult = document.querySelector('.search-results') !== null;
 
 if (isSearchResult) {
@@ -21,6 +22,25 @@ if (isSearchResult) {
 
 const searchType = (query.searchType === 'cross' && 'cross') || 'parts';
 
+const renderResults = ({ loadingElement, productList, isTruckLibrary, detail }) => {
+  loadingElement.remove();
+  products = detail?.results;
+  if (products.length === 0) return;
+  products.forEach((prod, idx) => {
+    prod.hasImage = false;
+    const filterLoop = detail.data.imgData.filter((e) => e['Part Number'] === prod['Base Part Number']
+    && ((isTruckLibrary(e['Image URL']) && e['Image URL'].includes('.0?$'))
+    || (!isTruckLibrary(e['Image URL']) && e['Image URL'].includes('-0.jpg'))));
+    if (filterLoop.length >= 1) {
+      prod.hasImage = true;
+      prod.imgUrl = filterLoop[0]['Image URL'];
+    }
+    const productItem = productCard(prod, searchType);
+    if (idx >= amount) productItem.classList.add('hidden');
+    productList.appendChild(productItem);
+  });
+};
+
 export default async function decorate(block) {
   const resultsSection = createElement('div', { classes: 'results-section' });
   const productList = createElement('ul', { classes: 'results-list' });
@@ -30,24 +50,36 @@ export default async function decorate(block) {
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');
 
   console.log('%cresults-list no-listener', 'color: deeppink', { results, products, query, category, searchType, window });
-  document.addEventListener('DataLoaded', ({ detail }) => {
-    console.log('%cDataLoaded results-list', 'color: deeppink');
-    loadingElement.remove();
-    products = detail?.results;
-    if (products.length === 0) return;
-    products.forEach((prod, idx) => {
-      prod.hasImage = false;
-      const filterLoop = detail.data.imgData.filter((e) => e['Part Number'] === prod['Base Part Number']
-      && ((isTruckLibrary(e['Image URL']) && e['Image URL'].includes('.0?$'))
-      || (!isTruckLibrary(e['Image URL']) && e['Image URL'].includes('-0.jpg'))));
-      if (filterLoop.length >= 1) {
-        prod.hasImage = true;
-        prod.imgUrl = filterLoop[0]['Image URL'];
-      }
-      const productItem = productCard(prod, searchType);
-      if (idx >= amount) productItem.classList.add('hidden');
-      productList.appendChild(productItem);
+  if (!isRendered && results.length > 0) {
+    const images = window?.allProducts.imgData;
+    renderResults({
+      loadingElement, productList, isTruckLibrary, detail: { results, data: { imgData: images } },
     });
+    isRendered = true;
+  }
+
+  document.addEventListener('DataLoaded', ({ detail }) => {
+    console.log('%cDataLoaded results-list', 'color: deeppink', { isRendered });
+    if (isRendered) return;
+    renderResults({
+      loadingElement, productList, isTruckLibrary, detail,
+    });
+    // loadingElement.remove();
+    // products = detail?.results;
+    // if (products.length === 0) return;
+    // products.forEach((prod, idx) => {
+    //   prod.hasImage = false;
+    //   const filterLoop = detail.data.imgData.filter((e) => e['Part Number'] === prod['Base Part Number']
+    //   && ((isTruckLibrary(e['Image URL']) && e['Image URL'].includes('.0?$'))
+    //   || (!isTruckLibrary(e['Image URL']) && e['Image URL'].includes('-0.jpg'))));
+    //   if (filterLoop.length >= 1) {
+    //     prod.hasImage = true;
+    //     prod.imgUrl = filterLoop[0]['Image URL'];
+    //   }
+    //   const productItem = productCard(prod, searchType);
+    //   if (idx >= amount) productItem.classList.add('hidden');
+    //   productList.appendChild(productItem);
+    // });
   });
 
   resultsSection.append(productList);
