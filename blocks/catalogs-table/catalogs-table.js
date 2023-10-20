@@ -40,6 +40,17 @@ const tableInfo = [
   },
 ];
 
+const sortOn = (arr, prop) => {
+  arr.sort((a, b) => {
+    if (a[prop] < b[prop]) {
+      return -1;
+    } if (a[prop] > b[prop]) {
+      return 1;
+    }
+    return 0;
+  });
+};
+
 const buildTables = (catalogs) => {
   const catalogsSection = createElement('div', { classes: `${blockName}-section` });
   tableInfo.forEach((el) => {
@@ -70,6 +81,7 @@ const buildTables = (catalogs) => {
       const checker = conditions.every((e) => e === true);
       return checker && catalog;
     });
+    sortOn(selectedCatalogs, 'title');
 
     selectedCatalogs.forEach(({ notes, file, title }) => {
       const isPdf = file.slice(-4) === '.pdf';
@@ -100,6 +112,7 @@ export default async function decorate(block) {
   const { url } = blockConfig;
 
   const { data: allCatalogs } = await getJsonFromUrl(url);
+
   const tables = buildTables(allCatalogs);
 
   block.textContent = '';
