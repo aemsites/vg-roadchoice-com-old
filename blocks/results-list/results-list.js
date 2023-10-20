@@ -49,7 +49,6 @@ export default async function decorate(block) {
 
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');
 
-  console.log('%cresults-list no-listener', 'color: deeppink', { results, products, allProducts, window_allProducts: window?.allProducts, window });
   if (results.length > 0) {
     const imgData = window?.allProducts?.imgData || allProducts?.imgData || [];
     renderResults({
@@ -59,7 +58,6 @@ export default async function decorate(block) {
       setTimeout(() => {
         if (allProducts.imgData) {
           const images = window?.allProducts?.imgData || allProducts?.imgData || [];
-          console.log({images});
           productList.innerHTML = '';
           renderResults({
             loadingElement,
@@ -73,7 +71,6 @@ export default async function decorate(block) {
   }
 
   document.addEventListener('DataLoaded', ({ detail }) => {
-    console.log('%cDataLoaded results-list', 'color: deeppink');
     renderResults({
       loadingElement, productList, isTruckLibrary, detail,
     });
