@@ -29,11 +29,11 @@
     },
     {
       "Key": "Part No",
-      "Text": "Part No"
+      "Text": "Part No or Description"
     },
     {
       "Key": "Part Number Label",
-      "Text": "Part Number OR Description"
+      "Text": "Part Number/Description"
     },
     {
       "Key": "search results title",
