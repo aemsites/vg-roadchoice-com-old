@@ -49,8 +49,8 @@ export default async function decorate(block) {
 
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');
 
-  console.log('%cresults-list no-listener', 'color: deeppink', { results, products, query, category, searchType, window });
-  if (!isRendered && results.length > 0) {
+  console.log('%cresults-list no-listener', 'color: deeppink', { results, products, window, allProducts: window?.allProducts });
+  if (results.length > 0) {
     const images = window?.allProducts.imgData;
     renderResults({
       loadingElement, productList, isTruckLibrary, detail: { results, data: { imgData: images } },
