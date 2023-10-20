@@ -88,9 +88,6 @@ export default async function decorate(block) {
   document.addEventListener('DataLoaded', ({ detail }) => {
     products = detail.results;
     imageData = detail.data.imgData;
-    if (!sessionStorage.getItem('results')) {
-      sessionStorage.setItem('results', JSON.stringify(products));
-    }
     if (!isDecorated) {
       isDecorated = true;
       if (products.length > 0) decoratePagination(block);
