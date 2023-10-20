@@ -4,6 +4,7 @@ let products;
 const titleContent = getTextLabel('Categories');
 const isSearchResult = document.querySelector('.search-results') !== null;
 const urlCategory = new URLSearchParams(window.location.search).get('cat');
+const total = +sessionStorage.getItem('total-results-amount') || 0;
 
 if (isSearchResult) products = JSON.parse(sessionStorage.getItem('results')) || [];
 
@@ -48,7 +49,7 @@ const buildFilter = (cats) => {
     const link = createElement('a', {
       classes: 'categories-link',
       props: { href: filterUrl },
-      textContent: `${category.toLowerCase()} (${amount})`,
+      textContent: `${category.toLowerCase()} (${total >= amount ? total : amount})`,
     });
     item.appendChild(link);
     list.appendChild(item);
@@ -74,9 +75,6 @@ const decorateFilter = (block) => {
 export default async function decorate(block) {
   document.addEventListener('DataLoaded', ({ detail }) => {
     products = detail.results;
-    if (!sessionStorage.getItem('results')) {
-      sessionStorage.setItem('results', JSON.stringify(products));
-    }
     if (products.length > 0) decorateFilter(block);
   });
 

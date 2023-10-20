@@ -1,5 +1,6 @@
 import {
   amountOfProducts,
+  fitAmount,
   searchCRPartNumValue,
   searchPartNumValue,
 } from '../../blocks/search/search.js';
@@ -14,7 +15,8 @@ const contactUsText = getTextLabel('no results contact us');
 const amount = amountOfProducts;
 const urlParams = new URLSearchParams(window.location.search);
 let query = {};
-let results = [];
+export const results = [];
+export const allProducts = {};
 let isResultsEmpty = true;
 let isDifferentQuery = false;
 
@@ -25,6 +27,7 @@ if (sessionStorage.getItem('query')) {
     sessionStorage.removeItem('results');
     sessionStorage.removeItem('amount');
     sessionStorage.removeItem('query');
+    sessionStorage.removeItem('total-results-amount');
   }
 }
 
@@ -40,7 +43,8 @@ if (!sessionStorage.getItem('query') || isDifferentQuery) {
 }
 
 if (sessionStorage.getItem('results')) {
-  results = JSON.parse(sessionStorage.getItem('results'));
+  results.length = 0;
+  results.push(...JSON.parse(sessionStorage.getItem('results')));
   isResultsEmpty = false;
 }
 
@@ -89,20 +93,23 @@ export default async function decorate(doc) {
 
   productsWorker.onmessage = ({ data }) => {
     if (data.crData && data.pnData && data.imgData) {
-      if (isResultsEmpty) {
+      if (isResultsEmpty || results.length >= fitAmount) {
+        results.length = 0;
         if (searchType === 'cross') {
-          results = searchCRPartNumValue(value, data.crData);
+          results.push(...searchCRPartNumValue(value, data.crData));
         } else {
           const { make, model } = query;
-          results = searchPartNumValue(value, make, model, data.pnData);
+          results.push(...searchPartNumValue(value, make, model, data.pnData));
         }
+      }
+      // when all messages are send, save the data in the window object again if needed
+      if (!Object.prototype.hasOwnProperty.call(window, 'allProducts')) {
+        const keys = ['crData', 'pnData', 'imgData'];
+        keys.forEach((key) => { allProducts[key] = data[key]; });
+        window.allProducts = data;
       }
       const event = new CustomEvent('DataLoaded', { detail: { results, data } });
       document.dispatchEvent(event);
-      // when all messages are send, save the data in the window object again if needed
-      if (!Object.prototype.hasOwnProperty.call(window, 'allProducts')) {
-        window.allProducts = data;
-      }
     }
   };
 
@@ -115,6 +122,18 @@ export default async function decorate(doc) {
         searchResultsSection.classList.add('no-results');
         searchResultsSection.insertBefore(fragment, filters);
       }
+    }
+    const equalResults = results.length === detail.results.length;
+    let total = sessionStorage.getItem('total-results-amount');
+    let storageResults = sessionStorage.getItem('results');
+    if (equalResults && !total && results.length >= fitAmount) {
+      sessionStorage.setItem('total-results-amount', results.length);
+      total = results.length.toString();
+    }
+    if (equalResults && !storageResults) {
+      const resultsToSave = results.length >= fitAmount ? results.slice(0, fitAmount) : results;
+      sessionStorage.setItem('results', JSON.stringify(resultsToSave));
+      storageResults = JSON.stringify(resultsToSave);
     }
   });
 

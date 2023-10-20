@@ -1,7 +1,7 @@
 {
-  "total": 20,
+  "total": 21,
   "offset": 0,
-  "limit": 20,
+  "limit": 21,
   "data": [
     {
       "Key": "brand name",
@@ -29,7 +29,11 @@
     },
     {
       "Key": "Part No",
-      "Text": "Part No"
+      "Text": "Part No or Description"
+    },
+    {
+      "Key": "Part Number Label",
+      "Text": "Part Number/Description"
     },
     {
       "Key": "search results title",

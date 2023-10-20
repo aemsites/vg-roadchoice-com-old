@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import { createElement, getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
 
 let isCrossRefActive = true;
@@ -7,10 +8,13 @@ const FILTERS_DATA = '/search/search-filters.json';
 let crData;
 let pnData;
 export const amountOfProducts = 12;
+let fitInStorage = true;
+export const fitAmount = 5000;
 
 const PLACEHOLDERS = {
   crossReference: getTextLabel('Cross-Reference No'),
   partNumber: getTextLabel('Part No'),
+  partNumberLabel: getTextLabel('Part Number Label'),
 };
 
 const TEMPLATES = {
@@ -60,7 +64,7 @@ const TEMPLATES = {
   `,
   inputPN: `
   <div class="search__input-pn__container">
-    <label class="search__input-pn__label">Part Number</label>
+    <label class="search__input-pn__label">${PLACEHOLDERS.partNumberLabel}</label>
     <div class="search__input-pn__wrapper">
       <input class="search__input-pn__input shadow" type="search" placeholder="${PLACEHOLDERS.partNumber}" />
       <button class="button search__input-pn__submit shadow search-button" type="submit">
@@ -142,6 +146,7 @@ async function getAndApplyFiltersData(form) {
 export function searchCRPartNumValue(value, data = crData) {
   const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
   const results = new Set();
+  if (value === ''.trim()) return [];
   partNumberBrands.forEach((brand) => {
     const tempResults = data.filter(
       (item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]),
@@ -171,21 +176,31 @@ function filterByOthersMake(results) {
   return results.filter((item) => !noOthersItems.includes(item.Make));
 }
 
+function filterPNByColumn({ column, data, value, make, model, results }) {
+  let tempResults = data.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[column]));
+  if (make === 'others' && tempResults.length > 0) {
+    tempResults = filterByOthersMake(tempResults, make);
+  } else if (make !== 'null' && tempResults.length > 0) {
+    tempResults = filterResults(tempResults, make);
+  }
+  if (model !== 'null' && tempResults.length > 0) {
+    tempResults = filterResults(tempResults, model, false);
+  }
+  tempResults.forEach((item) => results.add(item));
+}
+
 export function searchPartNumValue(value, make, model, data = pnData) {
+  // search by part number
   const partNumberBrands = ['Base Part Number', 'Volvo Part Number', 'Mack Part Number'];
   const results = new Set();
+  if (value === ''.trim() && make === 'null' && model === 'null') return [];
   partNumberBrands.forEach((brand) => {
-    let tempResults = data.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]));
-    if (make === 'others' && tempResults.length > 0) {
-      tempResults = filterByOthersMake(tempResults, make);
-    } else if (make !== 'null' && tempResults.length > 0) {
-      tempResults = filterResults(tempResults, make);
-    }
-    if (model !== 'null' && tempResults.length > 0) {
-      tempResults = filterResults(tempResults, model, false);
-    }
-    tempResults.forEach((item) => results.add(item));
+    filterPNByColumn({ column: brand, data, value, make, model, results });
   });
+  // search by Description aka Part Name
+  if (results.size === 0) {
+    filterPNByColumn({ column: 'Part Name', data, value, make, model, results });
+  }
   return [...results];
 }
 
@@ -207,6 +222,7 @@ function formListener(form) {
 
     if (!crData || !pnData) return;
     ssData.forEach((item) => sessionStorage.removeItem(item));
+    if (sessionStorage.getItem('total-results-amount')) sessionStorage.removeItem('total-results-amount');
     const results = isCrossRefActive
       ? searchCRPartNumValue(value)
       : searchPartNumValue(value, makeFilterValue, modelFilterValue);
@@ -222,7 +238,14 @@ function formListener(form) {
       query.model = modelFilterValue;
     }
     ssDataItems.push(query, results, amountOfProducts);
-    ssData.forEach((item, i) => sessionStorage.setItem(item, JSON.stringify(ssDataItems[i])));
+    ssData.forEach((item, i) => {
+      if (i === 1 && results.length > fitAmount) {
+        fitInStorage = false;
+        return;
+      }
+      sessionStorage.setItem(item, JSON.stringify(ssDataItems[i]));
+    });
+    if (!fitInStorage) sessionStorage.setItem('total-results-amount', results.length);
     url.pathname = '/search/';
     url.search = `?q=${value}&st=${searchType}`;
     window.location.href = url;
