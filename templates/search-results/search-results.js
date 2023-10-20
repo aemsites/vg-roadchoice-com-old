@@ -16,6 +16,7 @@ const amount = amountOfProducts;
 const urlParams = new URLSearchParams(window.location.search);
 let query = {};
 export const results = [];
+export const allProducts = {};
 let isResultsEmpty = true;
 let isDifferentQuery = false;
 
@@ -103,6 +104,8 @@ export default async function decorate(doc) {
       }
       // when all messages are send, save the data in the window object again if needed
       if (!Object.prototype.hasOwnProperty.call(window, 'allProducts')) {
+        const keys = ['crData', 'pnData', 'imgData'];
+        keys.forEach((key) => { allProducts[key] = data[key]; });
         window.allProducts = data;
       }
       const event = new CustomEvent('DataLoaded', { detail: { results, data } });
