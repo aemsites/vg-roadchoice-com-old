@@ -1,6 +1,7 @@
 import { createElement } from '../../scripts/scripts.js';
 import productCard from './product-card.js';
 import { amountOfProducts } from '../search/search.js';
+import { results } from '../../templates/search-results/search-results.js';
 
 let amount = amountOfProducts;
 let products;
@@ -28,6 +29,7 @@ export default async function decorate(block) {
 
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');
 
+  console.log('%cresults-list no-listener', 'color: deeppink', { results, products, query, category, searchType, window });
   document.addEventListener('DataLoaded', ({ detail }) => {
     console.log('%cDataLoaded results-list', 'color: deeppink');
     loadingElement.remove();
