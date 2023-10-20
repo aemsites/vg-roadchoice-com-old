@@ -29,6 +29,7 @@ export default async function decorate(block) {
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');
 
   document.addEventListener('DataLoaded', ({ detail }) => {
+    console.log('%cDataLoaded results-list', 'color: deeppink');
     loadingElement.remove();
     products = detail?.results;
     if (products.length === 0) return;
