@@ -144,7 +144,7 @@ async function getAndApplyFiltersData(form) {
 }
 
 export function searchCRPartNumValue(value, data = crData) {
-  const partNumberBrands = ['OEM_num', 'Base Part Number', 'VOLVO_RC', 'MACK_1000'];
+  const partNumberBrands = ['OEM_num'];
   const results = new Set();
   if (value === ''.trim()) return [];
   partNumberBrands.forEach((brand) => {
