@@ -52,7 +52,7 @@ async function loadGoogleTagManager() {
     const dl = l !== 'dataLayer' ? `&l=${l}` : ''; j.async = true;
     j.src = `https://www.googletagmanager.com/gtag/js?id=${i}${dl}`;
     f.parentNode.insertBefore(j, f);
-  }(window, document, 'script', 'dataLayer', 'G-DLBC08V7CP'));
+  }(window, document, 'script', 'dataLayer', 'G-GCHQFXXYQX'));
 }
 
 async function loadHotjar() {
