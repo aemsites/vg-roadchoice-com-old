@@ -24,7 +24,8 @@ const searchType = (query.searchType === 'cross' && 'cross') || 'parts';
 // eslint-disable-next-line object-curly-newline
 const renderResults = ({ loadingElement, productList, isTruckLibrary, detail }) => {
   loadingElement.remove();
-  products = detail?.results;
+  products = category ? products : detail?.results;
+
   if (products.length === 0) return;
   products.forEach((prod, idx) => {
     prod.hasImage = false;
