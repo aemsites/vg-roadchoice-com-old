@@ -291,6 +291,16 @@ a.button {
   list-style-type: disc;
 }
 
+.button-center .button-container .button {
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .image-50 img {
+    max-width: 50%;
+  }
+}
+
 /* default content styling */
 
 div.default-content-wrapper {
