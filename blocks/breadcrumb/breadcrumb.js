@@ -19,7 +19,7 @@ export default async function decorate(block) {
 
   let tempUrl = '';
   routes.forEach((path, idx) => {
-    if (path.length === 0) return;
+    if (path.length === 0 || path === 'part-category') return;
     const item = createElement('li', { classes: ['breadcrumb-item', `breadcrumb-item-${idx}`] });
     const link = createElement('a', { classes: ['breadcrumb-link'] });
     tempUrl += idx === 0 ? path : `${path}/`;
@@ -30,7 +30,6 @@ export default async function decorate(block) {
       link.innerHTML = `${pageName.toLowerCase()} /`;
       link.classList.add('active-link');
     } else {
-      if (path === 'part-category') return null;
       link.innerHTML = idx === 0 ? homeText : path.replaceAll('-', ' ');
     }
 
