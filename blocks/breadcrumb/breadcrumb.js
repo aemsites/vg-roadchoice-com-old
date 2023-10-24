@@ -25,13 +25,13 @@ export default async function decorate(block) {
     tempUrl += idx === 0 ? path : `${path}/`;
 
     link.href = idx === 0 ? url.origin : `${url.origin}${tempUrl}`;
-
     if (idx === amountOfLevels && isBlogArticle) {
       link.href = `${url.origin}/blog/${path}`;
       link.innerHTML = `${pageName.toLowerCase()} /`;
       link.classList.add('active-link');
     } else {
-      link.innerHTML = idx === 0 ? homeText : path;
+      if (path === 'part-category') return null;
+      link.innerHTML = idx === 0 ? homeText : path.replace('-', ' ');
     }
 
     item.appendChild(link);
