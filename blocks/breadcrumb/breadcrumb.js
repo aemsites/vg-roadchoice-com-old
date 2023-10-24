@@ -31,7 +31,7 @@ export default async function decorate(block) {
       link.classList.add('active-link');
     } else {
       if (path === 'part-category') return null;
-      link.innerHTML = idx === 0 ? homeText : path.replace('-', ' ');
+      link.innerHTML = idx === 0 ? homeText : path.replaceAll('-', ' ');
     }
 
     item.appendChild(link);
