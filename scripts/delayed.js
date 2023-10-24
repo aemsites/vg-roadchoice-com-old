@@ -80,7 +80,7 @@ async function loadArtibot() {
 
 const cookieSetting = decodeURIComponent(document.cookie.split(';').find((cookie) => cookie.trim().startsWith('OptanonConsent=')));
 const arePerfCookiesAllowed = cookieSetting.includes('C0002:1');
-const areTargetCookiesAllowed = cookieSetting.includes('C004:1');
+const areTargetCookiesAllowed = cookieSetting.includes('C0004:1');
 
 if (arePerfCookiesAllowed) {
   // eslint-disable-next-line no-use-before-define
