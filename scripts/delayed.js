@@ -53,6 +53,15 @@ async function loadGoogleTagManager() {
     j.src = `https://www.googletagmanager.com/gtag/js?id=${i}${dl}`;
     f.parentNode.insertBefore(j, f);
   }(window, document, 'script', 'dataLayer', 'G-GCHQFXXYQX'));
+
+  const g = document.getElementsByTagName(s)[0];
+  const h = document.createElement('script');
+  window.dataLayer = window.dataLayer || [];
+  // eslint-disable-next-line prefer-rest-params
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag('js', new Date().getTime());
+  gtag('config', 'G-GCHQFXXYQX');
+  g.parentNode.insertBefore(h, g);
 }
 
 async function loadHotjar() {
