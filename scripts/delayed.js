@@ -53,6 +53,14 @@ async function loadGoogleTagManager() {
     j.src = `https://www.googletagmanager.com/gtag/js?id=${i}${dl}`;
     f.parentNode.insertBefore(j, f);
   }(window, document, 'script', 'dataLayer', 'G-GCHQFXXYQX'));
+
+  const g = document.getElementsByTagName('script')[0];
+  const h = document.createElement('script');
+  h.text = `window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag('js', new Date().getTime());
+  gtag('config', 'G-GCHQFXXYQX');`;
+  g.parentNode.appendChild(h);
 }
 
 async function loadHotjar() {
