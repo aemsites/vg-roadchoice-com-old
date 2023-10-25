@@ -54,14 +54,13 @@ async function loadGoogleTagManager() {
     f.parentNode.insertBefore(j, f);
   }(window, document, 'script', 'dataLayer', 'G-GCHQFXXYQX'));
 
-  const g = document.getElementsByTagName(s)[0];
+  const g = document.getElementsByTagName('script')[0];
   const h = document.createElement('script');
-  window.dataLayer = window.dataLayer || [];
-  // eslint-disable-next-line prefer-rest-params
+  h.text = `window.dataLayer = window.dataLayer || [];
   function gtag() { window.dataLayer.push(arguments); }
   gtag('js', new Date().getTime());
-  gtag('config', 'G-GCHQFXXYQX');
-  g.parentNode.insertBefore(h, g);
+  gtag('config', 'G-GCHQFXXYQX');`;
+  g.parentNode.appendChild(h);
 }
 
 async function loadHotjar() {
