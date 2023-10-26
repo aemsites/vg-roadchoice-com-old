@@ -604,7 +604,12 @@ checkLinkProps(allLinks);
 */
 export const getJsonFromUrl = async (route) => {
   try {
-    const response = await fetch(route);
+    const response = await fetch(route, {
+      method: 'GET',
+      headers: {
+        'Accept-Encoding': 'gzip',
+      },
+    });
     if (!response.ok) return null;
     const json = await response.json();
     return json;
@@ -637,7 +642,12 @@ const getInitialJSONData = async (props) => {
     const { url, offset = 0, limit = null } = props;
     const nextOffset = offset > 0 ? `?offset=${offset}` : '';
     const nextLimit = limit ? `${offset > 0 ? '&' : '?'}limit=${limit}` : '';
-    const results = await fetch(`${url}${nextOffset}${nextLimit}`);
+    const results = await fetch(`${url}${nextOffset}${nextLimit}`, {
+      method: 'GET',
+      headers: {
+        'Accept-Encoding': 'gzip',
+      },
+    });
     const json = await results.json();
     return json;
   } catch (error) {
