@@ -1,4 +1,9 @@
-import { createElement, getJsonFromUrl } from '../../scripts/scripts.js';
+import {
+  createElement,
+  getJsonFromUrl,
+  getLongJSONData,
+  defaultLimit,
+} from '../../scripts/scripts.js';
 
 const categoryMaster = '/product-data/rc-attribute-master-file.json';
 const amount = 12;
@@ -6,6 +11,12 @@ const url = new URL(window.location.href);
 const urlParams = new URLSearchParams(url.search);
 let category;
 let mainCategory;
+const json = {
+  data: [],
+  limit: 0,
+  offset: 0,
+  total: 0,
+};
 
 /* Cases that throw an error if the category is wrong or missing that goes to 404 page:
  * 1. "/part-category/" => 404 if is index path
@@ -30,12 +41,17 @@ const getCategory = async () => urlParams.get('category') || null;
 */
 const getCategoryData = async (cat) => {
   try {
-    url.pathname = `/product-data/rc-${cat.replace(/[^\w]/g, '-')}.json`;
-    const json = await getJsonFromUrl(url);
+    const products = await getLongJSONData({
+      url: `/product-data/rc-${cat.replace(/[^\w]/g, '-')}.json`,
+      limit: defaultLimit,
+    });
+    json.data = products;
+    json.limit = 20;
+    json.total = products.length;
     if (!json) throw new Error(`No data found in "${cat}" category file`);
     const event = new Event('CategoryDataLoaded');
     mainCategory = json.data[0].Category;
-    sessionStorage.setItem('category-data', (json ? JSON.stringify(json.data) : null));
+    window.categoryData = json.data;
     sessionStorage.setItem('amount', amount);
     document.dispatchEvent(event);
   } catch (err) {
@@ -54,9 +70,9 @@ const getCategoryData = async (cat) => {
 */
 const getFilterAttrib = async (cat) => {
   try {
-    const json = await getJsonFromUrl(categoryMaster);
-    if (!json) throw new Error('No data found in category master file');
-    const filterAttribs = json.data.filter((el) => (
+    const filtersJson = await getJsonFromUrl(categoryMaster);
+    if (!filtersJson) throw new Error('No data found in category master file');
+    const filterAttribs = await filtersJson.data.filter((el) => (
       el.Subcategory.toLowerCase() === cat.toLowerCase().replaceAll('-', ' ')
       && el.Filter === ''
     )).map((el) => el.Attributes);
