@@ -461,7 +461,7 @@ export function createOptimizedPicture(src, alt = '', eager = false, breakpoints
     const source = document.createElement('source');
     if (br.media) source.setAttribute('media', br.media);
     source.setAttribute('type', 'image/webp');
-    source.setAttribute('srcset', `${pathname}?width=${br.width}&format=webply&optimize=medium`);
+    source.setAttribute('srcset', pathname);
     picture.appendChild(source);
   });
 
