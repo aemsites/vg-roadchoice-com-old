@@ -3,7 +3,7 @@ import { createElement } from '../../scripts/scripts.js';
 import productCard from '../results-list/product-card.js';
 
 let amount = JSON.parse(sessionStorage.getItem('amount'));
-let products = JSON.parse(sessionStorage.getItem('category-data'));
+let products = window.categoryData;
 let isRendered = false;
 let hasImagesData = false;
 let imgData;

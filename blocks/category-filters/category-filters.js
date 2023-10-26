@@ -1,6 +1,6 @@
 import { createElement } from '../../scripts/scripts.js';
 
-let products = JSON.parse(sessionStorage.getItem('category-data'));
+let products = window.categoryData;
 let filters = JSON.parse(sessionStorage.getItem('filter-attribs'));
 let isDecorated = false;
 
