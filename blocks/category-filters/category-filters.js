@@ -146,7 +146,7 @@ export default async function decorate(block) {
   ['FilterAttribsLoaded', 'CategoryDataLoaded'].forEach((eventName) => {
     document.addEventListener(eventName, () => {
       filters = JSON.parse(sessionStorage.getItem('filter-attribs'));
-      products = JSON.parse(sessionStorage.getItem('category-data'));
+      products = window.categoryData;
       isRenderedCheck(block);
     });
   });
