@@ -1,7 +1,7 @@
 import { createElement, getTextLabel } from '../../scripts/scripts.js';
 
 let amount = JSON.parse(sessionStorage.getItem('amount'));
-let products = JSON.parse(sessionStorage.getItem('category-data'));
+let products = window.categoryData;
 let isRendered = false;
 const moreBtns = [];
 let hasMoreItems = false;
