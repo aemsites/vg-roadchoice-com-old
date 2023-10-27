@@ -7,7 +7,7 @@ import { loadWorker } from './scripts.js';
 sampleRUM('cwv');
 
 // OneTrust Cookies Consent Notice start for roadchoice.com
-if (!window.location.host.includes('hlx.page') && !window.location.host.includes('localhost') && !window.location.pathname.includes('srcdoc')) {
+if (!window.location.host.includes('hlx.page') && !window.location.pathname.includes('srcdoc')) {
   // when running on localhost in the block library host is empty but the path is srcdoc
   // on localhost/hlx.page/hlx.live the consent notice is displayed every time the page opens,
   // because the cookie is not persistent. To avoid this annoyance, disable unless on the
@@ -36,6 +36,13 @@ if (!window.location.host.includes('hlx.page') && !window.location.host.includes
     });
   };
 }
+
+// This searches for id="preference" button and displays the cookie preference center.
+function displayPreferenceCookies() {
+  window.OneTrust.ToggleInfoDisplay();
+}
+const preferenceBtn = document.querySelector('#preference');
+preferenceBtn.addEventListener('click', displayPreferenceCookies);
 
 // add more delayed functionality here
 
