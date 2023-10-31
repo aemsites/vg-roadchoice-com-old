@@ -353,7 +353,6 @@
   flex-direction: row;
   margin: 0 auto;
   padding: 16px;
-  overflow: scroll;
 }
 
 .section.breadcrumbs a.breadcrumb-link {

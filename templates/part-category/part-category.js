@@ -17,7 +17,6 @@ const json = {
   offset: 0,
   total: 0,
 };
-const docRange = document.createRange();
 
 /* Cases that throw an error if the category is wrong or missing that goes to 404 page:
  * 1. "/part-category/" => 404 if is index path
@@ -124,30 +123,22 @@ export default async function decorate(doc) {
       const link = createElement('a', {
         classes: className,
         textContent: category.replaceAll('-', ' '),
+        props: { href: `${url.origin}/part-category/?category=${category}` },
       });
       const breadcrumbItem = createElement('li', {
         classes: ['breadcrumb-item', `breadcrumb-item-${length}`],
       });
 
       if (!mainCategory) {
-        lastElLink.href = new URL(window.location.href).origin;
+        lastElLink.href = url.origin;
       } else {
         mainCategory = mainCategory.toLowerCase();
-        lastElLink.href += `part-category/${mainCategory.replace(/\s/g, '-')}`;
+        lastElLink.href += `${mainCategory.replace(/\s/g, '-')}`;
         lastElLink.textContent = mainCategory;
       }
       breadcrumbItem.appendChild(link);
       breadcrumbList.appendChild(breadcrumbItem);
 
-      const linkFragment = `
-        <li class="breadcrumb-item">
-          <a class="breadcrumb-link" href=${new URL(window.location.href).origin}>
-            Road Choice
-          </a>
-        </li>
-      `;
-      const homeLink = docRange.createContextualFragment(linkFragment);
-      breadcrumbList.prepend(homeLink);
       observer.disconnect();
     }
   });
