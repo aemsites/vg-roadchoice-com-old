@@ -7,6 +7,7 @@ let amount = amountOfProducts;
 let products;
 let query;
 let category;
+let isRendered = false;
 const isSearchResult = document.querySelector('.search-results') !== null;
 
 if (isSearchResult) {
@@ -50,31 +51,34 @@ export default async function decorate(block) {
 
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');
 
-  if (results.length > 0) {
-    const imgData = window?.allProducts?.imgData || allProducts?.imgData || [];
+  const render = (data) => {
+    const imgData = data?.imgData || data?.data?.imgData || [];
+    const res = data?.results || results || [];
     renderResults({
-      loadingElement, productList, isTruckLibrary, detail: { results, data: { imgData } },
+      loadingElement,
+      productList,
+      isTruckLibrary,
+      detail: { results: res, data: { imgData } },
     });
-    if (!allProducts?.imgData) {
+  };
+
+  if (results.length > 0) {
+    let imgData = window?.allProducts?.imgData || allProducts?.imgData || [];
+    if (imgData.length > 0) render({ imgData });
+    else {
       setTimeout(() => {
-        if (allProducts.imgData) {
-          const images = window?.allProducts?.imgData || allProducts?.imgData || [];
+        if (allProducts.imgData && !isRendered) {
+          imgData = allProducts.imgData;
           productList.innerHTML = '';
-          renderResults({
-            loadingElement,
-            productList,
-            isTruckLibrary,
-            detail: { results, data: { imgData: images } },
-          });
+          render({ imgData });
         }
       }, 5000);
     }
   }
 
   document.addEventListener('DataLoaded', ({ detail }) => {
-    renderResults({
-      loadingElement, productList, isTruckLibrary, detail,
-    });
+    render(detail);
+    isRendered = true;
   });
 
   resultsSection.append(productList);
