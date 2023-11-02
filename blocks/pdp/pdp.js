@@ -474,9 +474,6 @@ function renderBreadcrumbs(part) {
             <li class="breadcrumb-item breadcrumb-item-0">
               <a class="breadcrumb-link" href="/">Road Choice</a>
             </li>
-            <li class="breadcrumb-item breadcrumb-item-0">
-              <a class="breadcrumb-link" href="/">Parts</a>
-            </li>
             <li class="breadcrumb-item breadcrumb-item-1">
               <a class="breadcrumb-link"
                 href="/part-category/${part.Category.toLowerCase().replace(/[^\w]/g, '-')}">
