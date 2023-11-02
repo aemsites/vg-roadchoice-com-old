@@ -149,7 +149,7 @@ export function searchCRPartNumValue(value, data = crData) {
   if (value === ''.trim()) return [];
   partNumberBrands.forEach((brand) => {
     const tempResults = data.filter(
-      (item) => new RegExp(`.*${value}.*`, 'i').test(item[brand]),
+      (item) => new RegExp(`.*${value.trim()}.*`, 'i').test(item[brand]),
     );
     if (tempResults.length > 0) {
       tempResults.forEach((item) => results.add(item));
@@ -177,7 +177,7 @@ function filterByOthersMake(results) {
 }
 
 function filterPNByColumn({ column, data, value, make, model, results }) {
-  let tempResults = data.filter((item) => new RegExp(`.*${value}.*`, 'i').test(item[column]));
+  let tempResults = data.filter((item) => new RegExp(`.*${value.trim()}.*`, 'i').test(item[column]));
   if (make === 'others' && tempResults.length > 0) {
     tempResults = filterByOthersMake(tempResults, make);
   } else if (make !== 'null' && tempResults.length > 0) {
