@@ -795,12 +795,18 @@ main .section.dealer-locator-container > div {
 }
 
 @media (max-width: 992px) {
-  .dealer-locator #map .gmnoprint {
-    display: none;
-  }
-
   .dealer-locator #map {
     height: 50%;
+  }
+}
+
+.dealer-locator #map > div .gm-style {
+  height: calc(100% - 170px) !important;
+}
+
+@media (max-width: 992px) {
+  .dealer-locator #map > div .gm-style {
+    height: calc(100% - 40px) !important;
   }
 }
 
