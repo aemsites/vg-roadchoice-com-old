@@ -176,6 +176,18 @@ function filterByOthersMake(results) {
   return results.filter((item) => !noOthersItems.includes(item.Make));
 }
 
+function filterByBasePartNumber(results) {
+  const basePartNumbers = new Set();
+  const filteredResults = [];
+  results.forEach((item) => {
+    if (!basePartNumbers.has(item['Base Part Number'])) {
+      basePartNumbers.add(item['Base Part Number']);
+      filteredResults.push(item);
+    }
+  });
+  return filteredResults;
+}
+
 function filterPNByColumn({ column, data, value, make, model, results }) {
   let tempResults = data.filter((item) => new RegExp(`.*${value.trim()}.*`, 'i').test(item[column]));
   if (make === 'others' && tempResults.length > 0) {
@@ -186,6 +198,7 @@ function filterPNByColumn({ column, data, value, make, model, results }) {
   if (model !== 'null' && tempResults.length > 0) {
     tempResults = filterResults(tempResults, model, false);
   }
+  if (tempResults.length > 0) tempResults = filterByBasePartNumber(tempResults);
   tempResults.forEach((item) => results.add(item));
 }
 
