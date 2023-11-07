@@ -3,6 +3,7 @@ import productCard from './product-card.js';
 import { amountOfProducts } from '../search/search.js';
 import { results, allProducts } from '../../templates/search-results/search-results.js';
 
+let total = 0;
 let amount = amountOfProducts;
 let products;
 let query;
@@ -11,6 +12,7 @@ let isRendered = false;
 const isSearchResult = document.querySelector('.search-results') !== null;
 
 if (isSearchResult) {
+  total = +sessionStorage.getItem('total-results-amount') || 0;
   amount = JSON.parse(sessionStorage.getItem('amount')) || amountOfProducts;
   products = JSON.parse(sessionStorage.getItem('results')) || [];
   query = JSON.parse(sessionStorage.getItem('query')) || {};
@@ -26,6 +28,9 @@ const searchType = (query.searchType === 'cross' && 'cross') || 'parts';
 const renderResults = ({ loadingElement, productList, isTruckLibrary, detail }) => {
   loadingElement.remove();
   products = category ? products : detail?.results;
+  products = total > 0 && category
+    ? detail?.results.filter((item) => item['Part Category'].toLowerCase() === category)
+    : products;
 
   if (products.length === 0) return;
   products.forEach((prod, idx) => {
