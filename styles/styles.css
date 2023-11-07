@@ -267,6 +267,10 @@ a.button {
   padding: 13px 30px 10px;
 }
 
+a.button:hover {
+  cursor: pointer;
+}
+
 .text-center {
   text-align: center;
 }
