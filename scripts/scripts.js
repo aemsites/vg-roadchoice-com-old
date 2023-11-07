@@ -721,10 +721,12 @@ export function loadWorker() {
 
 /**
  * checks for p elements for different configurations
+ * space -> [*space*]
+ * button -> [*button*] (id) text content
 */
 //  EXAMPLES:
-//  -white spacing required in document -> [*space*]
-//  -button and properties -> /*Button*/ [*id=preference,textContent=Cookie preference center*]
+//  - white spacing required in document -> [*space*]
+//  - button with id -> [*button*] (cookie preference) Cookie preference center
 
 (() => {
   const pElements = document.querySelectorAll('p');
@@ -733,21 +735,17 @@ export function loadWorker() {
       const spaceSpan = createElement('span', { classes: 'space' });
       el.replaceWith(spaceSpan);
     }
-    if (el.textContent.slice(0, 10) === '/*Button*/') {
-      const startArray = el.textContent.indexOf('[*');
-      const propertyString = el.textContent.slice((startArray + 2), -2);
-      const properties = propertyString.split(',');
-      const buttonProps = {};
-      let textValue = '';
-      properties.forEach((prop) => {
-        const set = prop.split('=');
-        const [key, value] = set;
-        if (key === 'textContent') textValue = value;
-        buttonProps[key] = value;
+    if (el.textContent.includes('[*button*]')) {
+      const id = el.textContent.match(/\((.*?)\)/)[1].toLowerCase().replace(/\s/g, '-');
+      const textContent = el.textContent.split(')')[1].trim();
+      const newBtn = createElement('a', {
+        classes: ['button', 'primary'],
+        props: { id },
+        textContent,
       });
-      const newBtn = createElement('a', { classes: ['button', 'primary'], props: buttonProps });
-      newBtn.textContent = textValue;
-      el.replaceWith(newBtn);
+      el.textContent = '';
+      el.classList.add('button-container');
+      el.appendChild(newBtn);
     }
   });
 })();

@@ -37,12 +37,9 @@ if (!window.location.host.includes('hlx.page') && !window.location.pathname.incl
   };
 }
 
-// This searches for id="preference" button and displays the cookie preference center.
-function displayPreferenceCookies() {
-  window.OneTrust.ToggleInfoDisplay();
-}
-const preferenceBtn = document.querySelector('#preference');
-preferenceBtn.addEventListener('click', displayPreferenceCookies);
+// This searches for id="cookie-preference" button and displays the cookie preference center.
+const preferenceBtn = document.querySelector('#cookie-preference');
+preferenceBtn.addEventListener('click', () => window.OneTrust.ToggleInfoDisplay());
 
 // add more delayed functionality here
 
