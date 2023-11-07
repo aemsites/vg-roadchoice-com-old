@@ -40,7 +40,7 @@ if (!window.location.pathname.includes('srcdoc')
 
 // This searches for id="cookie-preference" button and displays the cookie preference center.
 const preferenceBtn = document.querySelector('#cookie-preference');
-preferenceBtn.addEventListener('click', () => window.OneTrust.ToggleInfoDisplay());
+if (preferenceBtn) preferenceBtn.addEventListener('click', () => window.OneTrust.ToggleInfoDisplay());
 
 // add more delayed functionality here
 
