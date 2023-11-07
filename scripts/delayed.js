@@ -1,6 +1,5 @@
-// eslint-disable-next-line import/no-cycle
+/* eslint-disable import/no-cycle */
 import { loadScript, sampleRUM } from './lib-franklin.js';
-// eslint-disable-next-line import/no-cycle
 import { loadWorker } from './scripts.js';
 
 // Core Web Vitals RUM collection
@@ -54,8 +53,6 @@ async function loadGoogleTagManager() {
 }
 
 async function loadHotjar() {
-  // google tag manager
-  // eslint-disable-next-line func-names
   // Hotjar
   /* eslint-disable */
   (async function(h,o,t,j,a,r){
@@ -64,10 +61,10 @@ async function loadHotjar() {
     r=o.createElement('script');r.async=1; r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
     a.appendChild(r);
   })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  /* eslint-enable */
 }
 
 async function loadArtibot() {
-  // eslint-disable-next-line func-names
   // Artibot
   /* eslint-disable */
   (async function(t,e){
@@ -76,21 +73,24 @@ async function loadArtibot() {
     i.async=!0,i.type="text/javascript",i.src="https://app.artibot.ai/loader.js",e.getElementsByTagName("head").item(0).appendChild(i),i.onreadystatechange=i.onload=function(){if(!(a||this.readyState&&"loaded"!=this.readyState&&"complete"!=this.readyState)){new window.ArtiBot({i:"8b46bd2b-302c-418e-9d5a-b1c46088754f"});
     a=!0}}
   })(window,document);
+  /* eslint-enable */
 }
 
-const cookieSetting = decodeURIComponent(document.cookie.split(';').find((cookie) => cookie.trim().startsWith('OptanonConsent=')));
-const arePerfCookiesAllowed = cookieSetting.includes('C0002:1');
-const areTargetCookiesAllowed = cookieSetting.includes('C0004:1');
+const COOKIES = {
+  performance: 'C0002:1',
+  Target: 'C0004:1',
+};
 
-if (arePerfCookiesAllowed) {
-  // eslint-disable-next-line no-use-before-define
+const cookieSetting = decodeURIComponent(document.cookie.split(';').find((cookie) => cookie.trim().startsWith('OptanonConsent=')));
+const isPerformanceAllowed = cookieSetting.includes(COOKIES.performance);
+const isTargetAllowed = cookieSetting.includes(COOKIES.Target);
+
+if (isPerformanceAllowed) {
   loadGoogleTagManager();
-  // eslint-disable-next-line no-use-before-define
   loadHotjar();
 }
 
-if (areTargetCookiesAllowed) {
-  // eslint-disable-next-line no-use-before-define
+if (isTargetAllowed) {
   loadArtibot();
 }
 
