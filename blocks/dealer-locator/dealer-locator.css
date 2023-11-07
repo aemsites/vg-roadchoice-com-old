@@ -4,10 +4,19 @@
   font-size: 16px;
   font-family: var(--body-ff);
   width: 100% !important;
-  height: 100vh;
   position: absolute;
   left: 0;
   z-index: 0;
+}
+
+.dealer-locator {
+  height: calc(100vh - var(--nav-height));
+}
+
+@supports (height: 1svh) {
+  .dealer-locator {
+    height: calc(100svh - var(--nav-height));
+  }
 }
 
 main .section.dealer-locator-container > div {
@@ -99,12 +108,6 @@ main .section.dealer-locator-container > div {
 .dealer-locator .sidebar-legend > div > div {
   justify-content: center;
   gap: 5px;
-}
-
-@media (max-width: 992px) {
-  .dealer-locator {
-    height: calc(100vh - 6.1em) !important;
-  }
 }
 
 .dealer-locator .partsasist-form {
@@ -796,17 +799,15 @@ main .section.dealer-locator-container > div {
 
 @media (max-width: 992px) {
   .dealer-locator #map {
-    height: 50%;
+    height: calc(50% - 41px);
   }
-}
 
-.dealer-locator #map > div .gm-style {
-  height: calc(100% - 170px) !important;
-}
+  .dealer-locator #map .gm-bundled-control {
+    display: none;
+  }
 
-@media (max-width: 992px) {
-  .dealer-locator #map > div .gm-style {
-    height: calc(100% - 40px) !important;
+  .dealer-locator #map .gmnoprint {
+    align-items: baseline;
   }
 }
 
