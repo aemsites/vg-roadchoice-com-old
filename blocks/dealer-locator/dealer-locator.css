@@ -792,6 +792,7 @@ main .section.dealer-locator-container > div {
   width: 100%;
 }
 
+.dealer-locator #map .gmnoprint + .gm-style-cc,
 .dealer-locator #map .gmnoprint {
   top: 0;
   margin-top: 45px;
@@ -804,10 +805,6 @@ main .section.dealer-locator-container > div {
 
   .dealer-locator #map .gm-bundled-control {
     display: none;
-  }
-
-  .dealer-locator #map .gmnoprint {
-    align-items: baseline;
   }
 }
 
