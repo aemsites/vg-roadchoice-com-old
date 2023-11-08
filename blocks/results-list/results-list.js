@@ -67,11 +67,14 @@ export default async function decorate(block) {
     });
   };
 
+  console.log('%cresults', 'color: coral', { results });
   if (results.length > 0) {
     let imgData = window?.allProducts?.imgData || allProducts?.imgData || [];
+    console.log('%chas results', 'color: deeppink', { results, imgData });
     if (imgData.length > 0) render({ imgData });
     else {
       setTimeout(() => {
+        console.log('%cwaiting for imgData', 'color: gold', { imgData: allProducts.imgData, isRendered});
         if (allProducts.imgData && !isRendered) {
           imgData = allProducts.imgData;
           productList.innerHTML = '';
@@ -82,6 +85,7 @@ export default async function decorate(block) {
   }
 
   document.addEventListener('DataLoaded', ({ detail }) => {
+    console.log('%cDataLoaded', 'color: cyan', { detail });
     render(detail);
     isRendered = true;
   });
