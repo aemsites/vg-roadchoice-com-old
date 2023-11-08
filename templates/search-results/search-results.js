@@ -148,7 +148,22 @@ export default async function decorate(doc) {
   section.appendChild(searchResultsWrapper);
 
   main.textContent = '';
-  if (breadcrumb) main.prepend(breadcrumb);
+  if (breadcrumb) {
+    const breadcrumbBlock = breadcrumb.querySelector('.breadcrumb');
+
+    // update breadcrumb to remove the href to the search item
+    const observer = new MutationObserver((mutations) => {
+      const { target } = mutations[0];
+      if (target.dataset.blockStatus === 'loaded') {
+        const breadcrumbList = target.querySelector('.breadcrumb-list');
+        const lastElLink = breadcrumbList.lastElementChild.firstElementChild;
+        lastElLink.removeAttribute('href');
+        observer.disconnect();
+      }
+    });
+    observer.observe(breadcrumbBlock, { attributes: true, attributeFilter: ['data-block-status'] });
+    main.prepend(breadcrumb);
+  }
   if (searchBar) main.prepend(searchBar);
   if (noResults) {
     const fragment = document.createRange().createContextualFragment(noResultsTemplate);
