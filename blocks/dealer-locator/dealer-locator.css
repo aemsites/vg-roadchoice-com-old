@@ -9,6 +9,11 @@
   z-index: 0;
 }
 
+/* cookie button position fix */
+#onetrust-consent-sdk #ot-sdk-btn-floating.ot-floating-button {
+  bottom: 30px;
+}
+
 .dealer-locator {
   height: calc(100vh - var(--nav-height));
 }
