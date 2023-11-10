@@ -79,6 +79,8 @@ export default async function decorate(block) {
         }
       }, 5000);
     }
+  } else {
+    loadingElement.remove();
   }
 
   document.addEventListener('DataLoaded', ({ detail }) => {

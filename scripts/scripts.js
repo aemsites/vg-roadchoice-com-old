@@ -720,14 +720,32 @@ export function loadWorker() {
 }
 
 /**
- * checks for white spacing required in document
- */
+ * checks for p elements for different configurations
+ * space -> [*space*]
+ * button -> [*button*] (id) text content
+*/
+//  EXAMPLES:
+//  - white spacing required in document -> [*space*]
+//  - button with id -> [*button*] (cookie preference) Cookie preference center
+
 (() => {
   const pElements = document.querySelectorAll('p');
   pElements.forEach((el) => {
     if (el.textContent === '[*space*]') {
       const spaceSpan = createElement('span', { classes: 'space' });
       el.replaceWith(spaceSpan);
+    }
+    if (el.textContent.includes('[*button*]')) {
+      const id = el.textContent.match(/\((.*?)\)/)[1].toLowerCase().replace(/\s/g, '-');
+      const textContent = el.textContent.split(')')[1].trim();
+      const newBtn = createElement('a', {
+        classes: ['button', 'primary'],
+        props: { id },
+        textContent,
+      });
+      el.textContent = '';
+      el.classList.add('button-container');
+      el.appendChild(newBtn);
     }
   });
 })();
