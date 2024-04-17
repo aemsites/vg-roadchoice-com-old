@@ -292,7 +292,9 @@ $.fn.loadPins = function () {
   $markers = [];
 
   if (!window.locatorConfig.dataSource) {
-    window.locatorConfig.dataSource = '/simpleprox.ashx?https://mvservices.na.volvogroup.com/Dualbrand_US_DealerJSON.ashx';
+    window.locatorConfig.dataSource = '/simpleprox.ashx?https://as-dealerloc-endpoint-prod-001.azurewebsites.net/Volvo_DealerJSON.ashx';
+    // window.locatorConfig.dataSource = '/simpleprox.ashx?https://mvservices.na.volvogroup.com/Dualbrand_US_DealerJSON.ashx';
+    // https://as-dealerloc-endpoint-prod-001.azurewebsites.net/Volvo_DealerJSON.ashx
   }
 
   $.ajax({
@@ -2760,16 +2762,18 @@ $.fn.handleLocationError = function (browserHasGeolocation, infoWindow, pos) {
 };
 
 $.fn.camelCase = function (str) {
+  if (!str || (str.length === 0)) return;
   return str.toLowerCase().replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 };
 
 $.fn.formatPhoneNumber = function (str) {
+  if (!str || (str.length === 0)) return;
   return str.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 };
 
 $.fn.formatWebAddress = function (str) {
   var prefixes = 'http';
-  if (str.length === 0) return;
+  if (!str || (str.length === 0)) return;
   if (str.substr(0, prefixes.length).toLowerCase() === prefixes) {
     return str.toLowerCase();
   }
