@@ -1644,16 +1644,15 @@ $.fn.tmpPins = function (tmpPinList) {
     if (pin.WEB_ADDRESS) {
       templateClone.find('.website a').attr("href", $.fn.formatWebAddress(pin.WEB_ADDRESS));
     } else {
-      templateClone.find('.website').css({'pointer-events':'none','cursor':'default','opacity':'0.7'});
+      templateClone.find('.website').css({'pointer-events':'none','cursor':'default','opacity':'0.5'});
     }
 
     if (pin.REG_PHONE_NUMBER) {
       templateClone.find('.call').html('<a href="tel:' + pin.REG_PHONE_NUMBER + '">' + "Call" + '</a>');      
       templateClone.find('.call a').attr("href", $.fn.formatPhoneNumber(pin.REG_PHONE_NUMBER));
-      // templateClone.find('.detail-call').html('<a href="tel:' + pin.REG_PHONE_NUMBER + '">' + '<img src="/blocks/dealer-locator/images/Phone-2.png" />' + "Call" + '</a>');
     } else {
       templateClone.find('.call').text('Call');
-      templateClone.find('.call').css({'pointer-events':'none','cursor':'default','opacity':'0.7'});
+      templateClone.find('.call').css({'pointer-events':'none','cursor':'default','opacity':'0.5'});
     }
         
     var marker;
