@@ -1272,6 +1272,10 @@ main .section.dealer-locator-container > div {
   justify-content: center;
   gap: 20px;
 }
+.dealer-locator .sidebar .sidebar-content .pin-header .dealer-details-header div {
+  min-width: 50px;
+  text-align: center;
+}
 
 @media (min-width: 496px) and (max-width: 992px) {
   .dealer-locator .sidebar .sidebar-content .pin-header .dealer-details-header {
@@ -1486,6 +1490,7 @@ main .section.dealer-locator-container > div {
   color: #000;
   font-size: 13px;
   padding: 10px 15px;
+  z-index: 20;
 }
 
 .dealer-locator .sidebar .sidebar-content .accordion {
