@@ -252,7 +252,7 @@ export default async function decorate(block) {
             </div>
             <div class="detail-share">
 
-                <a id="share" >
+                <a id="share" class="accordion">
                     <img src="/blocks/dealer-locator/images/Share.svg"/>
                     SHARE
                 </a>
