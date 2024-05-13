@@ -883,7 +883,7 @@ $.fn.renderPinDetails = async function (markerId) {
     templateClone.find('.detail-call').html('<a href="tel:' + markerDetails.REG_PHONE_NUMBER + '">' + '<img src="/blocks/dealer-locator/images/Phone.svg" />' + "Call" + '</a>');
   } else {
     templateClone.find('.detail-call').html('<a>' + '<img src="/blocks/dealer-locator/images/Phone.svg" />' + "Call" + '</a>');
-    templateClone.find('.detail-call a').css({'pointer-events':'none','cursor':'default','opacity':'0.5'});
+    templateClone.find('.detail-call').css({'pointer-events':'none','cursor':'default','opacity':'0.5'});
   }
 
   
