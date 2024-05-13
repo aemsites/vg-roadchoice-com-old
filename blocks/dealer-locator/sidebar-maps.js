@@ -857,9 +857,10 @@ $.fn.renderPinDetails = async function (markerId) {
   }
 
   if (markerDetails.WEB_ADDRESS) {
-    templateClone.find('.detail-website a').attr('href', $.fn.formatWebAddress(markerDetails.WEB_ADDRESS));
+    templateClone.find('.detail-website').html('<a href="' + $.fn.formatWebAddress(markerDetails.WEB_ADDRESS) + '">' + '<img src="/blocks/dealer-locator/images/Globe.svg" />' + "Website" + '</a>');
     templateClone.find('#website').text(markerDetails.WEB_ADDRESS).css('text-transform','lowercase');
   } else {
+    templateClone.find('.detail-website').html('<a href="">' + '<img src="/blocks/dealer-locator/images/Globe.svg" />' + "Website" + '</a>');
     templateClone.find('.detail-website').css({'pointer-events':'none','cursor':'default','opacity':'0.5'});
     templateClone.find('#website').parent().addClass('noDataClass');
   }

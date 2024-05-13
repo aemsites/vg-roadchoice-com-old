@@ -238,9 +238,7 @@ export default async function decorate(block) {
 
         <div class="dealer-details-header">
             <div class="detail-website">
-                <a target="_blank">
-                    <img src="/blocks/dealer-locator/images/Globe.svg"/>
-                    Website</a>
+
             </div>
             <div class="detail-direction">
                 <a id="directions" data-id="" onclick="$.fn.switchSidebarPane('sidebar-directions', this);">
