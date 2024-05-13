@@ -1272,6 +1272,7 @@ main .section.dealer-locator-container > div {
   justify-content: center;
   gap: 20px;
 }
+
 .dealer-locator .sidebar .sidebar-content .pin-header .dealer-details-header div {
   min-width: 50px;
   text-align: center;
