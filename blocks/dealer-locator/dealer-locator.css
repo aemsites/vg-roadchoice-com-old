@@ -586,7 +586,7 @@ main .section.dealer-locator-container > div {
   }
 }
 
-@media (max-width: 310px) {
+@media (max-width: 375px) {
   .dealer-locator .nearby-pins article.teaser .teaser-top .heading p {
     max-width: 200px;
   }
