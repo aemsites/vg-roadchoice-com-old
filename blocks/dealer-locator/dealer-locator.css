@@ -538,6 +538,12 @@ main .section.dealer-locator-container > div {
   background: #fff;
 }
 
+@media (max-width: 496px) {
+  .dealer-locator .nearby-pins article.teaser .teaser-top .heading p {
+    max-width: 200px;
+  }
+}
+
 @media (max-width: 992px) {
   .dealer-locator .nearby-pins article.teaser .teaser-bottom .left .call,
   .dealer-locator .nearby-pins article.teaser .teaser-bottom .left .direction,
