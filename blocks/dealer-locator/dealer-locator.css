@@ -538,7 +538,7 @@ main .section.dealer-locator-container > div {
   background: #fff;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 310px) {
   .dealer-locator .nearby-pins article.teaser .teaser-top .heading p {
     max-width: 200px;
   }
