@@ -586,12 +586,6 @@ main .section.dealer-locator-container > div {
   }
 }
 
-@media (max-width: 375px) {
-  .dealer-locator .nearby-pins article.teaser .teaser-top .heading p {
-    max-width: 200px;
-  }
-}
-
 .dealer-locator .nearby-pins article.teaser .teaser-bottom .left .website,
 .dealer-locator .nearby-pins article.teaser .teaser-bottom .right .website {
   border: 1px solid #000;
