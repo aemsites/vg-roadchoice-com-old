@@ -78,8 +78,6 @@ const getFilterAttrib = async (cat) => {
 
     const filterAttribs = filtersJson.filter((el) => el.Subcategory.toLowerCase() === cat.toLowerCase().replaceAll('-', ' ') && el.Filter === '').map((el) => el.Attributes);
 
-    if (filterAttribs.length === 0) throw new Error(`No filter attributes found for category: ${cat}`);
-
     const event = new Event('FilterAttribsLoaded');
     sessionStorage.setItem('filter-attribs', JSON.stringify(filterAttribs));
     document.dispatchEvent(event);
