@@ -71,7 +71,7 @@ const getFilterAttrib = async (cat) => {
   try {
     const filtersJson = await getLongJSONData({
       url: categoryMaster,
-      limit: 100_000,
+      limit: defaultLimit,
     });
 
     if (!filtersJson) throw new Error('Failed to fetch filter data');
