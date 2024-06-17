@@ -1,4 +1,4 @@
-import { createElement } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 
 let products = window.categoryData;
 let filters = JSON.parse(sessionStorage.getItem('filter-attribs'));

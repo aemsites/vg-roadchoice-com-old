@@ -1,5 +1,5 @@
 import productsWorker from '../../scripts/delayed.js';
-import { createElement } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 import productCard from '../results-list/product-card.js';
 
 let amount = JSON.parse(sessionStorage.getItem('amount'));
