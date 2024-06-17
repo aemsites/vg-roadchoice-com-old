@@ -1,5 +1,6 @@
 /* eslint-disable object-curly-newline */
-import { createElement, getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
+import { getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 
 let isCrossRefActive = true;
 let noOthersItems;

@@ -7,7 +7,7 @@
  * @param {string} [options.textContent=null] add text content into the element
  * @returns {HTMLElement} the element
  */
-export function createElement(tagName, options = {}) {
+export const createElement = (tagName, options = {}) => {
   const { classes = [], props = {}, textContent = null } = options;
   const elem = document.createElement(tagName);
   const isString = typeof classes === 'string';

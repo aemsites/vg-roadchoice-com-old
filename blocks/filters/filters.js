@@ -1,4 +1,5 @@
-import { getTextLabel, createElement } from '../../scripts/scripts.js';
+import { getTextLabel } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 
 let products;
 const titleContent = getTextLabel('Categories');

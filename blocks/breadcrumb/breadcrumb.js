@@ -1,5 +1,6 @@
 import { getMetadata } from '../../scripts/lib-franklin.js';
-import { createElement, getTextLabel } from '../../scripts/scripts.js';
+import { getTextLabel } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 
 const homeText = getTextLabel('brand name');
 const url = new URL(window.location.href);

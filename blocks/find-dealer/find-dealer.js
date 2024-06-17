@@ -1,4 +1,5 @@
-import { createElement, getAllElWithChildren } from '../../scripts/scripts.js';
+import { getAllElWithChildren } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 
 export default function decorate(block) {
   const container = block.querySelector(':scope > div');

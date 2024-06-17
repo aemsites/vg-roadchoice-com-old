@@ -1,4 +1,5 @@
-import { createElement, getTextLabel } from '../../scripts/scripts.js';
+import { getTextLabel } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 
 let amount = JSON.parse(sessionStorage.getItem('amount'));
 let products = window.categoryData;

@@ -1,10 +1,10 @@
 import {
-  createElement,
   getTextLabel,
   getJsonFromUrl,
   getLongJSONData,
   defaultLimit,
 } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 const docTypes = {

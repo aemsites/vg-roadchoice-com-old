@@ -1,9 +1,9 @@
 import {
-  createElement,
   getTextLabel,
   getJsonFromUrl,
 } from '../../scripts/scripts.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
+import { createElement } from '../../scripts/common.js';
 
 const linkText = getTextLabel('read more');
 const btnPagesText = getTextLabel('pagination');

@@ -1,7 +1,5 @@
-import {
-  createElement,
-  getJsonFromUrl,
-} from '../../scripts/scripts.js';
+import { getJsonFromUrl } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
 const rowsToDelete = ['type', 'bold'];

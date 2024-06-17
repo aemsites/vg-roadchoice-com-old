@@ -1,4 +1,5 @@
-import { checkLinkProps, createElement } from '../../scripts/scripts.js';
+import { checkLinkProps } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 import { readBlockConfig, decorateIcons } from '../../scripts/lib-franklin.js';
 
 /**
@@ -17,7 +18,7 @@ export default async function decorate(block) {
     const html = await resp.text();
 
     // decorate footer DOM
-    const footer = document.createElement('div');
+    const footer = createElement('div');
     footer.innerHTML = html;
 
     decorateIcons(footer);
