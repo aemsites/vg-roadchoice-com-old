@@ -29,7 +29,7 @@ export const createElement = (tagName, options = {}) => {
   }
 
   return elem;
-}
+};
 
 /**
  * This function recursively traverses the child elements of a given element

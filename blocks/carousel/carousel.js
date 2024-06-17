@@ -1,3 +1,5 @@
+import { createElement } from '../../scripts/common.js';
+
 const ACTIVE_SLIDE_CLASS = 'carousel-slide-active';
 const ACTIVE_CONTROL_STEP_CLASS = 'carousel-controls-pagination-step-active';
 const SLIDE_CHANGE_TIME = 6000;
@@ -32,7 +34,7 @@ const renderSlidesControls = (carouselEl, onSelect) => {
 
   const slidesControls = Array(slidesCount).fill(0);
   slidesControls.forEach((_el, index) => {
-    const paginationStep = createElement('div', {classes: 'carousel-controls-pagination-step'});
+    const paginationStep = createElement('div', { classes: 'carousel-controls-pagination-step' });
     paginationStep.addEventListener('click', () => {
       onSelect(index);
     });

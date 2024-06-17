@@ -18,6 +18,6 @@ export default async function decorate(block) {
     } else {
       col.classList.add(`${blockName}__column-texts`);
     }
-  })
-  unwrapDivs(block)
+  });
+  unwrapDivs(block);
 }
