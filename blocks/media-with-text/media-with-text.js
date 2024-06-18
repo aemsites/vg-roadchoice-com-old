@@ -11,13 +11,7 @@ export default async function decorate(block) {
   });
 
   columns.forEach((col) => {
-    col.classList.add(`${blockName}__column`);
-    const picture = col.querySelector('picture');
-    if (picture) {
-      col.classList.add(`${blockName}__column-image`);
-    } else {
-      col.classList.add(`${blockName}__column-texts`);
-    }
+    col.classList.add(`${blockName}__column-${col.querySelector('picture') ? 'image' : 'texts'}`);
   });
   unwrapDivs(block);
 }
