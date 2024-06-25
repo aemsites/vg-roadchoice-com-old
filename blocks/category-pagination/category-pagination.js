@@ -8,8 +8,8 @@ let hasMoreItems = false;
 let hasImagesData = false;
 let currentAmount = 0;
 let newText = '';
-const paginationText = getTextLabel('pagination text');
-const buttonText = getTextLabel('pagination button');
+const paginationText = getTextLabel('pagination_text');
+const buttonText = getTextLabel('pagination_button');
 
 const loadMoreProducts = (props) => {
   const { hidden, amountText } = props;
@@ -50,15 +50,14 @@ const addImagesHandler = ({ resultsListBlock, moreBtn, bottomMoreBtn }) => {
 
 const renderBlock = async (block) => {
   const textWrapper = createElement('div', { classes: 'text-wrapper' });
-  const text = createElement('p', { classes: 'text', textContent: newText });
+  const text = createElement('p', { classes: 'text' });
+  text.textContent = newText;
 
   if (hasMoreItems) {
-    const moreBtn = createElement('button', {
-      classes: ['more-button', 'hidden'], textContent: buttonText,
-    });
-    const bottomMoreBtn = createElement('button', {
-      classes: ['more-button', 'bottom-more-button'], textContent: buttonText,
-    });
+    const moreBtn = createElement('button', { classes: ['more-button', 'hidden'] });
+    moreBtn.textContent = buttonText;
+    const bottomMoreBtn = createElement('button', { classes: ['more-button', 'bottom-more-button'] });
+    bottomMoreBtn.textContent = buttonText;
     const resultsListBlock = document.querySelector('.category-results-list.block');
     addShowMoreHandler(moreBtn, resultsListBlock, text);
     addShowMoreHandler(bottomMoreBtn, resultsListBlock, text);

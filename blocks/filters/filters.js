@@ -1,7 +1,7 @@
 import { getTextLabel, createElement } from '../../scripts/common.js';
 
 let products;
-const titleContent = getTextLabel('Categories');
+const titleContent = getTextLabel('categories_label');
 const isSearchResult = document.querySelector('.search-results') !== null;
 const urlCategory = new URLSearchParams(window.location.search).get('cat');
 const total = +sessionStorage.getItem('total-results-amount') || null;
@@ -36,7 +36,8 @@ const reduceCategories = (cats) => {
 
 const buildFilter = (cats) => {
   const section = createElement('div', { classes: 'filter-section' });
-  const title = createElement('h3', { classes: 'title', textContent: titleContent });
+  const title = createElement('h3', { classes: 'title' });
+  title.textContent = titleContent;
   const list = createElement('ul', { classes: 'list' });
   const currentUrl = new URL(window.location.href);
   const urlParams = new URLSearchParams(currentUrl.search);
@@ -49,8 +50,8 @@ const buildFilter = (cats) => {
     const link = createElement('a', {
       classes: 'categories-link',
       props: { href: filterUrl },
-      textContent: `${category.toLowerCase()} (${amount})`,
     });
+    link.textContent = `${category.toLowerCase()} (${amount})`;
     item.appendChild(link);
     list.appendChild(item);
   });

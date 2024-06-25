@@ -77,8 +77,8 @@ export function selectVideoLink(links, preferredType, videoType = videoTypes.bot
 }
 
 export function createLowResolutionBanner() {
-  const lowResolutionMessage = getTextLabel('Low resolution video message');
-  const changeCookieSettings = getTextLabel('Change cookie settings');
+  const lowResolutionMessage = getTextLabel('low_res_video_message');
+  const changeCookieSettings = getTextLabel('change_cookie_settings');
 
   const banner = createElement('div', { classes: 'low-resolution-banner' });
   banner.innerHTML = `${lowResolutionMessage} <button class="low-resolution-banner-cookie-settings">${changeCookieSettings}</button>`;

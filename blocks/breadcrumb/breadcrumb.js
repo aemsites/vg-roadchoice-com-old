@@ -2,7 +2,6 @@ import { getMetadata } from '../../scripts/lib-franklin.js';
 import { createElement, getTextLabel } from '../../scripts/common.js';
 
 const blockName = 'breadcrumb';
-const homeText = getTextLabel('brand name');
 const url = new URL(window.location.href);
 const categoryText = 'part-category';
 
@@ -39,7 +38,7 @@ export default async function decorate(block) {
       link.innerHTML = `${pageName.toLowerCase()} /`;
       link.classList.add('active-link');
     } else {
-      link.innerHTML = idx === 0 ? homeText : path.replaceAll('-', ' ');
+      link.innerHTML = idx === 0 ? getTextLabel('brand_name') : path.replaceAll('-', ' ');
     }
 
     item.appendChild(link);

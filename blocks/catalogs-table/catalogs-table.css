@@ -53,7 +53,7 @@
     scroll-margin: 170px;
   }
 
-  .catalogs-table .catalogs-table-list .table-item {
+  .catalogs-table .catalogs-table-list .catalogs-table-item {
     flex-wrap: wrap;
   }
 

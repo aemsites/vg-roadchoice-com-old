@@ -210,10 +210,8 @@ function renderDocsSection(docsList, sectionType) {
       </li>
     `);
     docs.forEach((doc) => {
-      const anchor = createElement('a', {
-        props: { target: '_blank', href: doc.file },
-        textContent: doc.title,
-      });
+      const anchor = createElement('a', { props: { target: '_blank', href: doc.file } });
+      anchor.textContent = doc.title;
       docsFragment.querySelector(`.pdp-${sectionType}-list-link`).append(anchor);
     });
     sectionWrapper.querySelector(`.pdp-${sectionType}-list`).append(docsFragment);

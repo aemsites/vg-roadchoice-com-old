@@ -16,11 +16,9 @@ export default async function decorate(block) {
     const item = createElement('li', { classes: 'accordion-item' });
     const button = createElement('button', {
       classes: ['accordion-button'],
-      props: {
-        type: 'button',
-      },
-      textContent: questionText.innerText,
+      props: { type: 'button' },
     });
+    button.textContent = questionText.innerText;
     button.onclick = (e) => toggleAnswer(e);
     const answer = createElement('div', { classes: ['accordion-answer', 'hide'] });
     answer.append(...allTexts);

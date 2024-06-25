@@ -62,8 +62,8 @@ const buildTables = (catalogs) => {
     const heading = createElement('h2', {
       classes: `${blockName}-heading`,
       props: { id: sectionTitle },
-      textContent: (sectionTitle.replaceAll('-', ' ')),
     });
+    heading.textContent = sectionTitle.replaceAll('-', ' ');
     const tableSection = createElement('ul', { classes: `${blockName}-list` });
 
     const selectedCatalogs = catalogs.filter((catalog) => {
@@ -86,13 +86,14 @@ const buildTables = (catalogs) => {
       const link = createElement('a', {
         classes: 'item-link',
         props: { href: file },
-        textContent: title,
       });
+      link.textContent = title;
       if (isPdf) {
         link.setAttribute('target', '_blank');
         link.setAttribute('rel', 'noopener noreferrer');
       }
-      const note = createElement('span', { classes: 'item-note', textContent: `(${notes})` });
+      const note = createElement('span', { classes: 'item-note' });
+      note.textContent = notes;
 
       catalog.append(link);
       if (notes.length > 0) link.append(note);

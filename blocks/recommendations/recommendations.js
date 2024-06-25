@@ -5,8 +5,8 @@ import {
 } from '../../scripts/common.js';
 import { getMetadata } from '../../scripts/lib-franklin.js';
 
-const title = getTextLabel('recommendations title');
-const linkText = getTextLabel('read more');
+const title = getTextLabel('recommendations_title');
+const linkText = getTextLabel('read_more');
 const [homeTitle, recommendationsTitle] = title.split('[/]');
 const category = getMetadata('category');
 

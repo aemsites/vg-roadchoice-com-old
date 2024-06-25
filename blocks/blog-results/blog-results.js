@@ -5,9 +5,7 @@ import {
 } from '../../scripts/common.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
-const linkText = getTextLabel('read more');
-const btnPagesText = getTextLabel('pagination');
-const pagesText = getTextLabel('blog pagination number');
+const blockName = 'blog-results';
 
 let selectedCategories = [];
 let articlesPerPage = 4;
@@ -56,7 +54,7 @@ const filterCats = () => {
     const newArts = getArticlesWithCat(selectedCategories, allArticles);
     newResults = buildResults(newArts, 0);
   }
-  const oldResults = document.querySelector('.blog-results-articles');
+  const oldResults = document.querySelector(`.${blockName}-articles`)
   oldResults.insertAdjacentElement('beforebegin', newResults);
   oldResults.remove();
 };
@@ -68,7 +66,7 @@ const deleteCats = (sidebar) => {
   allBtns.forEach((btn) => delete btn.dataset.active);
 
   const newResults = buildResults(allArticles, 0);
-  const oldResults = document.querySelector('.blog-results-articles');
+  const oldResults = document.querySelector(`.${blockName}-articles`)
   oldResults.insertAdjacentElement('beforebegin', newResults);
   oldResults.remove();
 };
@@ -189,7 +187,7 @@ const handlePagination = (e, articles, page, total) => {
     }
     nextPage = buildResults(articles, page + 1);
   }
-  const currPage = document.querySelector('.blog-results-articles');
+  const currPage = document.querySelector(`.${blockName}-articles`);
   currPage.insertAdjacentElement('beforebegin', nextPage);
   currPage.remove();
 
@@ -198,7 +196,7 @@ const handlePagination = (e, articles, page, total) => {
 };
 
 const buildPagination = (articles, totalPages, curentPage) => {
-  const paginationText = btnPagesText;
+  const paginationText = getTextLabel('pagination');
   const paginationLabels = paginationText.split('[/]');
   const [first, prev, next, last] = paginationLabels;
 
@@ -249,11 +247,11 @@ buildResults = (articles, page) => {
     return b.date - a.date;
   });
 
-  const results = createElement('div', { classes: 'blog-results-articles' });
+  const results = createElement('div', { classes: `${blockName}-articles` });
 
   const topPaginationSection = createElement('div', { classes: 'pagination-top-section' });
   const topPagination = createElement('p', { classes: 'pagination-top' });
-  const rawText = pagesText;
+  const rawText = getTextLabel('blog_pagination_number');
 
   if (firstBuild) totalArticleCount = rawText.replace('[$]', articles.length);
   topPagination.textContent = totalArticleCount;
@@ -282,7 +280,7 @@ buildResults = (articles, page) => {
     description.textContent = art.description;
 
     const link = createElement('a', { classes: 'link', props: { href: art.path } });
-    link.textContent = linkText;
+    link.textContent = getTextLabel('read_more');
 
     article.append(title, date, description, link);
     articleSection.appendChild(article);
@@ -294,7 +292,7 @@ buildResults = (articles, page) => {
 };
 
 const buildSidebar = (articles, titleContent) => {
-  const sidebar = createElement('div', { classes: 'blog-results-sidebar' });
+  const sidebar = createElement('div', { classes: `${blockName}-sidebar` });
 
   const titleSection = createElement('div', { classes: 'title-section' });
   const title = createElement('h4', { classes: 'title' });

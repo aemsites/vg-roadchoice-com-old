@@ -5,35 +5,39 @@ let products = window.categoryData;
 let filters = JSON.parse(sessionStorage.getItem('filter-attribs'));
 let isDecorated = false;
 
-const filtersTitle = getTextLabel('category_filters_title');
-const clearFilters = getTextLabel('category_filters_clear_button');
-const applyFilters = getTextLabel('category_filters_apply_button');
-
 const renderBlock = async (block) => {
-  const filterTitle = createElement('h3', { classes: `${blockName}-title`, textContent: filtersTitle });
+  const filterTitle = createElement('h3', { classes: `${blockName}-title` });
+  filterTitle.textContent = getTextLabel('category_filters_title');
   const filterForm = createElement('form', { classes: `${blockName}-form`, props: { id: `${blockName}-form` } });
   const buttonsWrapper = createElement('div', { classes: `${blockName}-buttons-wrapper` });
   const clearFilterBtn = createElement('button', {
     classes: ['clear-filter-btn', 'filter-btn', 'secondary'],
     props: {
-      type: 'submit', form: `${blockName}-form`, disabled: 'disabled', id: 'clear-filter-btn',
+      type: 'submit',
+      form: `${blockName}-form`,
+      disabled: 'disabled',
+      id: 'clear-filter-btn',
     },
-    textContent: clearFilters,
   });
+  clearFilterBtn.textContent = getTextLabel('category_filters_clear_button');
   const applyFilterBtn = createElement('button', {
     classes: ['apply-filter-btn', 'filter-btn', 'primary'],
     props: {
-      type: 'submit', form: `${blockName}-form`, disabled: 'disabled', id: 'apply-filter-btn',
+      type: 'submit',
+      form: `${blockName}-form`,
+      disabled: 'disabled',
+      id: 'apply-filter-btn',
     },
-    textContent: applyFilters,
   });
+  applyFilterBtn.textContent = getTextLabel('category_filters_apply_button');
   const filterList = createElement('ul', { classes: `${blockName}-list` });
 
   // filter the data to add extra filters to every attribute
   filters.forEach((attribute) => {
     const filterItem = createElement('li', { classes: `${blockName}-item` });
     const titleWrapper = createElement('div', { classes: `${blockName}-title-wrapper` });
-    const filterAttrib = createElement('h6', { classes: `${blockName}-item-title`, textContent: attribute });
+    const filterAttrib = createElement('h6', { classes: `${blockName}-item-title` });
+    filterAttrib.textContent = attribute;
     const plusBtn = createElement('span', { classes: ['plus-btn', 'fa', 'fa-plus'] });
     const filterOptionsWrapper = createElement('ul', {
       classes: [`${blockName}-options-wrapper`, 'hidden'],
@@ -57,11 +61,11 @@ const renderBlock = async (block) => {
       });
       const filterLabel = createElement('label', {
         classes: `${blockName}-label`,
-        textContent: el,
         props: {
           for: inputId,
         },
       });
+      filterLabel.textContent = el;
       filterOption.append(filterInput, filterLabel);
       filterOptionsWrapper.appendChild(filterOption);
     });

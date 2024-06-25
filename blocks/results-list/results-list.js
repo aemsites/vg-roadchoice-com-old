@@ -1,4 +1,4 @@
-import { createElement } from '../../scripts/common.js';
+import { createElement, getTextLabel } from '../../scripts/common.js';
 import productCard from './product-card.js';
 import { amountOfProducts } from '../search/search.js';
 import { results, allProducts } from '../../templates/search-results/search-results.js';
@@ -51,7 +51,8 @@ const renderResults = ({ loadingElement, productList, isTruckLibrary, detail }) 
 export default async function decorate(block) {
   const resultsSection = createElement('div', { classes: 'results-section' });
   const productList = createElement('ul', { classes: 'results-list' });
-  const loadingElement = createElement('div', { classes: 'loading', textContent: 'Loading...' });
+  const loadingElement = createElement('div', { classes: 'loading' });
+  loadingElement.textContent = getTextLabel('loading_label');
   resultsSection.append(loadingElement);
 
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');

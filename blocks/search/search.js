@@ -12,9 +12,9 @@ let fitInStorage = true;
 export const fitAmount = 5000;
 
 const PLACEHOLDERS = {
-  crossReference: getTextLabel('Cross-Reference No'),
-  partNumber: getTextLabel('Part No'),
-  partNumberLabel: getTextLabel('Part Number Label'),
+  crossReference: getTextLabel('cross-reference_number'),
+  partNumber: getTextLabel('part_number_or_description'),
+  partNumberLabel: getTextLabel('part_number_slash_description'),
 };
 
 const TEMPLATES = {
