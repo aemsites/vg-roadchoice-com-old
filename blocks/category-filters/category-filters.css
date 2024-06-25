@@ -25,7 +25,7 @@
   margin: 0;
 }
 
-.category-filters-wrapper .category-filter-list,
+.category-filters-wrapper .category-filters-list,
 .category-filters-wrapper .category-filters-buttons-wrapper {
   background-color: var(--table-bg);
 }
