@@ -1,4 +1,4 @@
-import { getTextLabel, createElement } from '../../scripts/scripts.js';
+import { getTextLabel, createElement } from '../../scripts/common.js';
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 const partNumberText = getTextLabel('part number');

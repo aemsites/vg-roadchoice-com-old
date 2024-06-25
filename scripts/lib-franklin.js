@@ -195,7 +195,12 @@ export async function decorateIcons(element) {
     }
   }));
 
-  const symbols = Object.values(ICONS_CACHE).filter((v) => !v.styled).map((v) => v.html).join('\n');
+  const symbols = Object
+    .keys(ICONS_CACHE).filter((k) => !svgSprite.querySelector(`#icons-sprite-${k}`))
+    .map((k) => ICONS_CACHE[k])
+    .filter((v) => !v.styled)
+    .map((v) => v.html)
+    .join('\n');
   svgSprite.innerHTML += symbols;
 
   icons.forEach((span) => {
@@ -447,13 +452,12 @@ export function getHref() {
  * @param {string} [alt] The image alternative text
  * @param {boolean} [eager] Set loading attribute to eager
  * @param {Array} [breakpoints] Breakpoints and corresponding params (eg. width)
- * @param {boolean} isExternal True if src is external
  * @returns {Element} The picture element
  */
-export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }], isExternal = false) {
+export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }]) {
   const url = new URL(src, getHref());
   const picture = document.createElement('picture');
-  const pathname = (isExternal && src) || url.pathname;
+  const { pathname } = url;
   const ext = pathname.substring(pathname.lastIndexOf('.') + 1);
 
   // webp
@@ -461,7 +465,7 @@ export function createOptimizedPicture(src, alt = '', eager = false, breakpoints
     const source = document.createElement('source');
     if (br.media) source.setAttribute('media', br.media);
     source.setAttribute('type', 'image/webp');
-    source.setAttribute('srcset', pathname);
+    source.setAttribute('srcset', `${pathname}?width=${br.width}&format=webply&optimize=medium`);
     picture.appendChild(source);
   });
 

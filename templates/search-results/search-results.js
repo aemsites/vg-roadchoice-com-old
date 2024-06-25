@@ -5,7 +5,7 @@ import {
   searchPartNumValue,
 } from '../../blocks/search/search.js';
 import productsWorker from '../../scripts/delayed.js';
-import { getTextLabel, createElement } from '../../scripts/scripts.js';
+import { getTextLabel, createElement } from '../../scripts/common.js';
 
 const titleContent = getTextLabel('search results title');
 const noResultsContent = getTextLabel('no results title');

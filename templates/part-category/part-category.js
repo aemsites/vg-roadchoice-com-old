@@ -2,7 +2,7 @@ import {
   createElement,
   getLongJSONData,
   defaultLimit,
-} from '../../scripts/scripts.js';
+} from '../../scripts/common.js';
 
 const categoryMaster = '/product-data/rc-attribute-master-file.json';
 const amount = 12;

@@ -1,4 +1,4 @@
-import { createElement } from '../../scripts/scripts.js';
+import { createElement } from '../../scripts/common.js';
 import productCard from './product-card.js';
 import { amountOfProducts } from '../search/search.js';
 import { results, allProducts } from '../../templates/search-results/search-results.js';

@@ -1,7 +1,7 @@
 {
-  "total": 21,
+  "total": 24,
   "offset": 0,
-  "limit": 21,
+  "limit": 24,
   "data": [
     {
       "Key": "brand name",
@@ -61,7 +61,8 @@
     },
     {
       "Key": "no results title",
-      "Text": "SORRY, YOUR SEARCH FOR \"[$]\" RETURNED NO RESULTS!"
+      "Text": "SORRY, YOUR SEARCH FOR "[$
+      ]" RETURNED NO RESULTS!"
     },
     {
       "Key": "no results subtitle",
@@ -86,6 +87,18 @@
     {
       "Key": "es",
       "Text": "Spanish"
+    },
+    {
+      "Key": "category_filters_title",
+      "Text": "Filters"
+    },
+    {
+      "Key": "category_filters_clear_button",
+      "Text": "Clear"
+    },
+    {
+      "Key": "category_filters_apply_button",
+      "Text": "Apply"
     }
   ],
   ":type": "sheet"

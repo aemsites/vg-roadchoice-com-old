@@ -1,10 +1,12 @@
+import { createElement } from '../../scripts/common.js';
+
+const blockName = 'carousel';
 const ACTIVE_SLIDE_CLASS = 'carousel-slide-active';
 const ACTIVE_CONTROL_STEP_CLASS = 'carousel-controls-pagination-step-active';
 const SLIDE_CHANGE_TIME = 6000;
 
 const buildSlide = (slideTemplate) => {
-  const slideEl = document.createElement('li');
-  slideEl.classList.add('carousel-slide');
+  const slideEl = createElement('li', { classes: `${blockName}-slide` });
   slideEl.innerHTML = slideTemplate.innerHTML;
   slideEl.children[0].classList.add('carousel-slide-content-wrapper');
 
@@ -29,13 +31,11 @@ const buildSlide = (slideTemplate) => {
 
 const renderSlidesControls = (carouselEl, onSelect) => {
   const slidesCount = carouselEl.querySelectorAll('.carousel-slide').length;
-  const slidesCountrolsEl = document.createElement('div');
-  slidesCountrolsEl.classList.add('carousel-controls');
+  const slidesCountrolsEl = createElement('div', { classes: `${blockName}-controls` });
 
   const slidesControls = Array(slidesCount).fill(0);
   slidesControls.forEach((_el, index) => {
-    const paginationStep = document.createElement('div');
-    paginationStep.classList.add('carousel-controls-pagination-step');
+    const paginationStep = createElement('div', { classes: `${blockName}-controls-pagination-step` });
     paginationStep.addEventListener('click', () => {
       onSelect(index);
     });
@@ -51,8 +51,7 @@ const renderArrows = (carouseEl, onSelect, carouselState) => {
     <button class="carousel-arrows-right" aria-label="slide right"></button>
   `;
 
-  const arrowsControlEl = document.createElement('div');
-  arrowsControlEl.classList.add('carousel-arrows-controls');
+  const arrowsControlEl = createElement('div', { classes: `${blockName}-arrows-controls` });
   arrowsControlEl.innerHTML = arrowsControl;
 
   const leftArrow = arrowsControlEl.querySelector('.carousel-arrows-left');
@@ -145,8 +144,7 @@ const onScroll = (carousel, onChange, carouselState) => {
 };
 
 export default function decorate(block) {
-  const carouselEl = document.createElement('ul');
-  carouselEl.classList.add('carousel-slide-list');
+  const carouselEl = createElement('ul', { classes: `${blockName}-slide-list` });
   carouselEl.innerHTML = block.innerHTML;
   block.innerHTML = '';
   block.append(carouselEl);

@@ -1,8 +1,8 @@
 import {
-  createElement,
   getTextLabel,
   getJsonFromUrl,
-} from '../../scripts/scripts.js';
+  createElement,
+} from '../../scripts/common.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 
 const linkText = getTextLabel('read more');

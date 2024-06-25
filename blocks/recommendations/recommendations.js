@@ -2,7 +2,7 @@ import {
   createElement,
   getTextLabel,
   getJsonFromUrl,
-} from '../../scripts/scripts.js';
+} from '../../scripts/common.js';
 import { getMetadata } from '../../scripts/lib-franklin.js';
 
 const title = getTextLabel('recommendations title');

@@ -1,4 +1,4 @@
-import { createIframe, isVideoLink } from '../../scripts/scripts.js';
+import { createIframe, isVideoLink } from '../../scripts/video-helper.js';
 
 const ratioWidth = 16;
 const ratioHeight = 9;

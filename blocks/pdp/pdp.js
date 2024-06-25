@@ -4,7 +4,7 @@ import {
   getJsonFromUrl,
   getLongJSONData,
   defaultLimit,
-} from '../../scripts/scripts.js';
+} from '../../scripts/common.js';
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 const docTypes = {
