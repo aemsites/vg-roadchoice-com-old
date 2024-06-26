@@ -446,7 +446,6 @@ export function getHref() {
   return `${window.parent.location.origin}${urlParams.get('path')}`;
 }
 
-
 /**
  * Returns a picture element with webp and fallbacks
  * @param {string} src The image URL
