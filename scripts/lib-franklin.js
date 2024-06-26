@@ -446,18 +446,20 @@ export function getHref() {
   return `${window.parent.location.origin}${urlParams.get('path')}`;
 }
 
+
 /**
  * Returns a picture element with webp and fallbacks
  * @param {string} src The image URL
  * @param {string} [alt] The image alternative text
  * @param {boolean} [eager] Set loading attribute to eager
  * @param {Array} [breakpoints] Breakpoints and corresponding params (eg. width)
+ * @param {boolean} isExternal True if src is external
  * @returns {Element} The picture element
  */
-export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }]) {
+export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }], isExternal = false) {
   const url = new URL(src, getHref());
   const picture = document.createElement('picture');
-  const { pathname } = url;
+  const pathname = (isExternal && src) || url.pathname;
   const ext = pathname.substring(pathname.lastIndexOf('.') + 1);
 
   // webp
@@ -465,7 +467,7 @@ export function createOptimizedPicture(src, alt = '', eager = false, breakpoints
     const source = document.createElement('source');
     if (br.media) source.setAttribute('media', br.media);
     source.setAttribute('type', 'image/webp');
-    source.setAttribute('srcset', `${pathname}?width=${br.width}&format=webply&optimize=medium`);
+    source.setAttribute('srcset', pathname);
     picture.appendChild(source);
   });
 
