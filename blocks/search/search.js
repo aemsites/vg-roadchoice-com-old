@@ -1,5 +1,5 @@
 /* eslint-disable object-curly-newline */
-import { createElement, getJsonFromUrl as getFiltersData, getTextLabel } from '../../scripts/common.js';
+import { createElement, getJsonFromUrl, getTextLabel } from '../../scripts/common.js';
 
 let isCrossRefActive = true;
 let noOthersItems;
@@ -117,7 +117,7 @@ async function getAndApplyFiltersData(form) {
   const makeSelect = form.querySelector('.search__make-filter__select');
   const modelsSelect = form.querySelector('.search__model-filter__select');
   const makeItems = [];
-  const filters = await getFiltersData(FILTERS_DATA);
+  const filters = await getJsonFromUrl(FILTERS_DATA);
   const { data } = filters;
   if (!data) return;
   data.forEach((item) => {

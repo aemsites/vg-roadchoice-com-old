@@ -255,6 +255,14 @@ function buildHeroBlock(main) {
   }
 }
 
+function buildSearchForm(main, head) {
+  const noSearchBlock = head.querySelector('meta[name="no-search"]');
+  if (noSearchBlock) return;
+  const section = createElement('div');
+  section.appendChild(buildBlock('search', []));
+  main.prepend(section);
+}
+
 function buildSubNavigation(main, head) {
   const subnav = head.querySelector('meta[name="sub-navigation"]');
   if (subnav && subnav.content.startsWith('/')) {
@@ -272,6 +280,7 @@ function buildAutoBlocks(main, head) {
   try {
     buildHeroBlock(main);
     if (head) {
+      buildSearchForm(main, head);
       buildSubNavigation(main, head);
     }
   } catch (error) {
