@@ -1,10 +1,10 @@
-import {
-  getMetadata,
-} from '../../scripts/lib-franklin.js';
+import { getMetadata } from '../../scripts/lib-franklin.js';
 import { createElement } from '../../scripts/common.js';
 
 const title = getMetadata('og:title');
 const date = getMetadata('publication-date');
+
+console.log(title, date);
 
 export default async function decorate(doc) {
   const container = doc.querySelector('main');
