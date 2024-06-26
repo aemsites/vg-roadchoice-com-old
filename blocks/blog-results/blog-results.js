@@ -54,7 +54,7 @@ const filterCats = () => {
     const newArts = getArticlesWithCat(selectedCategories, allArticles);
     newResults = buildResults(newArts, 0);
   }
-  const oldResults = document.querySelector(`.${blockName}-articles`)
+  const oldResults = document.querySelector(`.${blockName}-articles`);
   oldResults.insertAdjacentElement('beforebegin', newResults);
   oldResults.remove();
 };
@@ -66,7 +66,7 @@ const deleteCats = (sidebar) => {
   allBtns.forEach((btn) => delete btn.dataset.active);
 
   const newResults = buildResults(allArticles, 0);
-  const oldResults = document.querySelector(`.${blockName}-articles`)
+  const oldResults = document.querySelector(`.${blockName}-articles`);
   oldResults.insertAdjacentElement('beforebegin', newResults);
   oldResults.remove();
 };

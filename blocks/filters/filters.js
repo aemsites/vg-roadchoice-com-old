@@ -1,7 +1,7 @@
 import { getTextLabel, createElement } from '../../scripts/common.js';
 
+const blockName = 'filters';
 let products;
-const titleContent = getTextLabel('categories_label');
 const isSearchResult = document.querySelector('.search-results') !== null;
 const urlCategory = new URLSearchParams(window.location.search).get('cat');
 const total = +sessionStorage.getItem('total-results-amount') || null;
@@ -35,9 +35,9 @@ const reduceCategories = (cats) => {
 };
 
 const buildFilter = (cats) => {
-  const section = createElement('div', { classes: 'filter-section' });
+  const section = createElement('div', { classes: `${blockName}-section` });
   const title = createElement('h3', { classes: 'title' });
-  title.textContent = titleContent;
+  title.textContent = getTextLabel('categories_label');
   const list = createElement('ul', { classes: 'list' });
   const currentUrl = new URL(window.location.href);
   const urlParams = new URLSearchParams(currentUrl.search);
@@ -61,7 +61,7 @@ const buildFilter = (cats) => {
 };
 
 const decorateFilter = (block) => {
-  const filtersSection = createElement('div', { classes: 'filters-wrapper' });
+  const filtersSection = createElement('div', { classes: `${blockName}-wrapper` });
 
   const categories = reduceCategories(products);
 

@@ -3,6 +3,7 @@ import productCard from './product-card.js';
 import { amountOfProducts } from '../search/search.js';
 import { results, allProducts } from '../../templates/search-results/search-results.js';
 
+const blockName = 'results-list';
 let total = 0;
 let amount = amountOfProducts;
 let products;
@@ -49,8 +50,8 @@ const renderResults = ({ loadingElement, productList, isTruckLibrary, detail }) 
 };
 
 export default async function decorate(block) {
-  const resultsSection = createElement('div', { classes: 'results-section' });
-  const productList = createElement('ul', { classes: 'results-list' });
+  const resultsSection = createElement('div', { classes: `${blockName}__section` });
+  const productList = createElement('ul', { classes: `${blockName}__list` });
   const loadingElement = createElement('div', { classes: 'loading' });
   loadingElement.textContent = getTextLabel('loading_label');
   resultsSection.append(loadingElement);

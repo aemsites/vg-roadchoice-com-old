@@ -1,6 +1,7 @@
 import { getTextLabel, createElement } from '../../scripts/common.js';
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
+const blockName = 'product-card';
 const partNumberText = getTextLabel('part_number');
 
 const getProperties = (prod, st) => {
@@ -41,7 +42,7 @@ const productCard = (product, searchType) => {
     imgUrl,
   } = object;
 
-  const item = createElement('li', { classes: 'product' });
+  const item = createElement('li', { classes: blockName });
 
   const linkUrl = `/parts?category=${
     category.replace(/[^\w]/g, '-').toLowerCase()

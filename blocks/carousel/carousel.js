@@ -1,8 +1,8 @@
 import { createElement } from '../../scripts/common.js';
 
 const blockName = 'carousel';
-const ACTIVE_SLIDE_CLASS = 'carousel-slide-active';
-const ACTIVE_CONTROL_STEP_CLASS = 'carousel-controls-pagination-step-active';
+const ACTIVE_SLIDE_CLASS = `${blockName}-slide-active`;
+const ACTIVE_CONTROL_STEP_CLASS = `${blockName}-controls-pagination-step-active`;
 const SLIDE_CHANGE_TIME = 6000;
 
 const buildSlide = (slideTemplate) => {
