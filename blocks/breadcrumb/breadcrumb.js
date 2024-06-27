@@ -4,7 +4,7 @@ import { createElement, getTextLabel } from '../../scripts/common.js';
 const blockName = 'breadcrumb';
 const url = new URL(window.location.href);
 const categoryText = 'part-category';
-const brandName = getTextLabel('brand_name')
+const brandName = getTextLabel('brand_name');
 
 const pageName = getMetadata('og:title');
 

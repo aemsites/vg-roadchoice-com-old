@@ -1,7 +1,7 @@
 {
-  "total": 23,
+  "total": 26,
   "offset": 0,
-  "limit": 23,
+  "limit": 26,
   "data": [
     {
       "Key": "brand_name",
@@ -94,6 +94,18 @@
     {
       "Key": "change_cookie_settings",
       "Text": "Change cookie settings"
+    },
+    {
+      "Key": "en",
+      "Text": "English"
+    },
+    {
+      "Key": "fr",
+      "Text": "French"
+    },
+    {
+      "Key": "es",
+      "Text": "Spanish"
     }
   ],
   ":type": "sheet"
