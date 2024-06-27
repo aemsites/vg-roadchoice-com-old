@@ -6,11 +6,11 @@ import {
 import { getMetadata } from '../../scripts/lib-franklin.js';
 
 const blockName = 'recommendations';
+const category = getMetadata('category');
 const title = getTextLabel('recommendations_title');
 const linkText = getTextLabel('read_more');
-const [homeTitle, recommendationsTitle] = title.split('[/]');
-const category = getMetadata('category');
 
+const [homeTitle, recommendationsTitle] = title.split('[/]');
 const isBlogArticle = document.querySelector('.blog-article');
 
 export const getLimit = (block) => {

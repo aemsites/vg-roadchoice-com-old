@@ -10,6 +10,9 @@ const blockName = 'blog-results';
 let selectedCategories = [];
 let articlesPerPage = 4;
 let firstBuild = true;
+const paginationText = getTextLabel('pagination');
+const rawText = getTextLabel('blog_pagination_number');
+const readMoreText = getTextLabel('read_more');
 
 let totalArticleCount;
 let allArticles;
@@ -196,7 +199,6 @@ const handlePagination = (e, articles, page, total) => {
 };
 
 const buildPagination = (articles, totalPages, curentPage) => {
-  const paginationText = getTextLabel('pagination');
   const paginationLabels = paginationText.split('[/]');
   const [first, prev, next, last] = paginationLabels;
 
@@ -251,7 +253,6 @@ buildResults = (articles, page) => {
 
   const topPaginationSection = createElement('div', { classes: 'pagination-top-section' });
   const topPagination = createElement('p', { classes: 'pagination-top' });
-  const rawText = getTextLabel('blog_pagination_number');
 
   if (firstBuild) totalArticleCount = rawText.replace('[$]', articles.length);
   topPagination.textContent = totalArticleCount;
@@ -280,7 +281,7 @@ buildResults = (articles, page) => {
     description.textContent = art.description;
 
     const link = createElement('a', { classes: 'link', props: { href: art.path } });
-    link.textContent = getTextLabel('read_more');
+    link.textContent = readMoreText;
 
     article.append(title, date, description, link);
     articleSection.appendChild(article);

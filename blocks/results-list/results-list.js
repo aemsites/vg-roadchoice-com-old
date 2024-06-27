@@ -4,6 +4,7 @@ import { amountOfProducts } from '../search/search.js';
 import { results, allProducts } from '../../templates/search-results/search-results.js';
 
 const blockName = 'results-list';
+const loadingLabel = getTextLabel('loading_label');
 let total = 0;
 let amount = amountOfProducts;
 let products;
@@ -53,7 +54,7 @@ export default async function decorate(block) {
   const resultsSection = createElement('div', { classes: `${blockName}__section` });
   const productList = createElement('ul', { classes: `${blockName}__list` });
   const loadingElement = createElement('div', { classes: 'loading' });
-  loadingElement.textContent = getTextLabel('loading_label');
+  loadingElement.textContent = loadingLabel;
   resultsSection.append(loadingElement);
 
   const isTruckLibrary = (text) => text.includes('trucklibrary.com');

@@ -8,7 +8,7 @@ import {
 import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
 const blockName = 'pdp';
-
+const languageText = getTextLabel(language);
 const docTypes = {
   catalog: 'catalog',
   manual: 'manual',
@@ -209,7 +209,7 @@ function renderDocsSection(docsList, sectionType) {
   Object.entries(docsList).forEach(([language, docs]) => {
     const docsFragment = docRange.createContextualFragment(`
       <li class="${blockName}-${sectionType}-list-item">
-        <div class="${blockName}-${sectionType}-list-title">${getTextLabel(language)}</div>
+        <div class="${blockName}-${sectionType}-list-title">${languageText}</div>
         <div class="${blockName}-${sectionType}-list-link"></div>
       </li>
     `);

@@ -4,6 +4,7 @@ import { createElement, getTextLabel } from '../../scripts/common.js';
 const blockName = 'breadcrumb';
 const url = new URL(window.location.href);
 const categoryText = 'part-category';
+const brandName = getTextLabel('brand_name')
 
 const pageName = getMetadata('og:title');
 
@@ -38,7 +39,7 @@ export default async function decorate(block) {
       link.innerHTML = `${pageName.toLowerCase()} /`;
       link.classList.add('active-link');
     } else {
-      link.innerHTML = idx === 0 ? getTextLabel('brand_name') : path.replaceAll('-', ' ');
+      link.innerHTML = idx === 0 ? brandName : path.replaceAll('-', ' ');
     }
 
     item.appendChild(link);

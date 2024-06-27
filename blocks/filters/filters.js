@@ -5,6 +5,7 @@ let products;
 const isSearchResult = document.querySelector('.search-results') !== null;
 const urlCategory = new URLSearchParams(window.location.search).get('cat');
 const total = +sessionStorage.getItem('total-results-amount') || null;
+const categoriesText = getTextLabel('categories_label');
 
 if (isSearchResult) products = JSON.parse(sessionStorage.getItem('results')) || [];
 
@@ -37,7 +38,7 @@ const reduceCategories = (cats) => {
 const buildFilter = (cats) => {
   const section = createElement('div', { classes: `${blockName}-section` });
   const title = createElement('h3', { classes: 'title' });
-  title.textContent = getTextLabel('categories_label');
+  title.textContent = categoriesText;
   const list = createElement('ul', { classes: 'list' });
   const currentUrl = new URL(window.location.href);
   const urlParams = new URLSearchParams(currentUrl.search);
