@@ -4,10 +4,13 @@ const blockName = 'category-filters';
 let products = window.categoryData;
 let filters = JSON.parse(sessionStorage.getItem('filter-attribs'));
 let isDecorated = false;
+const titleText = getTextLabel('category_filters_title');
+const clearText = getTextLabel('category_filters_clear_button');
+const applyText = getTextLabel('category_filters_apply_button');
 
 const renderBlock = async (block) => {
   const filterTitle = createElement('h3', { classes: `${blockName}-title` });
-  filterTitle.textContent = getTextLabel('category_filters_title');
+  filterTitle.textContent = titleText;
   const filterForm = createElement('form', { classes: `${blockName}-form`, props: { id: `${blockName}-form` } });
   const buttonsWrapper = createElement('div', { classes: `${blockName}-buttons-wrapper` });
   const clearFilterBtn = createElement('button', {
@@ -19,7 +22,7 @@ const renderBlock = async (block) => {
       id: 'clear-filter-btn',
     },
   });
-  clearFilterBtn.textContent = getTextLabel('category_filters_clear_button');
+  clearFilterBtn.textContent = clearText;
   const applyFilterBtn = createElement('button', {
     classes: ['apply-filter-btn', 'filter-btn', 'primary'],
     props: {
@@ -29,7 +32,7 @@ const renderBlock = async (block) => {
       id: 'apply-filter-btn',
     },
   });
-  applyFilterBtn.textContent = getTextLabel('category_filters_apply_button');
+  applyFilterBtn.textContent = applyText;
   const filterList = createElement('ul', { classes: `${blockName}-list` });
 
   // filter the data to add extra filters to every attribute
@@ -86,8 +89,8 @@ const renderBlock = async (block) => {
     if (e.target.classList.contains(`${blockName}-input`)) {
       /* enable/disable the Apply button
        * depending on if there is at least one checked input of the whole list */
-      const parentFilterList = e.target.closest(`${blockName}-list`);
-      const filterInputs = parentFilterList.querySelectorAll(`${blockName}-input`);
+      const parentFilterList = e.target.closest(`.${blockName}-list`);
+      const filterInputs = parentFilterList.querySelectorAll(`.${blockName}-input`);
       const checkedInputs = [...filterInputs].filter((el) => el.checked);
       const isChecked = checkedInputs.length > 0;
       const targetBtnsWrapper = parentFilterList.previousElementSibling;
@@ -100,7 +103,7 @@ const renderBlock = async (block) => {
     const { submitter: { id } } = e;
     const isApply = id === 'apply-filter-btn';
     if (isApply) {
-      const checkedInputs = [...filterList.querySelectorAll(`${blockName}-input:checked`)];
+      const checkedInputs = [...filterList.querySelectorAll(`.${blockName}-input:checked`)];
       const filteredAttrib = [];
       filterForm.querySelector('.clear-filter-btn').disabled = false;
       // [{ title, values: [value1, value2, ...] }]
@@ -129,7 +132,7 @@ const renderBlock = async (block) => {
       const event = new CustomEvent('FilteredProducts', { detail: { filteredProducts: products } });
       document.dispatchEvent(event);
       // close active title filters
-      const activeTitles = [...filterList.querySelectorAll(`${blockName}-title-wrapper.active`)];
+      const activeTitles = [...filterList.querySelectorAll(`.${blockName}-title-wrapper.active`)];
       activeTitles.forEach((el) => {
         el.classList.remove('active');
         el.nextElementSibling.classList.add('hidden');
