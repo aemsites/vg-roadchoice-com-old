@@ -8,6 +8,7 @@ let isRendered = false;
 let hasImagesData = false;
 let imgData;
 const searchType = 'parts';
+const loadingLabel = getTextLabel('loading_label');
 
 productsWorker.onmessage = ({ data }) => {
   if (products && data.imgData && !hasImagesData) {
@@ -51,7 +52,7 @@ const renderBlock = async (block) => {
   const resultsWrapper = createElement('div', { classes: 'results-wrapper' });
   const productList = createElement('ul', { classes: 'results-list' });
   const loadingElement = createElement('div', { classes: 'loading' });
-  loadingElement.textContent = getTextLabel('loading_label');
+  loadingElement.textContent = loadingLabel;
 
   resultsWrapper.append(productList, loadingElement);
   block.append(resultsWrapper);
