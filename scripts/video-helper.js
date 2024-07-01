@@ -55,7 +55,6 @@ export function isVideoLink(link) {
   return (linkString.includes('youtube.com/embed/')
     || videoURLRegex.test(linkString)
     || isLowResolutionVideoUrl(linkString))
-    && link.closest('.block.embed') === null;
 }
 
 export function selectVideoLink(links, preferredType, videoType = videoTypes.both) {
