@@ -89,62 +89,6 @@ export function createLowResolutionBanner() {
   return banner;
 }
 
-// export function showVideoModal(linkUrl) {
-//   // eslint-disable-next-line import/no-cycle
-//   import('../common/modal/modal-component.js').then((modal) => {
-//     let beforeBanner = {};
-
-//     if (isLowResolutionVideoUrl(linkUrl)) {
-//       beforeBanner = createLowResolutionBanner();
-//     }
-
-//     modal.showModal(linkUrl, beforeBanner);
-//   });
-// }
-
-// export function addVideoShowHandler(link) {
-//   link.classList.add('text-link-with-video');
-
-//   link.addEventListener('click', (event) => {
-//     event.preventDefault();
-
-//     showVideoModal(link.getAttribute('href'));
-//   });
-// }
-
-//   export function isSoundcloudLink(link) {
-//     return link.getAttribute('href').includes('soundcloud.com/player')
-//       && link.closest('.block.embed') === null;
-//   }
-
-//   export function addSoundcloudShowHandler(link) {
-//     link.classList.add('text-link-with-soundcloud');
-
-//     link.addEventListener('click', (event) => {
-//       event.preventDefault();
-
-//       const thumbnail = link.closest('div')?.querySelector('picture');
-//       const title = link.closest('div')?.querySelector('h1, h2, h3');
-//       const text = link.closest('div')?.querySelector('p:not(.button-container, .image)');
-
-//       // eslint-disable-next-line import/no-cycle
-//       import('../common/modal/modal-component.js').then((modal) => {
-//         const episodeInfo = document.createElement('div');
-//         episodeInfo.classList.add('modal-soundcloud');
-//         episodeInfo.innerHTML = `<div class="episode-image"><picture></div>
-//         <div class="episode-text">
-//             <h2></h2>
-//             <p></p>
-//         </div>`;
-//         episodeInfo.querySelector('picture').innerHTML = thumbnail?.innerHTML || '';
-//         episodeInfo.querySelector('h2').innerText = title?.innerText || '';
-//         episodeInfo.querySelector('p').innerText = text?.innerText || '';
-
-//         modal.showModal(link.getAttribute('href'), null, episodeInfo);
-//       });
-//     });
-//   }
-
 export function addPlayIcon(parent) {
   const iconWrapper = createElement('div', { classes: 'video-icon-wrapper' });
   const icon = createElement('i', { classes: ['fa', 'fa-play', 'video-icon'] });

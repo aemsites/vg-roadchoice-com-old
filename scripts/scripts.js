@@ -28,11 +28,6 @@ import {
   variantsClassesToBEM,
 } from './common.js';
 
-// import {
-//   isVideoLink,
-//   addVideoShowHandler,
-// } from './video-helper.js';
-
 const disableHeader = getMetadata('disable-header').toLowerCase() === 'true';
 const disableFooter = getMetadata('disable-footer').toLowerCase() === 'true';
 
@@ -293,12 +288,6 @@ export function decorateLinks(block) {
   [...block.querySelectorAll('a')]
     .filter(({ href }) => !!href)
     .forEach((link) => {
-      /* eslint-disable no-use-before-define */
-      // if (isVideoLink(link)) {
-      //   addVideoShowHandler(link);
-      //   return;
-      // }
-
       // handling modal links
       if (link.getAttribute('href').startsWith('/#id-modal')) {
         link.addEventListener('click', (event) => {
@@ -325,13 +314,11 @@ export function decorateLinks(block) {
 
 function decorateSectionBackgrounds(main) {
   const variantClasses = [
-    'gray-background',
-    'light-gray-background',
-    'dark-gray-background',
-    'black-background',
-    'white-background',
-    'red-background',
-    'no-gap',
+    'black-bg',
+    'white-bg',
+    'primary-red-bg',
+    'primary-medium-gray-bg',
+    'secondary-red-bg',
     'no-vertical-padding',
   ];
 
@@ -549,6 +536,7 @@ export function loadScriptIfNotLoadedYet(url, attrs) {
 }
 
 /**
+ * Creates a new block element with the specified name and content, and loads it into the page.
  *
  * @param {string} blockName - block name with '-' instead of spaces
  * @param {string} blockContent - the content that will be set as block inner HTML
@@ -647,9 +635,12 @@ export function input(...items) { return domEl('input', ...items); }
 export function form(...items) { return domEl('form', ...items); }
 export function button(...items) { return domEl('button', ...items); }
 
-/* Helper for delaying something like
-takes function as argument, default timout = 200
-*/
+/**
+ * A helper function that delays the execution of a function
+ * @param {function} func the function to execute
+ * @param {number} timeout the timeout in milliseconds, 200 by default
+ * @returns {function} the function that will be executed after the timeout
+ */
 export function debounce(func, timeout = 200) {
   let timer;
   return (...args) => {
