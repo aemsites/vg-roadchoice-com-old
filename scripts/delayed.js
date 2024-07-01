@@ -14,18 +14,21 @@ const {
   GTM_ID = false,
   HOTJAR_ID = false,
   ARTIBOT_ID = false,
+  COOKIE_CHECK = true,
 } = COOKIE_CONFIGS;
 
 // Core Web Vitals RUM collection
 sampleRUM('cwv');
 
+const avoidCookieCheck = COOKIE_CHECK === 'false';
+
 // COOKIE ACCEPTANCE CHECKING
-if (isPerformanceAllowed()) {
+if (avoidCookieCheck || isPerformanceAllowed()) {
   if (GTM_ID) loadGoogleTagManager();
   if (HOTJAR_ID) loadHotjar();
 }
 
-if (isTargetingAllowed()) {
+if (avoidCookieCheck || isTargetingAllowed()) {
   if (ARTIBOT_ID) loadArtibot();
 }
 

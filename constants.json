@@ -38,7 +38,7 @@
       },
       {
         "name": "COOKIE_CHECK",
-        "value": "false"
+        "value": "true"
       }
     ]
   },
