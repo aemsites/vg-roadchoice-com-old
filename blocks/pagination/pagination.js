@@ -1,6 +1,7 @@
 import { getTextLabel, createElement } from '../../scripts/common.js';
 import { amountOfProducts } from '../search/search.js';
 
+const blockName = 'pagination';
 const amount = JSON.parse(sessionStorage.getItem('amount')) || amountOfProducts;
 let products = JSON.parse(sessionStorage.getItem('results')) || [];
 let moreBtns = [];
@@ -14,7 +15,6 @@ const displayedTextContent = getTextLabel('pagination_text');
 const buttonTextContent = getTextLabel('pagination_button');
 const firstWord = partNumberText.split(' ')[0];
 const category = new URLSearchParams(window.location.search).get('cat');
-const blockName = 'pagination';
 
 const loadMoreProducts = (props) => {
   const { hidden, amountText } = props;
@@ -40,7 +40,7 @@ const addShowMoreHandler = (btn, resultsListBlock, amountText) => {
 };
 
 const addButtons = ({ resultsListBlock, moreBtn, bottomMoreBtn }) => {
-  resultsListBlock.querySelector('.results-section').appendChild(bottomMoreBtn);
+  resultsListBlock.querySelector('.results-list__section').appendChild(bottomMoreBtn);
   moreBtn.classList.remove('hidden');
   moreBtns = [moreBtn, bottomMoreBtn];
 };
