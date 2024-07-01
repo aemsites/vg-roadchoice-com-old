@@ -54,7 +54,7 @@ export function isVideoLink(link) {
   const linkString = link.getAttribute('href');
   return (linkString.includes('youtube.com/embed/')
     || videoURLRegex.test(linkString)
-    || isLowResolutionVideoUrl(linkString))
+    || isLowResolutionVideoUrl(linkString));
 }
 
 export function selectVideoLink(links, preferredType, videoType = videoTypes.both) {
