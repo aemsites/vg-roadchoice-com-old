@@ -38,7 +38,7 @@
       },
       {
         "name": "COOKIE_CHECK",
-        "value": "true"
+        "value": "false"
       }
     ]
   },
@@ -61,10 +61,30 @@
       }
     ]
   },
+  "dealerLocator": {
+    "total": 3,
+    "offset": 0,
+    "limit": 3,
+    "data": [
+      {
+        "name": "ENDPOINT_URL",
+        "value": "https://dealerlocator.roadchoice.com/DealerJSON.ashx"
+      },
+      {
+        "name": "API_KEY",
+        "value": "AIzaSyAP8IewqHuU8SMz_6tNiIUlbU_l0GFOd1w"
+      },
+      {
+        "name": "BACKUP_URL",
+        "value": "https://as-dealerloc-endpoint-prod-001.azurewebsites.net/Mack_DealerJSON.ashx"
+      }
+    ]
+  },
   ":version": 3,
   ":names": [
     "cookieValues",
-    "projectConfig"
+    "projectConfig",
+    "dealerLocator"
   ],
   ":type": "multi-sheet"
 }

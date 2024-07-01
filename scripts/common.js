@@ -324,11 +324,13 @@ export const formatValues = (values) => {
 const {
   cookieValues,
   projectConfig,
+  dealerLocator,
 } = await getConstantValues();
 
 // This data comes from the sharepoint 'constants.xlsx' file
 export const COOKIE_CONFIGS = formatValues(cookieValues?.data);
 export const PROJECT_CONFIG = formatValues(projectConfig?.data);
+export const DEALER_LOCATOR = formatValues(dealerLocator?.data);
 
 /**
  * Check if one trust group is checked.
