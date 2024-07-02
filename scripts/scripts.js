@@ -17,7 +17,6 @@ import {
   loadScript,
   createOptimizedPicture,
 } from './lib-franklin.js';
-import { createElement } from './common.js';
 
 import {
   addFavIcon,
