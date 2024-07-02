@@ -4,7 +4,6 @@ import {
   createElement,
 } from '../../scripts/common.js';
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
-import { createElement } from '../../scripts/common.js';
 
 const blockName = 'blog-results';
 
