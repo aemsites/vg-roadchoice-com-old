@@ -56,7 +56,7 @@ const TEMPLATES = {
     <label class="search__input-cr__label">Cross-Reference Number</label>
     <div class="search__input-cr__wrapper">
       <input class="search__input-cr__input shadow" type="search" placeholder="${PLACEHOLDERS.crossReference}" />
-      <button class="button search__input-cr__submit shadow search-button" type="submit">
+      <button ${!window.allProducts && 'disabled'} class="button search__input-cr__submit shadow search-button" type="submit">
         SEARCH &nbsp;
         <span class="fa fa-search"></span>
       </button>
@@ -68,7 +68,7 @@ const TEMPLATES = {
     <label class="search__input-pn__label">${PLACEHOLDERS.partNumberLabel}</label>
     <div class="search__input-pn__wrapper">
       <input class="search__input-pn__input shadow" type="search" placeholder="${PLACEHOLDERS.partNumber}" />
-      <button class="button search__input-pn__submit shadow search-button" type="submit">
+      <button ${!window.allProducts && 'disabled'} class="button search__input-pn__submit shadow search-button" type="submit">
         SEARCH &nbsp;
         <span class="fa fa-search"></span>
       </button>
