@@ -52,7 +52,7 @@ const decoratePagination = (block) => {
   if (category) {
     products = products.filter((item) => item['Part Category'].toLowerCase() === category);
   }
-  hasMoreItems = products && products.length >= amount;
+  hasMoreItems = products && products.length > amount;
   currentAmount = hasMoreItems ? amount : [...products].length;
   newText = displayedTextContent.replace('[$]', currentAmount);
   displayedText.textContent = newText;
