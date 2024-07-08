@@ -87,8 +87,7 @@
 }
 
 .category-filters-wrapper .category-filters-title-wrapper.active :is(.plus-btn, .category-filters-item-title),
-.category-filters-wrapper .plus-btn:hover,
-.category-filters-wrapper .category-filters-title:hover {
+.category-filters-wrapper .plus-btn:hover {
   color: var(--primary-red);
 }
 

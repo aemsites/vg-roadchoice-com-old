@@ -305,7 +305,10 @@ export function decorateLinks(block) {
       }
 
       const url = new URL(link.href);
-      const external = !url.host.match('roadchoice.com') && !url.host.match('.hlx.(page|live)') && !url.host.match('localhost');
+      const external = !url.host.match('roadchoice.com')
+      && !url.host.match('.hlx.(page|live)')
+      && !url.host.match('.aem.(page|live)')
+      && !url.host.match('localhost');
       if (url.host.match('build.roadchoice.com') || url.pathname.endsWith('.pdf') || external) {
         link.target = '_blank';
       }

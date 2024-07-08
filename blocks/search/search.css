@@ -50,6 +50,11 @@
   color: var(--primary-white);
 }
 
+.search .search-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .search .search__buttons__wrapper {
   border-radius: 10px;
   width: 100%;
