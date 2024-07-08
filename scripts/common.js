@@ -649,12 +649,7 @@ export function loadWorker() {
   // this just launch the worker, and the message listener is triggered in another script
   worker.postMessage('run');
   // this enable the search in any page
-  worker.onmessage = (e) => {
-    window.allProducts = e.data;
-    // once the products are loaded to window the search button is enabled
-    // eslint-disable-next-line
-    document.querySelectorAll('.search.block .search-button').forEach((btn) => btn.disabled = false);
-  };
+  worker.onmessage = (e) => { window.allProducts = e.data; };
   return worker;
 }
 
