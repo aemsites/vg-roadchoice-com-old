@@ -1,0 +1,95 @@
+.v2-accordion__button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--text-color);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.v2-accordion__button:hover,
+.v2-accordion__button:focus {
+  background: transparent;
+}
+
+.v2-accordion__title {
+  font-family: var(--ff-headline-medium);
+  font-size: var(--headline-1-font-size);
+  letter-spacing: var(--headline-1-letter-spacing);
+  line-height: var(--headline-1-line-height);
+  margin: 0;
+}
+
+.v2-accordion__icon {
+  transform: rotate(180deg);
+  transition: transform var(--duration-small) var(--easing-standard);
+}
+
+.v2-accordion__item-close .v2-accordion__icon {
+  transform: rotate(0);
+}
+
+.v2-accordion__item-close .v2-accordion__content {
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.v2-accordion__icon svg {
+  display: flex;
+  height: 24px;
+  width: 24px;
+}
+
+.v2-accordion__item {
+  border-bottom: 2px solid var(--text-color);
+  padding: 24px 0;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.v2-accordion__content {
+  margin-top: 40px;
+}
+
+/* Styles for nested accordion */
+.v2-accordion__content .v2-accordion__title {
+  font-family: var(--ff-subheadings-medium);
+  font-size: 22px;
+  letter-spacing: 0.22px;
+  line-height: 138%;
+}
+
+.v2-accordion__item .v2-accordion__item {
+  border-bottom: 1px solid var(--navigation-line-default-color);
+}
+
+.v2-accordion__item .v2-accordion__item:last-child {
+  border-bottom: 0
+
+}
+
+/* END Styles for nested accordion */
+
+@media (min-width: 1200px) {
+  .v2-accordion__title {
+    font-size: var(--headline-2-font-size);
+    letter-spacing: var(--headline-2-letter-spacing);
+    line-height: var(--headline-2-line-height);
+  }
+
+  /* Styles for nested accordion */
+  .v2-accordion__content .v2-accordion__title {
+    font-size: var(--headline-4-font-size);
+    letter-spacing: var(--headline-4-letter-spacing);
+    line-height: var(--headline-4-line-height);
+  }
+
+  /* END Styles for nested accordion */
+}
