@@ -39,8 +39,8 @@ const addShowMoreHandler = (btn, resultsListBlock, amountText) => {
   });
 };
 
-const addButtons = async ({ resultsListBlock, moreBtn, bottomMoreBtn }) => {
-  await resultsListBlock.querySelector('.results-list__section').appendChild(bottomMoreBtn);
+const addButtons = ({ resultsListBlock, moreBtn, bottomMoreBtn }) => {
+  resultsListBlock.querySelector('.results-list__section').appendChild(bottomMoreBtn);
   moreBtn.classList.remove('hidden');
   moreBtns = [moreBtn, bottomMoreBtn];
 };
