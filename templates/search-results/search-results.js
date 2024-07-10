@@ -107,9 +107,6 @@ export default async function decorate(doc) {
         const keys = ['crData', 'pnData', 'imgData'];
         keys.forEach((key) => { allProducts[key] = data[key]; });
         window.allProducts = data;
-        // once the products are loaded to window the search button is enabled
-        // eslint-disable-next-line
-        document.querySelectorAll('.search.block .search-button').forEach((btn) => btn.disabled = false);
       }
       const event = new CustomEvent('DataLoaded', { detail: { results, data } });
       document.dispatchEvent(event);
