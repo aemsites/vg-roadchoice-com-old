@@ -45,7 +45,7 @@ const addButtons = ({ resultsListBlock, moreBtn, bottomMoreBtn }) => {
   moreBtns = [moreBtn, bottomMoreBtn];
 };
 
-const decoratePagination =({ block, isCached = false}) => {
+const decoratePagination =(block) => {
   const paginationSection = createElement('div', { classes: `${blockName}-section` });
   const paginationTitle = createElement('h2', { classes: 'title' });
   paginationTitle.textContent = `${firstWord}s`;
@@ -73,14 +73,9 @@ const decoratePagination =({ block, isCached = false}) => {
     if (imageData.length > 0) {
       addButtons({ resultsListBlock, moreBtn, bottomMoreBtn });
     } else {
-      if (isCached) {
+      document.addEventListener('DataLoaded', () => {
         addButtons({ resultsListBlock, moreBtn, bottomMoreBtn });
-      } else {
-        document.addEventListener('DataLoaded', () => {
-          addButtons({ resultsListBlock, moreBtn, bottomMoreBtn });
-        });
-      }
-        
+      });
     }
   }
 
@@ -95,12 +90,12 @@ export default async function decorate(block) {
     imageData = detail.data.imgData;
     if (!isDecorated) {
       isDecorated = true;
-      if (products.length > 0) decoratePagination({ block });
+      if (products.length > 0) decoratePagination(block);
     }
   });
 
   if (sessionStorage.getItem('results') && !isDecorated) {
     isDecorated = true;
-    if (products.length > 0) decoratePagination({ block, isCached: true });
+    if (products.length > 0) decoratePagination(block);
   }
 }
