@@ -45,7 +45,7 @@ const addButtons = ({ resultsListBlock, moreBtn, bottomMoreBtn }) => {
   moreBtns = [moreBtn, bottomMoreBtn];
 };
 
-const decoratePagination =(block) => {
+const decoratePagination = (block) => {
   const paginationSection = createElement('div', { classes: `${blockName}-section` });
   const paginationTitle = createElement('h2', { classes: 'title' });
   paginationTitle.textContent = `${firstWord}s`;
