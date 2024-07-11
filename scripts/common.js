@@ -649,7 +649,9 @@ export function loadWorker() {
   // this just launch the worker, and the message listener is triggered in another script
   worker.postMessage('run');
   // this enable the search in any page
-  worker.onmessage = (e) => { window.allProducts = e.data };
+  worker.onmessage = (e) => {
+    window.allProducts = e.data;
+  };
   return worker;
 }
 
