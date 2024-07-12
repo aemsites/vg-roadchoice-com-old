@@ -1,47 +1,62 @@
 .v2-specifications__list--with-text > div > *:first-child,
 .v2-specifications__list--with-pictures > div > *:first-child,
-.v2-specifications__list--with-downloads > div > *:first-child {
+.v2-specifications__list--with-link > div > *:first-child {
   margin-top: 0;
 }
 
 .v2-specifications__list--with-text > div > *:last-child,
 .v2-specifications__list--with-pictures > div > *:last-child,
-.v2-specifications__list--with-downloads > div > *:last-child {
+.v2-specifications__list--with-link > div > *:last-child {
   margin-bottom: 0;
 }
 
 .v2-specifications__list--with-text,
-.v2-specifications__list--with-pictures,
-.v2-specifications__list--with-downloads {
-  color: var(--text-color);
+.v2-specifications__list--with-pictures {
   display: grid;
-  font-family: var(--ff-body);
-  font-size: var(--body-1-font-size);
-  gap: 16px;
-  line-height: var(--body-1-line-height);
+  font-family: var(--body-ff);
+  font-size: var(--body-font-size-s);
+  line-height: var(--body-font-size-s);
   margin-top: 16px;
+  gap: 8px;
+}
+
+.v2-specifications__list--with-link {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  margin: 8px 24px;
+  gap: 8px;
+}
+
+.v2-specifications__list--with-link div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--c-light-gray);
+  padding: 8px 16px;
+  margin-left: 12px;
 }
 
 .v2-specifications__list--with-text:first-child,
 .v2-specifications__list--with-pictures:first-child,
-.v2-specifications__list--with-downloads:first-child {
+.v2-specifications__list--with-link:first-child {
   margin-top: 0;
 }
 
 /* stylelint-disable-next-line no-descending-specificity */
-.v2-specifications__list--with-pictures,
-.v2-specifications__list--with-downloads {
+.v2-specifications__list--with-pictures {
   gap: 40px;
   grid-template-columns: 1fr;
 }
 
-.v2-specifications__list--with-downloads strong,
+.v2-specifications__list--with-link strong,
 .v2-specifications__list--with-pictures strong {
   display: block;
-  font-family: var(--ff-subheadings-medium);
-  font-size: var(--headline-5-font-size);
+  font-family: var(--body-font-size-s);
+  font-size: var(--heading-font-size-xs);
   font-weight: normal;
-  line-height: var(--headline-5-line-height);
+  margin-right: 12px;
 }
 
 .v2-specifications__list--subtitle {
@@ -56,8 +71,8 @@
 }
 
 .v2-specifications__list--with-text strong {
-  font-family: var(--ff-body-bold);
-  font-size: 12px;
+  font-family: var(--body-ff-bold);
+  font-size: var(--heading-font-size-xs);
   letter-spacing: 1.92px;
   line-height: 16px;
   text-transform: uppercase;
@@ -70,22 +85,22 @@
 /* With images */
 .v2-specifications__list--with-pictures img {
   display: block;
+  width: 100%;
   margin-bottom: 24px;
 }
 
 /* With downloads */
-.v2-specifications__list--with-downloads .icon-download svg {
+.v2-specifications__list--with-link .icon-download svg {
   height: 16px;
   width: 16px;
 }
 
-.v2-specifications__list--with-downloads p {
+.v2-specifications__list--with-link p {
   margin: 8px 0 0;
 }
 
 @media (min-width: 744px) {
-  .v2-specifications__list--with-pictures,
-  .v2-specifications__list--with-downloads {
+  .v2-specifications__list--with-pictures {
     gap: 40px 16px;
     grid-template-columns: repeat(2, 1fr);
     margin-top: 40px;
@@ -94,8 +109,9 @@
 
 @media (min-width: 1200px) {
   .v2-specifications__list--with-text,
-  .v2-specifications__list--with-downloads {
+  .v2-specifications__list--with-link {
     grid-template-columns:repeat(4, 1fr);
+    padding: 8px 0;
   }
 
   .v2-specifications__list--with-text {
@@ -114,30 +130,31 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  /* Rempve accordion in Desktop */
+  /* Remove accordion in Desktop */
   .v2-specifications .v2-accordion__button {
     pointer-events: none;
   }
 
+  .v2-specifications .v2-accordion__button .v2-accordion__icon,
   .v2-specifications .v2-accordion__button .v2-accordion__close {
     display: none;
   }
 
+  .v2-specifications .v2-accordion__item .v2-accordion__content {
+    height: 0;
+  }
+
   .v2-specifications .v2-accordion__item-close .v2-accordion__content {
-    height: auto;
-    margin-top: 40px;
+    height: 100%;
     opacity: 1;
     overflow: auto;
   }
 
   .v2-specifications .v2-accordion__item {
-    border-bottom-color: var(--text-color);
-    padding: 72px 0;
+    padding: 24px 0;
   }
 
   .v2-specifications .v2-accordion__item:first-child {
     padding-top: 10px;
   }
-
-  /* END Rempve accordion in Desktop */
 }

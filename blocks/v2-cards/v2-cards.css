@@ -5,7 +5,6 @@
   flex-direction: column;
   gap: var(--card-container-gap);
   justify-content: center;
-  max-width: var(--wrapper-width);
   margin: auto;
 }
 
@@ -35,8 +34,6 @@
 }
 
 .v2-cards__image {
-  background: var(--media-background);
-  aspect-ratio: 16/9;
   width: 100%;
   object-fit: cover;
 }
@@ -70,6 +67,11 @@
   margin-top: 16px;
 }
 
+.v2-cards__text-wrapper .v2-cards__button-container a {
+  width: 100%;
+  text-align: center;
+}
+
 .v2-cards__button-container .v2-cards__button:any-link {
   align-items: flex-start;
 }
@@ -87,14 +89,14 @@
 
 @media (min-width: 744px) {
   .v2-cards {
-    --card-container-gap: 16px;
+    --card-container-gap: 24px;
 
     flex-flow: row wrap;
     justify-content: center;
   }
 
   .v2-cards__card-item {
-    max-width: calc((100% - 32px) / 3);
+    max-width: calc((100% - 48px) / 3);
   }
 
   .v2-cards--horizontal .v2-cards__card-item {

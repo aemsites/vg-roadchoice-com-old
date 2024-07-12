@@ -38,7 +38,7 @@ export default async function decorate(block) {
   [...items].forEach((item) => {
     const typeTitle = item.querySelector(`h${headerTag}`); // header of the accordion
     const typePicture = item.querySelector('picture'); // with image
-    const typeDownloads = item.querySelector('.button-container a'); // with downloads
+    const typeLink = item.querySelector('.button-container a'); // with downloads
 
     // Add title styles to the headings that are not as the accordion button
     const headingString = headings.join(',');
@@ -86,16 +86,16 @@ export default async function decorate(block) {
       classes.push(`${blockName}__list--with-pictures`);
     }
 
-    if (typeDownloads) {
-      classes.push(`${blockName}__list--with-downloads`);
+    if (typeLink) {
+      classes.push(`${blockName}__list--with-link`);
 
       const buttons = item.querySelectorAll('.button-container a');
       buttons.forEach((bt) => {
-        bt.classList.add('standalone-link');
+        bt.classList.replace('button', 'standalone-link');
       });
     }
 
-    if (!typePicture && !typeDownloads && !typeTitle) {
+    if (!typePicture && !typeLink && !typeTitle) {
       classes.push(`${blockName}__list--with-text`);
     }
 
