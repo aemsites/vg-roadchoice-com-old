@@ -140,10 +140,6 @@
     display: none;
   }
 
-  .v2-specifications .v2-accordion__item .v2-accordion__content {
-    height: 0;
-  }
-
   .v2-specifications .v2-accordion__item-close .v2-accordion__content {
     height: 100%;
     opacity: 1;

@@ -15,7 +15,7 @@ import {
 /**
    * Loads a fragment.
    * @param {string} path The path to the fragment
-   * @returns {HTMLElement} The root element of the fragment
+   * @returns {Promise<HTMLElement>} The root element of the fragment
    */
 async function loadFragment(path) {
   const link = path && path.startsWith('/') ? path : new URL(path).pathname;
