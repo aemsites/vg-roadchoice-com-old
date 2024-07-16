@@ -22,7 +22,7 @@
 }
 
 .v2-cards__text-wrapper {
-  padding: 24px;
+  padding: 24px 0;
 }
 
 .v2-cards--no-background .v2-cards__text-wrapper {
