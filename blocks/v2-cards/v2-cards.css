@@ -9,12 +9,11 @@
 }
 
 .v2-cards__card-item {
-  background: var(--card-background);
-  color: var(--card-text);
+  color: var(--text-color);
 }
 
 .v2-cards--no-background .v2-cards__card-item {
-  --card-background: transparent;
+  background: transparent;
 }
 
 .v2-cards__picture-wrapper {
@@ -43,23 +42,19 @@
 }
 
 .v2-cards__heading {
-  font-family: var(--ff-subheadings-medium);
-  font-size: var(--headline-5-font-size);
-  line-height: var(--headline-5-line-height);
+  font-size: var(--heading-font-size-xs);
   margin: 0 0 7px;
 }
 
 .v2-cards--large-heading .v2-cards__heading {
-  font-size: var(--headline-4-font-size);
-  line-height: var(--headline-4-line-height);
+  font-size: var(--heading-font-size-s);
 }
 
 .v2-cards__text-wrapper p {
   margin: 0;
-  font-family: var(--ff-body);
-  font-size: var(--body-1-font-size);
+  font-family: var(--body-ff);
+  font-size: var(--body-font-size-s);
   font-style: normal;
-  line-height: var(--body-1-line-height);
   letter-spacing: 0.16px;
 }
 

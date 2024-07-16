@@ -15,7 +15,6 @@
   display: grid;
   font-family: var(--body-ff);
   font-size: var(--body-font-size-s);
-  line-height: var(--body-font-size-s);
   margin: 0 0 0 12px;
   gap: 8px;
 }
