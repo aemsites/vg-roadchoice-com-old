@@ -3,11 +3,17 @@
   "host": "www.roadchoice.com",
   "plugins": [
     {
+      "id": "tagger",
+      "title": "Tagger",
+      "environments": [ "edit" ],
+      "url": "/tools/tagger/index.html"
+    },
+    {
       "id": "library",
       "title": "Library",
-      "environments": ["edit"],
-      "url": "/tools/sidekick/library.html",
-      "includePaths": ["**.docx**"]
+      "environments": [ "edit" ],
+      "url": "https://main--vg-roadchoice-com--hlxsites.hlx.live/tools/sidekick/library.html",
+      "includePaths": [ "**.docx**" ]
     }
   ]
 }
