@@ -24,7 +24,10 @@ const buildSlide = (slideTemplate) => {
   }
 
   const heading = slideEl.querySelector('h2, h3, h4, h5, h6');
-  heading.classList.add(`${blockName}-heading`);
+
+  if (heading) {
+    heading.classList.add(`${blockName}-heading`);
+  }
 
   slideTemplate.replaceWith(slideEl);
 };
