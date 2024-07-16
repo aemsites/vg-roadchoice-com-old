@@ -130,8 +130,6 @@
   --easing-standard: cubic-bezier(0.2, 0, 0.1, 1);
 }
 
-
-
 @media (min-width: 992px) {
   :root {
     --nav-height: calc(var(--nav-height-desktop-brand) + var(--nav-height-desktop-links));

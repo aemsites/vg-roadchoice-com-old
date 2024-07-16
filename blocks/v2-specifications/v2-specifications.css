@@ -16,7 +16,7 @@
   font-family: var(--body-ff);
   font-size: var(--body-font-size-s);
   line-height: var(--body-font-size-s);
-  margin-top: 16px;
+  margin: 0 0 0 12px;
   gap: 8px;
 }
 
@@ -36,11 +36,6 @@
   background-color: var(--c-light-gray);
   padding: 12px;
   gap: 12px;
-}
-
-.v2-specifications__list--with-pictures,
-.v2-specifications__list--with-text {
-  margin: 0 0 0 12px;
 }
 
 .v2-specifications__list--with-text:first-child,
