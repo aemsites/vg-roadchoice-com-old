@@ -237,7 +237,13 @@ export function findAndCreateImageLink(node) {
 function buildHeroBlock(main) {
   const header = main.querySelector('h1');
   const picture = main.querySelector('picture');
+  const isCarousel = header?.closest('.carousel');
   const heroBlock = main.querySelector('.hero, .v2-hero');
+
+  if (isCarousel || heroBlock) {
+    return;
+  }
+
   if (heroBlock) return;
   // eslint-disable-next-line no-bitwise
   if (header && picture
